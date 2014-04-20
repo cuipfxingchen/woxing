@@ -3,7 +3,6 @@ package com.hdsx.taxi.woxing.web.rest;
 import java.util.Date;
 
 import javax.ws.rs.FormParam;
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -13,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
-import com.hdsx.taxi.woxing.bean.CarInfo;
 import com.hdsx.taxi.woxing.bean.Complaint;
 import com.hdsx.taxi.woxing.mqutil.util.DateFormatUtil;
 import com.hdsx.taxi.woxing.web.rest.bean.RestBean;
