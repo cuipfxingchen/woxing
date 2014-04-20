@@ -1,0 +1,70 @@
+/**
+ * Project Name:MQMessage
+ * File Name:Msg0001.java
+ * Package Name:com.hdsx.taxi.message.order
+ * Date:2013年7月3日下午4:24:42
+ * Copyright (c) 2013, 谢广泉  All Rights Reserved.
+ * 
+ *
+ */
+
+package com.hdsx.taxi.woxing.mqutil.message.order;
+
+import javax.jms.BytesMessage;
+import javax.jms.JMSException;
+
+import com.hdsx.taxi.woxing.mqutil.message.MQAbsMsg;
+
+/**
+ * ClassName:Msg0003 Function: 取消订单 Date: 2013年7月3日 下午4:24:42
+ * 
+ * @author 谢广泉
+ * @see
+ */
+public class MQMsg0003 extends MQAbsMsg {
+
+	long orderId;
+	String cancel;
+
+	public MQMsg0003() {
+	}
+
+	public MQMsg0003(String customId) {
+		super(customId);
+	}
+
+	public long getOrderId() {
+		return orderId;
+	}
+
+	public void setOrderId(long orderId) {
+		this.orderId = orderId;
+	}
+
+	public String getCancel() {
+		return cancel;
+	}
+
+	public void setCancel(String cancel) {
+		this.cancel = cancel;
+	}
+
+	@Override
+	protected short getMessageId() {
+		return 0x0003;
+	}
+
+	@Override
+	protected void decodebody(BytesMessage msg) throws JMSException {
+		this.orderId = msg.readLong();
+		this.cancel = msg.readUTF();
+	}
+
+	@Override
+	protected BytesMessage encodebody(BytesMessage msg) throws JMSException {
+		msg.writeLong(this.orderId);
+		msg.writeUTF(this.cancel);
+		return msg;
+	}
+
+}
