@@ -16,7 +16,7 @@ import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg4001;
 import com.hdsx.taxi.woxing.mqutil.msgpool.MQMsgPool;
 
 /**
- * 投诉相关服务
+ * 评价相关服务
  * @author cuipengfei
  *
  */
@@ -57,7 +57,7 @@ public class EstimateService {
 	 * @see com.hdsx.centerservice.estimate.service.EstimateService#createEstimate(long,
 	 *      long, int, java.lang.String)
 	 */
-	public String createEstimate(long orderId, long userId, int score,
+	public boolean createEstimate(long orderId, long userId, int score,
 			String comment) {
 		Estimate est = new Estimate();
 		long estimateId = System.currentTimeMillis();
@@ -70,18 +70,13 @@ public class EstimateService {
 		DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd-hh-mm-ss");
 		String estimateTime = format1.format(currentTime);
 		est.setEstimateTime(estimateTime);
-		if (estimateMapper.createEstimate(est)) {
-			return "{\"state\":1}";
-		} else {
-			return "{\"state\":0}";
-		}
+		return estimateMapper.createEstimate(est);
 	}
 
 	public Estimate updateEstimate(long estimateId, long orderId, int score,
 			String comment) {
-		estimateMapper.updateEstimate(estimateId, orderId, score, comment);
 		// TODO Auto-generated method stub
-		return null;
+		return estimateMapper.updateEstimate(estimateId, orderId, score, comment);
 	}
 
 	public boolean deleteEstimate(long estimateId) {

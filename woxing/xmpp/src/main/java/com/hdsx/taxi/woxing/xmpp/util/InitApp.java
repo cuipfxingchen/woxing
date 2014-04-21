@@ -10,6 +10,7 @@ public class InitApp {
 	/**
 	 * 系统根目录
 	 */
+//	public static final String ROOT_PATH = System.getProperty("user.dir");
 	public static final String ROOT_PATH = System.getProperty("user.dir");
 	
 	/**

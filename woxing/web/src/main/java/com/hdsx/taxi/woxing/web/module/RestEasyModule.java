@@ -13,6 +13,7 @@ import com.hdsx.taxi.woxing.web.rest.EstimateRest;
 import com.hdsx.taxi.woxing.web.rest.LocationRest;
 import com.hdsx.taxi.woxing.web.rest.OrderRest;
 import com.hdsx.taxi.woxing.web.service.ComplaintService;
+import com.hdsx.taxi.woxing.web.service.EstimateService;
 import com.hdsx.taxi.woxing.web.service.LocationService;
 import com.hdsx.taxi.woxing.xmpp.IXMPPService;
 import com.hdsx.taxi.woxing.xmpp.impl.XMPPService;
@@ -40,7 +41,7 @@ public class RestEasyModule implements Module {
 		 */
 		binder.bind(LocationService.class); // 位置服务
 		binder.bind(ComplaintService.class); // 投诉服务
-		binder.bind(ComplaintService.class); // 评价服务
+		binder.bind(EstimateService.class); // 评价服务
 
 		/**
 		 * RESTeasy
