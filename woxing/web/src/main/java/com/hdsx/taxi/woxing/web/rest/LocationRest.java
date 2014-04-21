@@ -16,6 +16,7 @@ import com.hdsx.taxi.woxing.bean.CarInfo;
 import com.hdsx.taxi.woxing.mqutil.message.location.MQMsg2001;
 import com.hdsx.taxi.woxing.mqutil.msgpool.MQMsgPool;
 import com.hdsx.taxi.woxing.web.rest.bean.RestBean;
+import com.hdsx.taxi.woxing.web.service.CityService;
 import com.hdsx.taxi.woxing.web.service.LocationService;
 
 /**
@@ -24,7 +25,7 @@ import com.hdsx.taxi.woxing.web.service.LocationService;
  * @author Steven
  * 
  */
-@Path("/rest/l/{customid}")
+@Path("/rest/loc/{customid}")
 public class LocationRest {
 	/**
 	 * Logger for this class
@@ -34,7 +35,18 @@ public class LocationRest {
 
 	@Inject
 	LocationService ls;
-
+	@Inject
+	CityService cityService;
+	
+	/**
+	 * 查询周边车辆信息
+	 * @param x
+	 * @param y
+	 * @param r
+	 * @param citycode
+	 * @param customid
+	 * @return
+	 */
 	@GET
 	@Path("/2/{x}/{y}/{r}/{citycode}")
 	@Produces("application/json;charset=UTF-8")
@@ -48,7 +60,7 @@ public class LocationRest {
 		List<CarInfo> l = ls.findCars(x, y, r, citycode, customid);
 		// List<CarInfo> l = new ArrayList<>();
 		if (l.size() == 0) {
-			re.setState(201);
+			re.setState(200);
 			re.setMsg("没有找到车辆");
 		} else {
 			re.setResult(l);
@@ -78,8 +90,49 @@ public class LocationRest {
 
 	}
 
-	
-	
+	/**
+	 * 通过城市代码或者城市名称查询是否有小费
+	 * @param ct
+	 * @param cn
+	 * @return
+	 */
+	@GET
+	@Path("/getchecktip/code/name")
+	@Produces("text/plain;charset=utf-8")
+	public String getCheckTip(@PathParam("code") String ct,
+			@PathParam("name") String cn) {
+		
+		RestBean<String> bean = new RestBean<>();
+		// 通过城市编码
+		if (ct != null && !"".equals(ct)) {
+			if (cityService.findCityByCode(ct)) {
+				bean.setState(1);
+				bean.setMsg("有小费");
+			}else{
+				bean.setState(0);
+				bean.setMsg("没有小费");
+			}
+		}else{
+			bean.setState(200);
+			bean.setMsg("城市代码为空");
+		}
+
+		// 通过城市名称
+		if (cn != null && !"".equals(cn)) {
+			if (cityService.findCityByCityName(cn)) {
+				bean.setState(1);
+				bean.setMsg("有小费");
+			}else{
+				bean.setState(0);
+				bean.setMsg("没有小费");
+			}
+		}else{
+			bean.setState(200);
+			bean.setMsg("城市名称为空");
+		}
+
+		return "{\"state\":0}";
+	}
 	
 	
 	

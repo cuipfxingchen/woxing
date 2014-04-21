@@ -11,6 +11,7 @@ import org.mybatis.guice.MyBatisModule;
 import org.mybatis.guice.datasource.bonecp.BoneCPProvider;
 
 import com.google.inject.name.Names;
+import com.hdsx.taxi.woxing.dao.CityMapper;
 import com.hdsx.taxi.woxing.dao.ComplaintMapper;
 import com.hdsx.taxi.woxing.dao.EstimateMapper;
 import com.hdsx.taxi.woxing.dao.OrderMapper;
@@ -55,6 +56,7 @@ public class DaoModule extends MyBatisModule {
 		addMapperClass(OrderMapper.class);
 		addMapperClass(ComplaintMapper.class);
 		addMapperClass(EstimateMapper.class);
+		addMapperClass(CityMapper.class);
 
 		logger.info("完成mybatis配置");
 	}
