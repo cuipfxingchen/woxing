@@ -2,14 +2,23 @@ package com.hdsx.taxi.woxing.bean;
 
 public class OrderResult {
 
-	public static byte RESULT_STATE_ONHANLDE = 0;
-	public static byte RESULT_STATE_FINISH_NOCAR = 1;
-	public static byte RESULT_STATE_FINISH_HASCAR = 2;
-	public static byte RESULT_STATE_NOORDER = 3;
+	public static byte RESULT_STATE_ONHANLDE = 0;     //正在处理
+	public static byte RESULT_STATE_FINISH_NOCAR = 1; //完成，无车
+	public static byte RESULT_STATE_FINISH_HASCAR = 2;  //完成，有车
+	public static byte RESULT_STATE_NOORDER = 3;    //没有订单
 
 	long id;
 	String taxiid;
 	String carNum;
+	String driver_id;
+	public String getDriver_id() {
+		return driver_id;
+	}
+
+	public void setDriver_id(String driver_id) {
+		this.driver_id = driver_id;
+	}
+
 	String driver_tel;
 	String driver_name;
 	String car_color;
