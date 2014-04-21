@@ -3,6 +3,8 @@ package com.hdsx.taxi.woxing.bean;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.ws.rs.FormParam;
+
 /**
  * 订单实体
  * 
@@ -20,8 +22,22 @@ public class Order implements Serializable {
 	/**
 	 * 城市编码
 	 */
+	@FormParam("citycode")
 	private String citycode;
+	/**
+	 * 用户电话号码
+	 */
+	@FormParam("useriphone")
+	private String useriphone;
 	
+	public String getUseriphone() {
+		return useriphone;
+	}
+
+	public void setUseriphone(String useriphone) {
+		this.useriphone = useriphone;
+	}
+
 	public String getCitycode() {
 		return citycode;
 	}
@@ -273,22 +289,26 @@ public class Order implements Serializable {
 	/**
 	 * 返回结果集对象
 	 */
+	@FormParam("result")
 	private OrderResult result;
 	
 	
 	/**
 	 * 支付类型
 	 */
+	@FormParam("paytype")
 	private byte paytype;
 	
 	/**
 	 * 打车费用
 	 */
+	@FormParam("fee")
 	private short fee;
 	
 	/**
 	 * 订单状态
 	 */
+	@FormParam("state")
 	private byte state;
 
 	/**
@@ -296,6 +316,7 @@ public class Order implements Serializable {
 	 * 
 	 * 在此次环境下,使用即时毫秒数作为订单id录入数据库
 	 */
+	@FormParam("orderId")
 	private long orderId;
 	/*--------------------用户表部分--------------------*/
 	/**
@@ -303,11 +324,13 @@ public class Order implements Serializable {
 	 * 
 	 * (用户手机号)
 	 */
+	@FormParam("userId")
 	private String userId;
 
 	/**
 	 * 用户昵称
 	 */
+	@FormParam("nickName")
 	private String nickName;
 
 	/**
@@ -319,11 +342,13 @@ public class Order implements Serializable {
 	 * 
 	 * 1为女
 	 */
+	@FormParam("sex")
 	private byte sex;
 		
 	/**
 	 * 出发时间 yyyy-MM-dd HH:mm:ss
 	 */
+	@FormParam("getOnTime")
 	private Date getOnTime;
 
 	/**
@@ -331,26 +356,31 @@ public class Order implements Serializable {
 	 * 
 	 * yyyy-MM-dd HH:mm:ss
 	 */
+	@FormParam("lastReplTime")
 	private Date lastReplTime;
 
 	/**
 	 * 是否搜索签约出租车
 	 */
+	@FormParam("contractTaxi")
 	private boolean contractTaxi;
 
 	/**
 	 * vip标记
 	 */
+	@FormParam("vipMark")
 	private boolean vipMark;
 
 	
 	/**
 	 * 是否预约标记
 	 */
+	@FormParam("reservation")
 	private boolean reservation;
 	/**
 	 * 打车类型 0是普通, 1是等级,2指派
 	 */
+	@FormParam("takeTaxiType")
 	private byte takeTaxiType;
 
 	/**
@@ -358,71 +388,85 @@ public class Order implements Serializable {
 	 * 
 	 * 1为最高
 	 */
+	@FormParam("serverLevel")
 	private byte serverLevel;
 
 	/**
 	 * 乘客首选公司
 	 */
+	@FormParam("firstChoiceCompany")
 	private String firstChoiceCompany;
 
 	/**
 	 * 人数
 	 */
+	@FormParam("personCount")
 	private int personCount;
 
 	/**
 	 * 上车地点经度信息
 	 */
+	@FormParam("getOnLon")
 	private double getOnLon;
 
 	/**
 	 * 上车地点纬度信息
 	 */
+	@FormParam("getOnLat")
 	private double getOnLat;
 
 	/**
 	 * 下车地点经度信息
 	 */
+	@FormParam("getOffLon")
 	private double getOffLon;
 
 	/**
 	 * 下车地点纬度信息
 	 */
+	@FormParam("getOffLat")
 	private double getOffLat;
 
 	/**
 	 * 上车地点名称
 	 */
+	@FormParam("getOnPlaceName")
 	private String getOnPlaceName;
 
 	/**
 	 * 下车地点名称
 	 */
+	@FormParam("getOffPlaceName")
 	private String getOffPlaceName;
 
 	/**
 	 * 备注
 	 */
+	@FormParam("notes")
 	private String notes;
 
 	/**
 	 * 车型要求
 	 */
+	@FormParam("motorcycleType")
 	private String motorcycleType;
 
 	/**
 	 * 备用电话
 	 */
+	@FormParam("anotherCellPhoneNo")
 	private int anotherCellPhoneNo;
 
 	/**
 	 * 特殊要求
 	 */
+	@FormParam("specialRequirements")
 	private String specialRequirements;
 
 	/**
 	 * 订单生成时间
 	 */
+	@FormParam("orderCreateTime")
 	private Date orderCreateTime;
 
 	
@@ -431,6 +475,7 @@ public class Order implements Serializable {
 	 * 
 	 * String类型时间格式的字符串yyyy-MM-dd HH:mm:ss
 	 */
+	@FormParam("cityResponse2CenterTime")
 	private String cityResponse2CenterTime;
 
 	/**
@@ -438,6 +483,7 @@ public class Order implements Serializable {
 	 * 
 	 * String类型时间格式的字符串yyyy-MM-dd HH:mm:ss
 	 */
+	@FormParam("taxiResponse2CityTime")
 	private String taxiResponse2CityTime;
 
 	
