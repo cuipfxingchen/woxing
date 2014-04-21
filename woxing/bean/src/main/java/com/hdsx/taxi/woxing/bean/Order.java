@@ -18,7 +18,6 @@ public class Order implements Serializable {
 	 */
 	private static final long serialVersionUID = -5167741453339721565L;
 
-
 	/**
 	 * 城市编码
 	 */
@@ -29,7 +28,7 @@ public class Order implements Serializable {
 	 */
 	@FormParam("useriphone")
 	private String useriphone;
-	
+
 	public String getUseriphone() {
 		return useriphone;
 	}
@@ -47,6 +46,8 @@ public class Order implements Serializable {
 	}
 
 	public OrderResult getResult() {
+		if (result == null)
+			result = new OrderResult();
 		return result;
 	}
 
@@ -291,20 +292,19 @@ public class Order implements Serializable {
 	 */
 	@FormParam("result")
 	private OrderResult result;
-	
-	
+
 	/**
 	 * 支付类型
 	 */
 	@FormParam("paytype")
 	private byte paytype;
-	
+
 	/**
 	 * 打车费用
 	 */
 	@FormParam("fee")
 	private short fee;
-	
+
 	/**
 	 * 订单状态
 	 */
@@ -344,7 +344,7 @@ public class Order implements Serializable {
 	 */
 	@FormParam("sex")
 	private byte sex;
-		
+
 	/**
 	 * 出发时间 yyyy-MM-dd HH:mm:ss
 	 */
@@ -371,7 +371,6 @@ public class Order implements Serializable {
 	@FormParam("vipMark")
 	private boolean vipMark;
 
-	
 	/**
 	 * 是否预约标记
 	 */
@@ -469,7 +468,6 @@ public class Order implements Serializable {
 	@FormParam("orderCreateTime")
 	private Date orderCreateTime;
 
-	
 	/**
 	 * [城市级响应到中心时间]
 	 * 
@@ -486,5 +484,4 @@ public class Order implements Serializable {
 	@FormParam("taxiResponse2CityTime")
 	private String taxiResponse2CityTime;
 
-	
 }

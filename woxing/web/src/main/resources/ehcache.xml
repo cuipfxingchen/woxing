@@ -17,6 +17,18 @@
 		memoryStoreEvictionPolicy="FIFO"></cache>
 
 
+	<!-- 订单缓存池缓存 -->
+	<cache name="orderpoolcache" maxElementsInMemory="10000" eternal="false"
+		timeToIdleSeconds="120" timeToLiveSeconds="120" diskSpoolBufferSizeMB="30"
+		maxElementsOnDisk="10000000" diskExpiryThreadIntervalSeconds="120"
+		memoryStoreEvictionPolicy="FIFO"></cache>
+		
+	<!--用户和订单对应缓存 -->
+	<cache name="customordermapperpoolcache" maxElementsInMemory="10000" eternal="false"
+		timeToIdleSeconds="120" timeToLiveSeconds="120" diskSpoolBufferSizeMB="30"
+		maxElementsOnDisk="10000000" diskExpiryThreadIntervalSeconds="120"
+		memoryStoreEvictionPolicy="FIFO"></cache>
+
 
 
 	<!-- name:缓存名称。 maxElementsInMemory：缓存最大个数。 eternal:对象是否永久有效，一但设置了，timeout将不起作用。 

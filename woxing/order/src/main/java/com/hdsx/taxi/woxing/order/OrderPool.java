@@ -1,0 +1,161 @@
+package com.hdsx.taxi.woxing.order;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import net.sf.ehcache.Ehcache;
+import net.sf.ehcache.Element;
+
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+import com.hdsx.taxi.woxing.bean.Order;
+import com.hdsx.taxi.woxing.bean.util.CacheManagerUtil;
+import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1001;
+
+/**
+ * 订单池
+ * 
+ * @author Steven
+ * 
+ */
+@Singleton
+public class OrderPool {
+
+	private static final String ORDERPOOL_CACHE_NAME = "orderpoolcache";
+	private static final String CUSTOMPOOL_CACHE_NAME = "customordermapperpoolcache";
+	Ehcache pool;
+	Ehcache custompool;
+
+	@Inject
+	public OrderPool(CacheManagerUtil cm) {
+		this.pool = cm.getCm().getEhcache(ORDERPOOL_CACHE_NAME);
+		this.custompool = cm.getCm().getEhcache(CUSTOMPOOL_CACHE_NAME);
+	}
+
+	/**
+	 * 通过customid查询当前订单
+	 * 
+	 * @param customid
+	 * @return
+	 */
+	public Order getCurOrder(String customid) {
+
+		Element e = custompool.get(customid);
+		if (e != null) {
+			CutomOrderMapper mapper = (CutomOrderMapper) e.getObjectValue();
+
+			Element ele = pool.get(mapper.getCurOrderid());
+			if (ele != null)
+				return (Order) ele.getObjectValue();
+
+		}
+		return null;
+	}
+
+	/**
+	 * 根据customid查询预约订单
+	 * 
+	 * @param customid
+	 * @return
+	 */
+	public List<Order> getReservationOrder(String customid) {
+		Element e = custompool.get(customid);
+		if (e != null) {
+			CutomOrderMapper mapper = (CutomOrderMapper) e.getObjectValue();
+
+			List<Order> list = new ArrayList<>();
+
+			for (long oid : mapper.getReorderlist()) {
+				Element ele = pool.get(oid);
+
+				list.add((Order) ele.getObjectValue());
+			}
+			return list;
+		}
+		return null;
+	}
+
+	/**
+	 * 增加订单
+	 * 
+	 * @param order
+	 */
+	public void put(Order order) {
+		Element e = new Element(order.getOrderId(), order);
+		Element customelement = custompool.get(order.getUserId());
+		if (customelement == null) {
+			CutomOrderMapper mapper = new CutomOrderMapper();
+			mapper.setCustomid(order.getUserId());
+			if (order.isReservation()) {
+				mapper.getReorderlist().add(order.getOrderId());
+			} else {
+				mapper.setCurOrderid(order.getOrderId());
+			}
+			customelement = new Element(order.getUserId(), mapper);
+
+		} else {
+			CutomOrderMapper mapper = (CutomOrderMapper) customelement
+					.getObjectValue();
+			if (order.isReservation()) {
+				mapper.getReorderlist().add(order.getOrderId());
+			} else {
+				mapper.setCurOrderid(order.getOrderId());
+			}
+		}
+		this.custompool.put(customelement);
+		this.pool.put(e);
+	}
+
+	public void update(MQMsg1001 msg) {
+		long orderid = msg.getOrderId();
+		Element e = pool.get(orderid);
+		if (e == null)
+			return;
+		Order o = (Order) e.getObjectValue();
+		o.getResult().setCar_company(msg.getCommpany());
+
+		// TODO 完善Order属性更新
+
+		pool.put(e);
+
+		// TODO 将Order对象存入数据库
+
+	}
+
+	/**
+	 * 乘客Id和订单信息的关联
+	 * 
+	 * @author Steven
+	 * 
+	 */
+	class CutomOrderMapper {
+		String customid; // 乘客id
+		long curOrderid; // 当前订单id
+		List<Long> reorderlist = new ArrayList<Long>(); // 预约订单id
+
+		public String getCustomid() {
+			return customid;
+		}
+
+		public void setCustomid(String customid) {
+			this.customid = customid;
+		}
+
+		public long getCurOrderid() {
+			return curOrderid;
+		}
+
+		public void setCurOrderid(long curOrderid) {
+			this.curOrderid = curOrderid;
+		}
+
+		public List<Long> getReorderlist() {
+			return reorderlist;
+		}
+
+		public void setReorderlist(List<Long> reorderlist) {
+			this.reorderlist = reorderlist;
+		}
+
+	}
+}

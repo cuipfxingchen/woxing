@@ -26,5 +26,20 @@
 			<artifactId>bean</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.hdsx.taxi.woxing</groupId>
+			<artifactId>xmpp</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.hdsx.taxi.woxing</groupId>
+			<artifactId>dao</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.hdsx.taxi.woxing</groupId>
+			<artifactId>mqutil</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 </project>

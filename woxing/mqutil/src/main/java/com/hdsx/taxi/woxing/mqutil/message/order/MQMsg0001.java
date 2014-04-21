@@ -49,8 +49,9 @@ public class MQMsg0001 extends MQAbsMsg {
 	String getOffPlaceName; // 下车地点名称
 	String nickName; // 称呼
 	byte sex; // 性别:0：女，1，男
-	long userId; // 乘客联系电话
+	String userphone; // 乘客联系电话
 	String notes; // 备注信息
+	boolean revesation; // 是否预约
 
 	public MQMsg0001() {
 	}
@@ -191,12 +192,14 @@ public class MQMsg0001 extends MQAbsMsg {
 		this.sex = sex;
 	}
 
-	public long getUserId() {
-		return userId;
+
+
+	public String getUserphone() {
+		return userphone;
 	}
 
-	public void setUserId(long userId) {
-		this.userId = userId;
+	public void setUserphone(String userphone) {
+		this.userphone = userphone;
 	}
 
 	public String getNotes() {
@@ -242,8 +245,9 @@ public class MQMsg0001 extends MQAbsMsg {
 		this.getOffPlaceName = msg.readUTF();
 		this.nickName = msg.readUTF();
 		this.sex = msg.readByte();
-		this.userId = msg.readLong();
+		this.userphone = msg.readUTF();
 		this.notes = msg.readUTF();
+		this.revesation = msg.readBoolean();
 	}
 
 	@Override
@@ -268,10 +272,18 @@ public class MQMsg0001 extends MQAbsMsg {
 		msg.writeUTF(this.getOffPlaceName);
 		msg.writeUTF(this.nickName);
 		msg.writeByte(this.sex);
-		msg.writeLong(this.userId);
+		msg.writeUTF(this.userphone);
 		msg.writeUTF(this.notes);
-
+		msg.writeBoolean(this.revesation);
 		return msg;
+	}
+
+	public boolean isRevesation() {
+		return revesation;
+	}
+
+	public void setRevesation(boolean revesation) {
+		this.revesation = revesation;
 	}
 
 }

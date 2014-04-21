@@ -8,6 +8,9 @@ import com.google.inject.Module;
 import com.google.inject.Singleton;
 import com.hdsx.taxi.woxing.bean.util.CacheManagerUtil;
 import com.hdsx.taxi.woxing.mqutil.msgpool.MQMsgPool;
+import com.hdsx.taxi.woxing.order.IOrderService;
+import com.hdsx.taxi.woxing.order.OrderPool;
+import com.hdsx.taxi.woxing.order.OrderService;
 import com.hdsx.taxi.woxing.web.rest.ComplaintRest;
 import com.hdsx.taxi.woxing.web.rest.EstimateRest;
 import com.hdsx.taxi.woxing.web.rest.LocationRest;
@@ -33,16 +36,20 @@ public class RestEasyModule implements Module {
 		 */
 		binder.bind(CacheManagerUtil.class); // Ehcache管理器
 		binder.bind(MQMsgPool.class).in(Singleton.class); // MQ消息池
+		binder.bind(OrderPool.class).in(Singleton.class); // 订单服务池
 		binder.bind(IXMPPService.class).to(XMPPService.class)
-				.in(Singleton.class);  //XMPPService
+				.in(Singleton.class); // XMPPService
 
 		/**
 		 * 绑定服务
 		 */
+
 		binder.bind(LocationService.class); // 位置服务
 		binder.bind(ComplaintService.class); // 投诉服务
 		binder.bind(EstimateService.class); // 评价服务
 
+		binder.bind(IOrderService.class).to(OrderService.class)
+				.in(Singleton.class); // 订单服务
 		/**
 		 * RESTeasy
 		 */
