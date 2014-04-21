@@ -1,10 +1,12 @@
 package com.hdsx.taxi.woxing.mqutil;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.Set;
 
@@ -57,13 +59,19 @@ public class MQService {
 	 * 
 	 * @param listener
 	 * @throws JMSException
+	 * @throws IOException 
 	 */
-	public void initcity(MessageListener listener) throws JMSException {
-		ResourceBundle rb = ResourceBundle.getBundle("mq");
-		String url = rb.getString("mq.url");
-		String user = rb.getString("mq.user");
-		String password = rb.getString("mq.password");
-		String citycode = rb.getString("mq.citycode");
+	public void initcity(MessageListener listener) throws JMSException, IOException {
+		
+		
+		
+		Properties p = new Properties();
+		p.load(MQService.class.getResourceAsStream("/mq.properties"));
+		
+		String url = p.getProperty("mq.url");
+		String user = p.getProperty("mq.user");
+		String password = p.getProperty("mq.password");
+		String citycode = p.getProperty("mq.citycode");
 		logger.info("开始连接ActiveMQ");
 		ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(
 				user, password, url);
