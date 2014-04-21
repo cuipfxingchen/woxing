@@ -12,6 +12,12 @@ import java.util.Date;
 
 public class Order implements Serializable {
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5167741453339721565L;
+
+
+	/**
 	 * 城市编码
 	 */
 	private String citycode;
