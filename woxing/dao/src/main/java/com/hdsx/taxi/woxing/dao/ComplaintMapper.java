@@ -1,17 +1,12 @@
 package com.hdsx.taxi.woxing.dao;
 
-import java.util.List;
 
 import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Select;
 
 import com.hdsx.taxi.woxing.bean.Complaint;
-import com.hdsx.taxi.woxing.bean.Order;
 
 public interface ComplaintMapper {
-	@Select("select * from orderaa")
-	public List<Complaint> getlist();
 
-	@Insert("insert into orderaa (id,operationid,name) values(#{id},#{operationid},#{name})")
+	@Insert("insert into taxi.db_complaint(id,db_order_id,db_type,db_content,db_state,db_passengerMobile,db_passengerName,db_complaint_creat_time) values(#{id},#{orderId},#{type},#{content},#{state},#{passengerMobile},#{passengerName},#{complainDate})")
 	public int insert(Complaint complaint);
 }

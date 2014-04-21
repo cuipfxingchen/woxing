@@ -23,7 +23,7 @@ import com.hdsx.taxi.woxing.web.service.ComplaintService;
  * @author cuipengfei
  * 
  */
-@Path("/rest/2/{customid}")
+@Path("/rest/com/{customid}")
 public class ComplaintRest {
 
 	/**
@@ -35,6 +35,17 @@ public class ComplaintRest {
 	@Inject
 	ComplaintService complaintService;
 
+	/**
+	 * 保存投诉信息
+	 * @param orderId
+	 * @param type
+	 * @param content
+	 * @param mobile
+	 * @param name
+	 * @param citycode
+	 * @param customid
+	 * @return
+	 */
 	@POST
 	@Path("/1")
 	@Produces("application/json;charset=UTF-8")

@@ -22,7 +22,7 @@ import javax.ws.rs.Produces;
  * @author cuipengfei
  *
  */
-@Path("/rest/3/{customid}")
+@Path("/rest/est/{customid}")
 public class EstimateRest {
 	/**
 	 * Logger for this class
