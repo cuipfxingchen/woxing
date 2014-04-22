@@ -12,7 +12,7 @@ import com.hdsx.taxi.woxing.mqutil.message.MQAbsMsg;
  * 
  */
 public class MQMsg1005 extends MQAbsMsg {
-	String orderid;
+	long orderid;
 
 	String carLicensenumber;
 	float lat;
@@ -22,7 +22,7 @@ public class MQMsg1005 extends MQAbsMsg {
 	@Override
 	protected void decodebody(BytesMessage msg) throws JMSException {
 
-		this.orderid = msg.readUTF();
+		this.orderid = msg.readLong();
 		this.carLicensenumber = msg.readUTF();
 		this.lat = msg.readFloat();
 		this.lon = msg.readFloat();
@@ -32,7 +32,7 @@ public class MQMsg1005 extends MQAbsMsg {
 
 	@Override
 	protected BytesMessage encodebody(BytesMessage msg) throws JMSException {
-		msg.writeUTF(this.orderid);
+		msg.writeLong(this.orderid);
 		msg.writeUTF(this.carLicensenumber);
 		msg.writeFloat(this.lat);
 		msg.writeFloat(this.lon);
@@ -40,11 +40,11 @@ public class MQMsg1005 extends MQAbsMsg {
 		return null;
 	}
 
-	public String getOrderid() {
+	public long getOrderid() {
 		return orderid;
 	}
 
-	public void setOrderid(String orderid) {
+	public void setOrderid(long orderid) {
 		this.orderid = orderid;
 	}
 
