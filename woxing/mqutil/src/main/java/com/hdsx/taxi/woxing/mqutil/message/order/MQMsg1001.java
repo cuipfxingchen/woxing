@@ -34,6 +34,7 @@ public class MQMsg1001 extends MQAbsMsg {
 	String commpany; // 出租车公司 对应Order中taxiCompany(出租车所属公司)
 	String driverid; // 驾驶员的从业资格证号
 	String time;// 抢单时间
+	float lat, lon;
 
 	public MQMsg1001() {
 		super();
@@ -140,6 +141,8 @@ public class MQMsg1001 extends MQAbsMsg {
 		this.commpany = msg.readUTF();
 		this.driverid = msg.readUTF();
 		this.time = msg.readUTF();
+		this.lat=msg.readFloat();
+		this.lon=msg.readFloat();
 
 	}
 
@@ -155,8 +158,26 @@ public class MQMsg1001 extends MQAbsMsg {
 		msg.writeUTF(this.color);
 		msg.writeUTF(this.commpany);
 		msg.writeUTF(this.driverid);
-		msg.writeUTF(this.time);		
+		msg.writeUTF(this.time);
+		msg.writeFloat(this.lat);
+		msg.writeFloat(this.lon);
 		return msg;
+	}
+
+	public float getLat() {
+		return lat;
+	}
+
+	public void setLat(float lat) {
+		this.lat = lat;
+	}
+
+	public float getLon() {
+		return lon;
+	}
+
+	public void setLon(float lon) {
+		this.lon = lon;
 	}
 
 }
