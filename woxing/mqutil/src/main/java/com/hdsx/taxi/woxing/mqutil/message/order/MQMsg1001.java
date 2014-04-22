@@ -33,9 +33,18 @@ public class MQMsg1001 extends MQAbsMsg {
 	String color; // 抢单车颜色 对应Order中taxiColor(出租车颜色)
 	String commpany; // 出租车公司 对应Order中taxiCompany(出租车所属公司)
 	String driverid; // 驾驶员的从业资格证号
+	String time;// 抢单时间
 
 	public MQMsg1001() {
 		super();
+	}
+
+	public String getTime() {
+		return time;
+	}
+
+	public void setTime(String time) {
+		this.time = time;
 	}
 
 	public String getDriverid() {
@@ -116,7 +125,6 @@ public class MQMsg1001 extends MQAbsMsg {
 
 	@Override
 	protected short getMessageId() {
-
 		return 0x1001;
 	}
 
@@ -131,6 +139,7 @@ public class MQMsg1001 extends MQAbsMsg {
 		this.color = msg.readUTF();
 		this.commpany = msg.readUTF();
 		this.driverid = msg.readUTF();
+		this.time = msg.readUTF();
 
 	}
 
@@ -146,7 +155,7 @@ public class MQMsg1001 extends MQAbsMsg {
 		msg.writeUTF(this.color);
 		msg.writeUTF(this.commpany);
 		msg.writeUTF(this.driverid);
-
+		msg.writeUTF(this.time);		
 		return msg;
 	}
 
