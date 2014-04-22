@@ -19,8 +19,7 @@ public interface EstimateMapper {
 
 	/* 修改评论 */
 	@Update("UPDATE db_estimate SET db_user_id = #{userId},db_score = #{score},db_comment =#{comment},db_estimate_time =#{estimateTime} WHERE db_order_id = #{orderId}")
-	public Estimate updateEstimate(long estimateId, long orderId, int score,
-			String comment);
+	public Estimate updateEstimate(Estimate Estimate);
 
 	/* 删除评论 */
 	@Delete("DELETE FROM db_estimate WHERE id = #{estimateId}")

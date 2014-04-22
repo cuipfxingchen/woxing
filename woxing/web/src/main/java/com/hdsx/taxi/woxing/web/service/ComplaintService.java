@@ -37,12 +37,12 @@ public class ComplaintService {
 	 * @param customid
 	 * @return
 	 */
-	public boolean saveComplain(Complaint complaint,String citycode,String customid) {
+	public boolean saveComplain(Complaint complaint) {
 		try {
 			complaintMapper.insert(complaint);
 			
 			//   封装内容
-			MQMsg4001 msg = new MQMsg4001(customid);
+			MQMsg4001 msg = new MQMsg4001(complaint.getCustomid());
 			msg.setContents(complaint.getContent());
 			msg.setPass_name(complaint.getPassengerName());
 			msg.setPass_tel(complaint.getPassengerMobile());
@@ -50,7 +50,7 @@ public class ComplaintService {
 			msg.setId(Long.parseLong(complaint.getOrderId()));
 			
 			// 发送信息
-			ms.sendMsg(citycode, msg);
+			ms.sendMsg(complaint.getCitycode(), msg);
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -13,21 +13,7 @@ import javax.ws.rs.FormParam;
  */
 
 public class Order implements Serializable {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -5167741453339721565L;
-
-	/**
-	 * 城市编码
-	 */
-	@FormParam("citycode")
-	private String citycode;
-	/**
-	 * 用户电话号码
-	 */
-	@FormParam("useriphone")
-	private String useriphone;
 
 	public String getUseriphone() {
 		return useriphone;
@@ -87,12 +73,12 @@ public class Order implements Serializable {
 		this.orderId = orderId;
 	}
 
-	public String getUserId() {
-		return userId;
+	public String getCustomid() {
+		return customid;
 	}
 
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setCustomid(String customid) {
+		this.customid = customid;
 	}
 
 	public String getNickName() {
@@ -247,11 +233,11 @@ public class Order implements Serializable {
 		this.motorcycleType = motorcycleType;
 	}
 
-	public int getAnotherCellPhoneNo() {
+	public String getAnotherCellPhoneNo() {
 		return anotherCellPhoneNo;
 	}
 
-	public void setAnotherCellPhoneNo(int anotherCellPhoneNo) {
+	public void setAnotherCellPhoneNo(String anotherCellPhoneNo) {
 		this.anotherCellPhoneNo = anotherCellPhoneNo;
 	}
 
@@ -294,6 +280,17 @@ public class Order implements Serializable {
 	private OrderResult result;
 
 	/**
+	 * 城市编码
+	 */
+	@FormParam("citycode")
+	private String citycode;
+	/**
+	 * 用户电话号码
+	 */
+	@FormParam("useriphone")
+	private String useriphone;
+
+	/**
 	 * 支付类型
 	 */
 	@FormParam("paytype")
@@ -324,8 +321,8 @@ public class Order implements Serializable {
 	 * 
 	 * (用户手机号)
 	 */
-	@FormParam("userId")
-	private String userId;
+	@FormParam("customid")
+	private String customid;
 
 	/**
 	 * 用户昵称
@@ -454,7 +451,7 @@ public class Order implements Serializable {
 	 * 备用电话
 	 */
 	@FormParam("anotherCellPhoneNo")
-	private int anotherCellPhoneNo;
+	private String anotherCellPhoneNo;
 
 	/**
 	 * 特殊要求

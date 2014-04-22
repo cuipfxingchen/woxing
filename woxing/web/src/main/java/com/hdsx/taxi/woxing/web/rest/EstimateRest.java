@@ -2,6 +2,7 @@ package com.hdsx.taxi.woxing.web.rest;
 
 import java.util.List;
 
+import org.jboss.resteasy.annotations.Form;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,7 +35,7 @@ public class EstimateRest {
 
 	/* 查询评论 */
 	@GET
-	@Path("/getEstimate/estimateId")
+	@Path("/1/estimateId")
 	@Produces("application/json;charset=UTF-8")
 	public RestBean getEstimateById(@PathParam("estimateId") long estimateId) {
 		RestBean<String> re = new RestBean<>();
@@ -52,13 +53,11 @@ public class EstimateRest {
 
 	/* 新建评论 */
 	@POST
-	@Path("/createEstimate/orderId/userId/score/comment")
+	@Path("/2")
 	@Produces("application/json;charset=UTF-8")
-	public RestBean createEstimate(@FormParam("orderId") long orderId,
-			@FormParam("userId") long userId, @FormParam("score") int score,
-			@FormParam("comment") String comment) {
+	public RestBean createEstimate(@Form Estimate est) {
 		RestBean<String> re = new RestBean<>();
-		if(estimateService.createEstimate(orderId, userId, score, comment)){
+		if(estimateService.createEstimate(est)){
 			re.setMsg("创建评论成功");
 		}else{
 			re.setState(201);
@@ -69,16 +68,12 @@ public class EstimateRest {
 	}
 
 	/* 修改评论 */
-	@GET
-	@Path("/updateEstimate/estimateId/orderId/score/comment")
+	@POST
+	@Path("/3")
 	@Produces("application/json;charset=UTF-8")
-	public RestBean updateEstimate(@PathParam("estimateId") long estimateId,
-			@PathParam("orderId") long orderId,
-			@PathParam("score") int score,
-			@PathParam("comment") String comment) {
+	public RestBean updateEstimate(@Form Estimate est) {
 		RestBean<Estimate> re = new RestBean<>();
-		Estimate estimate=estimateService.updateEstimate(estimateId, orderId, score,
-				comment);
+		Estimate estimate=estimateService.updateEstimate(est);
 		if(estimate!=null){
 			re.setMsg("创建评论成功");
 			re.setResult(estimate);
@@ -92,7 +87,7 @@ public class EstimateRest {
 
 	/* 删除评论 */
 	@GET
-	@Path("/deleteEstimate/estimateId")
+	@Path("/4/estimateId")
 	@Produces("application/json;charset=UTF-8")
 	public RestBean deleteEstimate(@PathParam("estimateId") long estimateId) {
 		RestBean<String> re = new RestBean<>();

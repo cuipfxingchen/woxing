@@ -82,16 +82,16 @@ public class OrderPool {
 	 */
 	public void put(Order order) {
 		Element e = new Element(order.getOrderId(), order);
-		Element customelement = custompool.get(order.getUserId());
+		Element customelement = custompool.get(order.getCustomid());
 		if (customelement == null) {
 			CutomOrderMapper mapper = new CutomOrderMapper();
-			mapper.setCustomid(order.getUserId());
+			mapper.setCustomid(order.getCustomid());
 			if (order.isReservation()) {
 				mapper.getReorderlist().add(order.getOrderId());
 			} else {
 				mapper.setCurOrderid(order.getOrderId());
 			}
-			customelement = new Element(order.getUserId(), mapper);
+			customelement = new Element(order.getCustomid(), mapper);
 
 		} else {
 			CutomOrderMapper mapper = (CutomOrderMapper) customelement

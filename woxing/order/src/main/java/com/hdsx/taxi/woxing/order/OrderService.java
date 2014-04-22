@@ -43,7 +43,7 @@ public class OrderService implements IOrderService {
 	public int submit(Order order) {
 		try {
 
-			MQMsg0001 msg = new MQMsg0001(order.getUserId());
+			MQMsg0001 msg = new MQMsg0001(order.getCustomid());
 			msg.setRevesation(order.isReservation());
 			msg.setGetOnTime(order.getGetOnTime());
 			msg.setGetOnPlaceName(order.getGetOnPlaceName());

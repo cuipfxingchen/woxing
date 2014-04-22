@@ -8,6 +8,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
+import org.jboss.resteasy.annotations.Form;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,6 +36,8 @@ public class ComplaintRest {
 	@Inject
 	ComplaintService complaintService;
 
+	
+	
 	/**
 	 * 保存投诉信息
 	 * @param orderId
@@ -49,27 +52,14 @@ public class ComplaintRest {
 	@POST
 	@Path("/1")
 	@Produces("application/json;charset=UTF-8")
-	public RestBean saveComplain(@FormParam("orderid") String orderId,
-			@FormParam("type") String type,
-			@FormParam("content") String content,
-			@FormParam("mobile") String mobile, @FormParam("name") String name,
-			@PathParam("citycode") String citycode,
-			@PathParam("customid") String customid) {
-
-		// 填充上 stats 、时间
-		Complaint cp = new Complaint();
-		cp.setOrderId(orderId);
-		cp.setType(type);
-		cp.setContent(content);
-		cp.setPassengerMobile(mobile);
-		cp.setPassengerName(name);
+	public RestBean saveComplain(@Form Complaint cp) {
 
 		// 默认数据
 		cp.setState("1");
 		cp.setComplainDate(DateFormatUtil.date2MySQLDateTimeString(new Date()));
 		RestBean bean = new RestBean<>();
 		// 业务处理
-		if (complaintService.saveComplain(cp, citycode, customid)) {
+		if (complaintService.saveComplain(cp)) {
 			bean.setMsg("提交成功");
 		} else {
 			bean.setState(200);
