@@ -57,15 +57,9 @@ public class EstimateService {
 	 * @see com.hdsx.centerservice.estimate.service.EstimateService#createEstimate(long,
 	 *      long, int, java.lang.String)
 	 */
-	public boolean createEstimate(long orderId, long userId, int score,
-			String comment) {
-		Estimate est = new Estimate();
+	public boolean createEstimate(Estimate est) {
 		long estimateId = System.currentTimeMillis();
 		est.setEstimateId(estimateId);
-		est.setOrderId(orderId);
-		est.setUserId(userId);
-		est.setScore(score);
-		est.setComment(comment);
 		Date currentTime = new Date();
 		DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd-hh-mm-ss");
 		String estimateTime = format1.format(currentTime);
@@ -73,10 +67,9 @@ public class EstimateService {
 		return estimateMapper.createEstimate(est);
 	}
 
-	public Estimate updateEstimate(long estimateId, long orderId, int score,
-			String comment) {
+	public Estimate updateEstimate(Estimate estimate) {
 		// TODO Auto-generated method stub
-		return estimateMapper.updateEstimate(estimateId, orderId, score, comment);
+		return estimateMapper.updateEstimate(estimate);
 	}
 
 	public boolean deleteEstimate(long estimateId) {

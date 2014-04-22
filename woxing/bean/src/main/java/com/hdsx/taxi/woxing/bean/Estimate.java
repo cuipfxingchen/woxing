@@ -10,6 +10,10 @@
 
 package com.hdsx.taxi.woxing.bean;
 
+import java.io.Serializable;
+
+import javax.ws.rs.FormParam;
+
 /**
  * ClassName:Estimate
  * 
@@ -22,7 +26,11 @@ package com.hdsx.taxi.woxing.bean;
  * @author Kevin
  * @see
  */
-public class Estimate {
+public class Estimate implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3297840773127067101L;
 	public Estimate() {
 
 	}
@@ -43,12 +51,13 @@ public class Estimate {
 		this.orderId = orderId;
 	}
 
-	public long getUserId() {
-		return userId;
+
+	public String getCustomid() {
+		return customid;
 	}
 
-	public void setUserId(long userId) {
-		this.userId = userId;
+	public void setCustomid(String customid) {
+		this.customid = customid;
 	}
 
 	public int getScore() {
@@ -76,16 +85,32 @@ public class Estimate {
 	}
 
 	/* 评价对象ID */
+	@FormParam("estimateId")
 	private long estimateId;
 	/* 评价对应订单ID */
+	@FormParam("orderId")
 	private long orderId;
 	/* 评价用户id */
-	private long userId;
+	@FormParam("customid")
+	private String customid;
+	@FormParam("citycode")
+	private String citycode;//城市代码
+	public String getCitycode() {
+		return citycode;
+	}
+
+	public void setCitycode(String citycode) {
+		this.citycode = citycode;
+	}
+
 	/* id的用户对订单的评分(对出租车司机的评分) */
+	@FormParam("score")
 	private int score;
 	/* 对订单的评论 */
+	@FormParam("comment")
 	private String comment;
 	/* 评价生成时间 */
+	@FormParam("estimateTime")
 	private String estimateTime;
 
 }

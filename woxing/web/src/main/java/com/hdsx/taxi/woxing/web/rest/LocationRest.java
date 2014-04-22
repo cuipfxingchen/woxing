@@ -48,7 +48,7 @@ public class LocationRest {
 	 * @return
 	 */
 	@GET
-	@Path("/2/{x}/{y}/{r}/{citycode}")
+	@Path("/1/{x}/{y}/{r}/{citycode}")
 	@Produces("application/json;charset=UTF-8")
 	public RestBean getCarByDistance(@PathParam("x") double x,
 			@PathParam("y") double y, @PathParam("r") short r,
@@ -77,7 +77,7 @@ public class LocationRest {
 	 * @return
 	 */
 	@GET
-	@Path("/1/{orderId}/{citycode}")
+	@Path("/2/{orderId}/{citycode}")
 	@Produces("application/json;charset=UTF-8")
 	public RestBean getCarInfoByCarNum(@PathParam("orderId") String orderId,
 			@PathParam("citycode") String citycode,
@@ -97,9 +97,9 @@ public class LocationRest {
 	 * @return
 	 */
 	@GET
-	@Path("/getchecktip/code/name")
+	@Path("/3/code/name")
 	@Produces("text/plain;charset=utf-8")
-	public String getCheckTip(@PathParam("code") String ct,
+	public RestBean getCheckTip(@PathParam("code") String ct,
 			@PathParam("name") String cn) {
 		
 		RestBean<String> bean = new RestBean<>();
@@ -131,7 +131,7 @@ public class LocationRest {
 			bean.setMsg("城市名称为空");
 		}
 
-		return "{\"state\":0}";
+		return bean;
 	}
 	
 	
