@@ -35,6 +35,15 @@ public class MQMsg1004 extends MQAbsMsg {
 
 	String carNumber;
 	String phone;
+	long orderid;
+
+	public long getOrderid() {
+		return orderid;
+	}
+
+	public void setOrderid(long orderid) {
+		this.orderid = orderid;
+	}
 
 	public String getPhone() {
 		return phone;
@@ -100,6 +109,7 @@ public class MQMsg1004 extends MQAbsMsg {
 		this.reasoncode = msg.readByte();
 		this.time = msg.readUTF();
 		this.phone = msg.readUTF();	
+		this.orderid=msg.readLong();
 	}
 
 	@Override
@@ -109,6 +119,7 @@ public class MQMsg1004 extends MQAbsMsg {
 		msg.writeByte(this.reasoncode);
 		msg.writeUTF(this.time);
 		msg.writeUTF(this.phone);
+		msg.writeLong(this.orderid);
 		return null;
 	}
 
