@@ -21,14 +21,14 @@ import com.hdsx.taxi.woxing.mqutil.message.MQAbsMsg;
  * @author Steven
  * 
  */
-public class MQMsg0004 extends MQAbsMsg {
+public class MQMsg1004 extends MQAbsMsg {
 
-	public MQMsg0004() {
+	public MQMsg1004() {
 		super();
 
 	}
 
-	public MQMsg0004(String customId) {
+	public MQMsg1004(String customId) {
 		super(customId);
 
 	}
