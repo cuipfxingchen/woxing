@@ -26,23 +26,24 @@ public class MQMsg1001 extends MQAbsMsg {
 	long orderId; // 订单ID
 	String taxiId; // 出租车ID 对应Order中taxiId(出租车驾驶员编号)
 
-	@Override
-	public String toString() {
-		return "MQMsg1001 [orderId=" + orderId + ", taxiId=" + taxiId
-				+ ", number=" + number + ", phone=" + phone + ", name=" + name
-				+ ", type=" + type + ", color=" + color + ", commpany="
-				+ commpany + "]";
-	}
-
 	String number; // 抢单车牌号 对应Order中taxiPlateNumber(出租车牌号)
 	String phone; // 抢单电话 抢单司机电话 对应Order中taxiDriverCellPhoneNo(出租车司机手机号)
 	String name; // 抢单名称 出租车司机姓名 对应Order中taxiDriverName(出租车司机姓名 )
 	String type; // 抢单车型 对应Order中motorcycleType(出租车具体型号)
 	String color; // 抢单车颜色 对应Order中taxiColor(出租车颜色)
 	String commpany; // 出租车公司 对应Order中taxiCompany(出租车所属公司)
+	String driverid; // 驾驶员的从业资格证号
 
 	public MQMsg1001() {
 		super();
+	}
+
+	public String getDriverid() {
+		return driverid;
+	}
+
+	public void setDriverid(String driverid) {
+		this.driverid = driverid;
 	}
 
 	public MQMsg1001(String customId) {
@@ -129,6 +130,7 @@ public class MQMsg1001 extends MQAbsMsg {
 		this.type = msg.readUTF();
 		this.color = msg.readUTF();
 		this.commpany = msg.readUTF();
+		this.driverid = msg.readUTF();
 
 	}
 
@@ -143,6 +145,7 @@ public class MQMsg1001 extends MQAbsMsg {
 		msg.writeUTF(this.type);
 		msg.writeUTF(this.color);
 		msg.writeUTF(this.commpany);
+		msg.writeUTF(this.driverid);
 
 		return msg;
 	}
