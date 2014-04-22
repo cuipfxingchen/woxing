@@ -4,9 +4,13 @@ package com.hdsx.taxi.woxing.dao;
 import org.apache.ibatis.annotations.Insert;
 
 import com.hdsx.taxi.woxing.bean.Complaint;
-
+/**
+ * 投诉dao
+ * @author cuipengfei
+ *
+ */
 public interface ComplaintMapper {
 
-	@Insert("insert into taxi.db_complaint(id,db_order_id,db_type,db_content,db_state,db_passengerMobile,db_passengerName,db_complaint_creat_time) values(#{id},#{orderId},#{type},#{content},#{state},#{passengerMobile},#{passengerName},#{complainDate})")
+	@Insert("insert into db_complaint(id,orderId,type,content,state,passengerMobile,passengerName,complaint_creat_time,citcode,customid) values(#{id},#{orderId},#{type},#{content},#{state},#{passengerMobile},#{passengerName},#{complainDate},#{citycode},#{customid})")
 	public int insert(Complaint complaint);
 }

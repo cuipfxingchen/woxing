@@ -35,14 +35,6 @@ public class Estimate implements Serializable{
 
 	}
 
-	public long getEstimateId() {
-		return estimateId;
-	}
-
-	public void setEstimateId(long estimateId) {
-		this.estimateId = estimateId;
-	}
-
 	public long getOrderId() {
 		return orderId;
 	}
@@ -84,9 +76,6 @@ public class Estimate implements Serializable{
 		this.estimateTime = estimateTime;
 	}
 
-	/* 评价对象ID */
-	@FormParam("estimateId")
-	private long estimateId;
 	/* 评价对应订单ID */
 	@FormParam("orderId")
 	private long orderId;
@@ -102,7 +91,6 @@ public class Estimate implements Serializable{
 	public void setCitycode(String citycode) {
 		this.citycode = citycode;
 	}
-
 	/* id的用户对订单的评分(对出租车司机的评分) */
 	@FormParam("score")
 	private int score;

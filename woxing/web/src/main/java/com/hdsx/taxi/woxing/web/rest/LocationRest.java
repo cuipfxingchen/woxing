@@ -25,7 +25,7 @@ import com.hdsx.taxi.woxing.web.service.LocationService;
  * @author Steven
  * 
  */
-@Path("/rest/loc/{customid}")
+@Path("/rest/loc")
 public class LocationRest {
 	/**
 	 * Logger for this class

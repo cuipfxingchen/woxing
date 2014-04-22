@@ -23,7 +23,7 @@ import javax.ws.rs.Produces;
  * @author cuipengfei
  *
  */
-@Path("/rest/est/{customid}")
+@Path("/rest/est")
 public class EstimateRest {
 	/**
 	 * Logger for this class
@@ -73,10 +73,8 @@ public class EstimateRest {
 	@Produces("application/json;charset=UTF-8")
 	public RestBean updateEstimate(@Form Estimate est) {
 		RestBean<Estimate> re = new RestBean<>();
-		Estimate estimate=estimateService.updateEstimate(est);
-		if(estimate!=null){
+		if(estimateService.updateEstimate(est)){
 			re.setMsg("创建评论成功");
-			re.setResult(estimate);
 		}else{
 			re.setState(201);
 			re.setMsg("创建评论失败");
