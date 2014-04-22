@@ -15,17 +15,18 @@ import com.hdsx.taxi.woxing.mqutil.message.MQAbsMsg;
  * 
  ******************************************************************************/
 public class MQMsg2007 extends MQAbsMsg {
-	
+
 	double xlat, ylon;
 	double xdlat, ydlon;
-	
+
 	public MQMsg2007() {
+		super();
 	}
 
 	public MQMsg2007(String customId) {
 		super(customId);
 	}
-	
+
 	@Override
 	protected short getMessageId() {
 		return 0x2007;

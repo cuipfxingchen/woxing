@@ -31,6 +31,7 @@ public class MQMsg2002 extends MQAbsMsg {
 	long orderId;
 
 	public MQMsg2002() {
+		super();
 	}
 
 	public MQMsg2002(String customId) {

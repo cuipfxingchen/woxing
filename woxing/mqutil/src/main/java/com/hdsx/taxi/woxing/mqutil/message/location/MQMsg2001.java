@@ -28,6 +28,7 @@ public class MQMsg2001 extends MQAbsMsg {
 	short range;
 
 	public MQMsg2001() {
+		super();
 	}
 
 	public MQMsg2001(String customId) {

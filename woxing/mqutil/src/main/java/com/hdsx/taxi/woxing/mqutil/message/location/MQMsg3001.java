@@ -36,6 +36,7 @@ public class MQMsg3001 extends MQAbsMsg {
 	List<CarInfo> cars = new ArrayList<CarInfo>();
 
 	public MQMsg3001() {
+		super();
 	}
 
 	public MQMsg3001(String customId) {
@@ -92,8 +93,8 @@ public class MQMsg3001 extends MQAbsMsg {
 
 	@Override
 	public String toString() {
-		return "车辆:"+count;
-//		+"\t所有车辆:"+cars;
+		return "车辆:" + count;
+		// +"\t所有车辆:"+cars;
 	}
-	
+
 }

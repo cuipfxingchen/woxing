@@ -17,14 +17,15 @@ import com.hdsx.taxi.woxing.mqutil.message.MQAbsMsg;
 public class MQMsg3003 extends MQAbsMsg {
 
 	Integer cont;
-	
+
 	public MQMsg3003() {
+		super();
 	}
 
 	public MQMsg3003(String customId) {
 		super(customId);
 	}
-	
+
 	public Integer getCont() {
 		return cont;
 	}

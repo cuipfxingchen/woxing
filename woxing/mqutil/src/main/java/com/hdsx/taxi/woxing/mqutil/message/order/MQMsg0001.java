@@ -54,6 +54,7 @@ public class MQMsg0001 extends MQAbsMsg {
 	boolean revesation; // 是否预约
 
 	public MQMsg0001() {
+		super();
 	}
 
 	public MQMsg0001(String customId) {
@@ -191,8 +192,6 @@ public class MQMsg0001 extends MQAbsMsg {
 	public void setSex(byte sex) {
 		this.sex = sex;
 	}
-
-
 
 	public String getUserphone() {
 		return userphone;

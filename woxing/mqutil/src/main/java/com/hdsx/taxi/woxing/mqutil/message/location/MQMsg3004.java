@@ -20,13 +20,15 @@ public class MQMsg3004 extends MQAbsMsg {
 	 * 返回打车指数
 	 */
 	int result;
-	
+
 	public MQMsg3004() {
+		super();
 	}
-	
+
 	public MQMsg3004(String customId) {
 		super(customId);
 	}
+
 	@Override
 	protected short getMessageId() {
 		return 0x3004;

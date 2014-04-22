@@ -17,10 +17,11 @@ import com.hdsx.taxi.woxing.mqutil.message.MQAbsMsg;
 public class MQMsg2004 extends MQAbsMsg {
 
 	double lat, lon;
-	
+
 	public MQMsg2004() {
+		super();
 	}
-	
+
 	public MQMsg2004(String customId) {
 		super(customId);
 	}

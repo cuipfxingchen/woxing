@@ -25,6 +25,7 @@ public class MQMsg1001 extends MQAbsMsg {
 
 	long orderId; // 订单ID
 	String taxiId; // 出租车ID 对应Order中taxiId(出租车驾驶员编号)
+
 	@Override
 	public String toString() {
 		return "MQMsg1001 [orderId=" + orderId + ", taxiId=" + taxiId
@@ -41,6 +42,7 @@ public class MQMsg1001 extends MQAbsMsg {
 	String commpany; // 出租车公司 对应Order中taxiCompany(出租车所属公司)
 
 	public MQMsg1001() {
+		super();
 	}
 
 	public MQMsg1001(String customId) {
