@@ -40,6 +40,7 @@ public class MQMsg3002 extends MQAbsMsg {
 	}
 
 	public MQMsg3002() {
+		super();
 	}
 
 	public MQMsg3002(String customId) {

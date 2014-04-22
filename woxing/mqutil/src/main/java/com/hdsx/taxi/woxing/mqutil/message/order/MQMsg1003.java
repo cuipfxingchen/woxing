@@ -28,6 +28,7 @@ public class MQMsg1003 extends MQAbsMsg {
 	String explain;
 
 	public MQMsg1003() {
+		super();
 	}
 
 	public MQMsg1003(String customId) {

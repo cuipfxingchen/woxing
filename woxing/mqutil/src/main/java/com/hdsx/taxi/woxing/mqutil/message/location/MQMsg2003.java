@@ -17,14 +17,14 @@ import com.hdsx.taxi.woxing.mqutil.message.MQAbsMsg;
 public class MQMsg2003 extends MQAbsMsg {
 
 	String city;
-	
+
 	public MQMsg2003() {
+		super();
 	}
 
 	public MQMsg2003(String customId) {
 		super(customId);
 	}
-
 
 	public String getCity() {
 		return city;

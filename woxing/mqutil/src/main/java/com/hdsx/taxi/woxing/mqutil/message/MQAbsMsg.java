@@ -24,6 +24,8 @@ public abstract class MQAbsMsg implements MQMessage {
 	MessageHead head;
 
 	public MQAbsMsg() {
+		this.head = new MessageHead();
+		head.setMsgId(getMessageId());
 	}
 
 	public MQAbsMsg(String customId) {

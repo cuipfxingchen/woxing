@@ -19,6 +19,7 @@ public class MQMsg2005 extends MQAbsMsg {
 	double lat, lon, dlat, dlon;
 
 	public MQMsg2005() {
+		super();
 	}
 
 	public MQMsg2005(String customId) {

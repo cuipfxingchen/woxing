@@ -25,6 +25,7 @@ public class MQMsg3005 extends MQAbsMsg {
 	private List<TaxiIndex> list;
 
 	public MQMsg3005() {
+		super();
 	}
 
 	public MQMsg3005(String customId) {
@@ -62,13 +63,12 @@ public class MQMsg3005 extends MQAbsMsg {
 		return msg;
 	}
 
-
 	public void setList(List<TaxiIndex> list) {
 		this.list = list;
 	}
-	
-	public List<Index> getLs(){
+
+	public List<Index> getLs() {
 		return this.ls;
 	}
-	
+
 }

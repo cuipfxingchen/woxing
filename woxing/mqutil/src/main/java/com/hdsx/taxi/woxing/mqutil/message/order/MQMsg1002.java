@@ -27,6 +27,7 @@ public class MQMsg1002 extends MQAbsMsg {
 	byte state; // 0：处理中 1：完成调度（有车） 2：完成调度（无车）
 
 	public MQMsg1002() {
+		super();
 	}
 
 	public MQMsg1002(String customId) {

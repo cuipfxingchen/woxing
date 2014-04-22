@@ -5,7 +5,7 @@ import javax.jms.JMSException;
 
 public class IsDebugMsg extends MQAbsMsg {
 	public IsDebugMsg() {
-
+		super();
 	}
 
 	public IsDebugMsg(String customId) {

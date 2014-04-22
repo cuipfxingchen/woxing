@@ -20,11 +20,14 @@ import com.hdsx.taxi.woxing.mqutil.message.MQAbsMsg;
  * 
  ******************************************************************************/
 public class MQMsg3006 extends MQAbsMsg {
-	
-	List<Station> rl ;
-	private List<TaxiStation> rlf; 
-	
-	public MQMsg3006() {	}
+
+	List<Station> rl;
+	private List<TaxiStation> rlf;
+
+	public MQMsg3006() {
+		super();
+	}
+
 	public MQMsg3006(String customId) {
 		super(customId);
 	}
@@ -33,12 +36,12 @@ public class MQMsg3006 extends MQAbsMsg {
 	protected short getMessageId() {
 		return 0x3006;
 	}
-	
+
 	@Override
 	protected void decodebody(BytesMessage msg) throws JMSException {
-		int count  = msg.readInt();
-		if(count >0 ){
-		rl  = new ArrayList<Station>();
+		int count = msg.readInt();
+		if (count > 0) {
+			rl = new ArrayList<Station>();
 			for (int i = 0; i < count; i++) {
 				Station ts = new Station();
 				ts.setId(msg.readUTF());
@@ -71,9 +74,11 @@ public class MQMsg3006 extends MQAbsMsg {
 		}
 		return msg;
 	}
+
 	public List<Station> getRl() {
 		return rl;
 	}
+
 	public void setRl(List<TaxiStation> rl) {
 		this.rlf = rl;
 	}

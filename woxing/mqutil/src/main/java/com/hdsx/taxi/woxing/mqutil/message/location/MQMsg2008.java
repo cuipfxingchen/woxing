@@ -7,8 +7,9 @@ import com.hdsx.taxi.woxing.mqutil.message.MQAbsMsg;
 
 /**
  * 通过车辆ID查询车辆信息
+ * 
  * @author Steven
- *
+ * 
  */
 public class MQMsg2008 extends MQAbsMsg {
 	String taxiid;
@@ -22,6 +23,7 @@ public class MQMsg2008 extends MQAbsMsg {
 	}
 
 	public MQMsg2008() {
+		super();
 	}
 
 	public MQMsg2008(String customId) {

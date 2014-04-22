@@ -27,6 +27,7 @@ public class MQMsg0003 extends MQAbsMsg {
 	String cancel;
 
 	public MQMsg0003() {
+		super();
 	}
 
 	public MQMsg0003(String customId) {
