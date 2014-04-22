@@ -1,8 +1,8 @@
 package com.hdsx.taxi.woxing.web.rest.bean;
 
 public class RestBean<T> {
-	static int SUCESSCODE = 1;
-	static int FAILCODE = 200;
+	public static int SUCESSCODE = 1;
+	public static int FAILCODE = 200;
 	int state = SUCESSCODE;
 	String msg = "";
 	T result;

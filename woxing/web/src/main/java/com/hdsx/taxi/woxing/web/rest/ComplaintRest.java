@@ -24,7 +24,7 @@ import com.hdsx.taxi.woxing.web.service.ComplaintService;
  * @author cuipengfei
  * 
  */
-@Path("/rest/com/{customid}")
+@Path("/rest/com")
 public class ComplaintRest {
 
 	/**

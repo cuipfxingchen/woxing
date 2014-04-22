@@ -16,16 +16,6 @@ import com.hdsx.taxi.woxing.mqutil.msgpool.MQMsgPool;
 @Singleton
 public class ComplaintService {
 
-	MQService ms;
-	MQMsgPool msgpool;
-
-	@Inject
-	public ComplaintService(MQMsgPool msgpool) {
-		super();
-		this.ms = MQService.getInstance();
-		this.msgpool = msgpool;
-	}
-
 	@Inject
 	ComplaintMapper complaintMapper;
 	
@@ -38,23 +28,10 @@ public class ComplaintService {
 	 * @return
 	 */
 	public boolean saveComplain(Complaint complaint) {
-		try {
-			complaintMapper.insert(complaint);
-			
-			//   封装内容
-			MQMsg4001 msg = new MQMsg4001(complaint.getCustomid());
-			msg.setContents(complaint.getContent());
-			msg.setPass_name(complaint.getPassengerName());
-			msg.setPass_tel(complaint.getPassengerMobile());
-			msg.setType((byte) 1); 
-			msg.setId(Long.parseLong(complaint.getOrderId()));
-			
-			// 发送信息
-			ms.sendMsg(complaint.getCitycode(), msg);
+		if(complaintMapper.insert(complaint)>0){
 			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
+		}else{
+			return false;
 		}
-		return false;
 	}
 }

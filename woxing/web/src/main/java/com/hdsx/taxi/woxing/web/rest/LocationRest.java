@@ -25,7 +25,7 @@ import com.hdsx.taxi.woxing.web.service.LocationService;
  * @author Steven
  * 
  */
-@Path("/rest/loc/{customid}")
+@Path("/rest/loc")
 public class LocationRest {
 	/**
 	 * Logger for this class
@@ -54,19 +54,40 @@ public class LocationRest {
 			@PathParam("y") double y, @PathParam("r") short r,
 			@PathParam("citycode") String citycode,
 			@PathParam("customid") String customid) {
-		RestBean<List> re = new RestBean<>();
-
+//		RestBean<List> re = new RestBean<>();
+//
+//		logger.debug("Customid=:" + customid);
+//		List<CarInfo> l = ls.findCars(x, y, r, citycode, customid);
+//		// List<CarInfo> l = new ArrayList<>();
+//		if (l.size() == 0) {
+//			re.setState(200);
+//			re.setMsg("没有找到车辆");
+//		} else {
+//			re.setResult(l);
+//		}
+//		return re;
+		
+		RestBean<List> rb = new RestBean<>();
+		String success = "成功";
+		String fail = "没有找到车辆";
+		boolean operResult = false;
+		//业务逻辑开始
 		logger.debug("Customid=:" + customid);
 		List<CarInfo> l = ls.findCars(x, y, r, citycode, customid);
-		// List<CarInfo> l = new ArrayList<>();
-		if (l.size() == 0) {
-			re.setState(200);
-			re.setMsg("没有找到车辆");
+		if(l.size()>0)
+		{
+			rb.setResult(l);
+			operResult = true;
+		}	
+		//业务逻辑结束
+		if (operResult) {
+			rb.setState(RestBean.SUCESSCODE);
+			rb.setMsg(success);
 		} else {
-			re.setResult(l);
+			rb.setState(RestBean.FAILCODE);
+			rb.setMsg(fail);
 		}
-
-		return re;
+		return rb;
 	}
 
 	/**
@@ -82,11 +103,25 @@ public class LocationRest {
 	public RestBean getCarInfoByCarNum(@PathParam("orderId") String orderId,
 			@PathParam("citycode") String citycode,
 			@PathParam("customid") String customid) {
-
-		RestBean<CarInfo> bean = new RestBean<>();
+		RestBean<CarInfo> r = new RestBean<>();
+		String success = "成功";
+		String fail = "失败";
+		boolean operResult = false;
+		//业务逻辑开始
 		CarInfo c = ls.getCarInfoByCarNum(citycode, customid,Long.parseLong( orderId));
-		bean.setResult(c);
-		return bean;
+		r.setResult(c);
+
+		operResult = true;
+
+		//业务逻辑结束
+		if (operResult) {
+			r.setState(RestBean.SUCESSCODE);
+			r.setMsg(success);
+		} else {
+			r.setState(RestBean.FAILCODE);
+			r.setMsg(fail);
+		}
+		return r;
 
 	}
 

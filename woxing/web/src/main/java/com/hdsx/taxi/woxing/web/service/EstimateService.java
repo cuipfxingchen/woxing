@@ -1,5 +1,8 @@
 package com.hdsx.taxi.woxing.web.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -22,30 +25,27 @@ import com.hdsx.taxi.woxing.mqutil.msgpool.MQMsgPool;
  */
 @Singleton
 public class EstimateService {
+	/**
+	 * Logger for this class
+	 */
+	private static final Logger logger = LoggerFactory.getLogger(EstimateService.class);
 
-	MQService ms;
-	MQMsgPool msgpool;
-
-	@Inject
-	public EstimateService(MQMsgPool msgpool) {
-		super();
-		this.ms = MQService.getInstance();
-		this.msgpool = msgpool;
-	}
-
+	
+	
 	@Inject
 	EstimateMapper estimateMapper;
 	
 	
-	public String getEstimateById(long estimateId) {
-
-		if (estimateMapper.getEstimateById(estimateId) != null) {
-			Estimate estimate = estimateMapper.getEstimateById(estimateId);
+	public String getEstimateById(long orderId) {
+		Estimate estimate = estimateMapper.getEstimateById(orderId);
+		if (estimate != null) {
 			Gson gson = new Gson();
 			String json = gson.toJson(estimate);
 			return json;
 		} else {
-			System.err.println("查询的评论编号异常");
+			if (logger.isInfoEnabled()) {
+				logger.info("getEstimateById(long) - Estimate estimate={}", "评价查询异常"); //$NON-NLS-1$
+			}
 			return null;
 		}
 	}
@@ -58,22 +58,32 @@ public class EstimateService {
 	 *      long, int, java.lang.String)
 	 */
 	public boolean createEstimate(Estimate est) {
-		long estimateId = System.currentTimeMillis();
-		est.setEstimateId(estimateId);
 		Date currentTime = new Date();
 		DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd-hh-mm-ss");
 		String estimateTime = format1.format(currentTime);
 		est.setEstimateTime(estimateTime);
-		return estimateMapper.createEstimate(est);
+		if(estimateMapper.createEstimate(est)>0){
+			return true;
+		}else{
+			return false;
+		}
 	}
 
-	public Estimate updateEstimate(Estimate estimate) {
+	public boolean updateEstimate(Estimate estimate) {
 		// TODO Auto-generated method stub
-		return estimateMapper.updateEstimate(estimate);
+		if(estimateMapper.updateEstimate(estimate)>0){
+			return true;
+		}else{
+			return false;
+		}
 	}
 
-	public boolean deleteEstimate(long estimateId) {
+	public boolean deleteEstimate(long orderId) {
 
-		return estimateMapper.deleteEstimate(estimateId);
+		if(estimateMapper.deleteEstimate(orderId)>0){
+			return true;
+		}else{
+			return false;
+		}
 	}
 }
