@@ -25,7 +25,7 @@ public class OrderRest {
 	 * @param order
 	 * @return
 	 */
-	@Path("/1/")
+	@Path("/1")
 	@POST
 	@Produces("application/json;charset=UTF-8")
 	public RestBean submit(Order order) {
