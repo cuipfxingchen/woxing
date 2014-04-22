@@ -29,13 +29,13 @@ public class OrderService implements IOrderService {
 			.getLogger(OrderService.class);
 
 	IXMPPService xmppservice;
-	OrderMapper odermapper;
+	OrderMapper orderMapper;
 	OrderPool orderpool;
 
 	@Inject
 	public OrderService(IXMPPService xmpp, OrderMapper om, OrderPool pool) {
 		this.xmppservice = xmpp;
-		this.odermapper = om;
+		this.orderMapper = om;
 		this.orderpool = pool;
 	}
 
@@ -68,34 +68,67 @@ public class OrderService implements IOrderService {
 
 	}
 
+
+	
+
+	/**
+	 * 查询历史订单
+	 * 
+	 * @param customid
+	 * @return
+	 */
 	@Override
-	public List<Order> getHistoryOrder(String customid) {
-		// TODO Auto-generated method stub
+	public List<Order> getHistoryOrder(String customid){
+		return orderMapper.getHistoryOrderByCustomId(customid);
+	}
+
+	/**
+	 * 查询预约订单
+	 * 
+	 * @param customid
+	 * @return
+	 */
+	@Override
+	public List<Order> getReservationOrder(String customid){
+		return orderMapper.getReservationOrder(customid);
+		
+	}
+
+	/**
+	 * 取消订单
+	 * 
+	 * @param orderid
+	 * @return
+	 */
+	@Override
+	public boolean cancelOrder(long orderid){
+		
+		return true;
+	}
+
+	/**
+	 * 通过订单查询车辆信息
+	 * 
+	 * @param orderid
+	 * @return
+	 */
+	@Override
+	public CarInfo queryCarInfoByOrder(long orderid){
+		Order order = orderMapper.getOrderById(orderid);
+		//TBD.......通过订单查询关联车辆信息
 		return null;
 	}
 
+	
+	/**
+	 * 更新订单，包括状态
+	 * @param order
+	 * @return
+	 */
 	@Override
-	public List<Order> getReservationOrder(String customid) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public boolean cancelOrder(long orderid) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public CarInfo queryCarInfoByOrder(long orderid) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public boolean update(Order order) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean update(Order order){
+		
+		return true;
 	}
 
 }
