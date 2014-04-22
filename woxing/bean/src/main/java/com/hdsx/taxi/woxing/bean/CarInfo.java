@@ -16,13 +16,40 @@ public class CarInfo {
 	String id;
 	Date time;
 	double lat, lon;
-	int direction;
-	float speed;
+	int direction=0;
+	float speed=0;
 	boolean gpsavailabe;
 
 	String lisencenumber = "";// 车牌号码
 	String DriverName = "";// 司机称呼
 	String company = "";// 出租车公司
+	String driverphone="";
+	String driverid;
+	public String getDriverid() {
+		return driverid;
+	}
+
+	public void setDriverid(String driverid) {
+		this.driverid = driverid;
+	}
+
+	String creditLevel="";
+
+	public String getCreditLevel() {
+		return creditLevel;
+	}
+
+	public void setCreditLevel(String creditLevel) {
+		this.creditLevel = creditLevel;
+	}
+
+	public String getDriverphone() {
+		return driverphone;
+	}
+
+	public void setDriverphone(String driverphone) {
+		this.driverphone = driverphone;
+	}
 
 	public String getLisencenumber() {
 		return lisencenumber;
