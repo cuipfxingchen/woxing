@@ -32,6 +32,21 @@ public class OrderPool {
 		this.custompool = cm.getCm().getEhcache(CUSTOMPOOL_CACHE_NAME);
 	}
 
+	
+	
+	/**
+	 * 通过订单号获取订单
+	 * @param orderid
+	 * @return
+	 */
+	public Order getOrder(long orderid) {
+
+		Element e = this.pool.get(orderid);
+		if (e != null)
+			return (Order) e.getObjectValue();
+		return null;
+	}
+
 	/**
 	 * 通过customid查询当前订单
 	 * 

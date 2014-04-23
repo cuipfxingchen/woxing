@@ -29,6 +29,7 @@ import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1005;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1006;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1007;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1008;
+import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1009;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg4001;
 
 public class MessageFacotry {
@@ -61,6 +62,8 @@ public class MessageFacotry {
 			return new MQMsg1007();
 		else if (id == 0x1008)
 			return new MQMsg1008();
+		else if (id == 0x1009)
+			return new MQMsg1009();
 
 		/**
 		 * 发送 位置内容

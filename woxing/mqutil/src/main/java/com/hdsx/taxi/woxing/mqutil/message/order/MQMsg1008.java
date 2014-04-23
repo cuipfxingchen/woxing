@@ -35,4 +35,20 @@ public class MQMsg1008 extends MQAbsMsg {
 		return msg;
 	}
 
+	public long getOldid() {
+		return oldid;
+	}
+
+	public void setOldid(long oldid) {
+		this.oldid = oldid;
+	}
+
+	public long getNewid() {
+		return newid;
+	}
+
+	public void setNewid(long newid) {
+		this.newid = newid;
+	}
+
 }

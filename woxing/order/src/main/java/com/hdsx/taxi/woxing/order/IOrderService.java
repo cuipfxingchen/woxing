@@ -53,12 +53,19 @@ public interface IOrderService {
 	 */
 	public CarInfo queryCarInfoByOrder(long orderid);
 
-	
 	/**
 	 * 更新订单，包括状态
+	 * 
 	 * @param order
 	 * @return
 	 */
 	public boolean update(Order order);
+
+	/**
+	 * 更新订单信息
+	 * @param l  订单号
+	 * @param c  车辆信息
+	 */
+	public void doSucess(long l, CarInfo c);
 
 }
