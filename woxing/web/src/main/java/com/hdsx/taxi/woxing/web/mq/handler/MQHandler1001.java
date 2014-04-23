@@ -5,7 +5,6 @@ import com.hdsx.taxi.woxing.bean.CarInfo;
 import com.hdsx.taxi.woxing.mqutil.message.MQAbsMsg;
 import com.hdsx.taxi.woxing.mqutil.message.handle.IMQMsgHanlder;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1001;
-import com.hdsx.taxi.woxing.mqutil.msgpool.MQMsgPool;
 import com.hdsx.taxi.woxing.order.IOrderService;
 
 /**
@@ -16,8 +15,6 @@ import com.hdsx.taxi.woxing.order.IOrderService;
  */
 public class MQHandler1001 implements IMQMsgHanlder {
 
-	@Inject
-	MQMsgPool msgpool;
 
 	@Inject
 	IOrderService os;
