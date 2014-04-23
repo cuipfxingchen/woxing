@@ -17,15 +17,14 @@ public interface OrderMapper {
 	@Select("SELECT * FROM db_order WHERE 1=1 AND orderId=#{orderId}")
 	public Order getOrderById(long orderId);
 	
-	/* 查询历史订单 */
-	@Select("SELECT * FROM db_order WHERE 1=1 AND orderId=#{orderId}")
-	public List getHistoryOrderByCustomId(String customid);
+	/* 查询历史订单  WHERE 1=1 AND customid=#{customid}*/							
+	@Select("SELECT * FROM db_order WHERE 1=1 and customid=#{customid}")
+	public List<Order> getHistoryOrderByCustomId(String customid);
 
 	/* 查询预约单*/
 	@Select("SELECT * FROM db_order WHERE 1=1 AND orderId=#{orderId}")
-	public List getReservationOrder(String customid);
+	public List<Order> getReservationOrder(String customid);
 
-	
 	/* 新建订单 */
 	@Insert("INSERT INTO db_order (citycode,useriphone,paytype,fee,state,"
 			+ "orderId,customid,nickName,sex,getOnTime,lastReplTime,contractTaxi,"

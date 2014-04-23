@@ -65,7 +65,7 @@ public class OrderService implements IOrderService {
 			logger.error("提交订单失败:" + ex);
 			return 1;
 		}
-
+     
 	}
 
 
@@ -79,6 +79,7 @@ public class OrderService implements IOrderService {
 	 */
 	@Override
 	public List<Order> getHistoryOrder(String customid){
+		System.out.println("getHistoryOrder:customid="+customid);
 		return orderMapper.getHistoryOrderByCustomId(customid);
 	}
 

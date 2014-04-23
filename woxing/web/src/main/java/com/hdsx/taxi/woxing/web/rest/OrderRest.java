@@ -39,8 +39,8 @@ public class OrderRest {
 		String fail = "失败";
 		boolean operResult=true;
 		//*业务逻辑开始
+		//ordermapper.insert(order);
 		r.setResult(orderservice.submit(order));
-		
 		
 		//业务逻辑结束
 		if(operResult){
@@ -50,7 +50,7 @@ public class OrderRest {
 			r.setState(RestBean.FAILCODE);
 			r.setMsg(fail);
 		}
-		
+		   
 		return r;
 	}
 	
@@ -67,12 +67,15 @@ public class OrderRest {
 	public RestBean getHistoryOrder(@PathParam("customid") String customid){
 		RestBean<List<Order>> r = new RestBean<>();
 		String success = "成功";
-		String fail = "失败";
+		String fail = "没有订单";
 		boolean operResult = false;
 		//业务逻辑开始
-		r.setResult(orderservice.getHistoryOrder(customid));
-		operResult = true;
-
+		List<Order> rtn = orderservice.getHistoryOrder(customid);
+		if (rtn!=null)
+		{
+			r.setResult(rtn);
+			operResult=true;
+		} 
 		//业务逻辑结束
 		if (operResult) {
 			r.setState(RestBean.SUCESSCODE);
