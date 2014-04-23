@@ -37,7 +37,7 @@ public class MQMsg0001 extends MQAbsMsg {
 	Date lastReplTime; // 最晚回复时间 yyyy-MM-dd HH:mm:ss
 	byte contractTaxi; // 是否搜索签约出租车 1：是、0：否
 	String vipMark; // VIP
-	byte takeTaxiType; // 打车类型 0是普通, 1是等级,2指派
+	byte takeTaxiType; // 打车类型 0是普通, 1是预约,2指派
 	byte serverLevel; // 1为最高
 	String firstChoiceCompany;// 乘客首选公司
 	int personCount;// 人数
@@ -52,6 +52,8 @@ public class MQMsg0001 extends MQAbsMsg {
 	String userphone; // 乘客联系电话
 	String notes; // 备注信息
 	boolean revesation; // 是否预约
+
+	short tips = 0;// 电招费
 
 	public MQMsg0001() {
 		super();
@@ -247,6 +249,7 @@ public class MQMsg0001 extends MQAbsMsg {
 		this.userphone = msg.readUTF();
 		this.notes = msg.readUTF();
 		this.revesation = msg.readBoolean();
+		this.tips = msg.readShort();
 	}
 
 	@Override
@@ -274,7 +277,16 @@ public class MQMsg0001 extends MQAbsMsg {
 		msg.writeUTF(this.userphone);
 		msg.writeUTF(this.notes);
 		msg.writeBoolean(this.revesation);
+		msg.writeShort(this.tips);
 		return msg;
+	}
+
+	public short getTips() {
+		return tips;
+	}
+
+	public void setTips(short tips) {
+		this.tips = tips;
 	}
 
 	public boolean isRevesation() {
