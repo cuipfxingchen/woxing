@@ -276,7 +276,7 @@ public class Order implements Serializable {
 	/**
 	 * 返回结果集对象
 	 */
-	@FormParam("result")
+	//@FormParam("result")
 	private OrderResult result;
 
 	/**
