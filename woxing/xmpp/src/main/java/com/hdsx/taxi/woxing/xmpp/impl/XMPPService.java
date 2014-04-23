@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.google.inject.Singleton;
 import com.hdsx.taxi.woxing.xmpp.IXMPPService;
+import com.hdsx.taxi.woxing.xmpp.XMPPBean;
 
 @Singleton
 public class XMPPService implements IXMPPService {
@@ -32,5 +33,10 @@ public class XMPPService implements IXMPPService {
 		return XmppClient.getXmppClient().GetOnlineDriverCount();
 	}
 
-	
+	@Override
+	public void sendMessage(String customid, XMPPBean value) {
+		XmppClient.getXmppClient().sendMessage(customid, value);
+
+	}
+
 }

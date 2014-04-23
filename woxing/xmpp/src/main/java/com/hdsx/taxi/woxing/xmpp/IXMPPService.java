@@ -41,4 +41,11 @@ public interface IXMPPService {
 	 * @return 在线人数
 	 */
 	int GetOnlineDriverCount();
+
+	/**
+	 * 发送消息
+	 * @param customid
+	 * @param value
+	 */
+	void sendMessage(String customid, XMPPBean value);
 }
