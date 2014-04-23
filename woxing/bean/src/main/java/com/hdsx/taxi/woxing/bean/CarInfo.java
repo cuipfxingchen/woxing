@@ -25,6 +25,16 @@ public class CarInfo {
 	String company = "";// 出租车公司
 	String driverphone="";
 	String driverid;
+	private String driverSerial;// 驾驶员监督卡号
+	
+	public String getDriverSerial() {
+		return driverSerial;
+	}
+
+	public void setDriverSerial(String driverSerial) {
+		this.driverSerial = driverSerial;
+	}
+
 	public String getDriverid() {
 		return driverid;
 	}
