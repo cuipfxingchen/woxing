@@ -7,6 +7,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.hdsx.taxi.woxing.bean.CarInfo;
 import com.hdsx.taxi.woxing.bean.Index;
+import com.hdsx.taxi.woxing.bean.Order;
 import com.hdsx.taxi.woxing.bean.Station;
 import com.hdsx.taxi.woxing.mqutil.MQService;
 import com.hdsx.taxi.woxing.mqutil.message.MQAbsMsg;
@@ -22,6 +23,7 @@ import com.hdsx.taxi.woxing.mqutil.message.location.MQMsg3004;
 import com.hdsx.taxi.woxing.mqutil.message.location.MQMsg3005;
 import com.hdsx.taxi.woxing.mqutil.message.location.MQMsg3006;
 import com.hdsx.taxi.woxing.mqutil.msgpool.MQMsgPool;
+import com.hdsx.taxi.woxing.order.OrderPool;
 
 /**
  * 位置相关服务
@@ -34,9 +36,11 @@ public class LocationService {
 
 	MQService ms;
 	MQMsgPool msgpool;
-
+	OrderPool orderpool;
+	
+	
 	@Inject
-	public LocationService(MQMsgPool msgpool) {
+	public LocationService(MQMsgPool msgpool,OrderPool orderpool) {
 
 		this.msgpool = msgpool;
 		this.ms = MQService.getInstance();
@@ -82,9 +86,11 @@ public class LocationService {
 	public CarInfo getCarInfoByCarNum(String citycode, String customid,
 			long orderId) {
 
+		Order order = orderpool.getOrder(orderId);
 		// 消息体
 		MQMsg2002 msg = new MQMsg2002(customid);
-		msg.setOrderid(orderId);
+		
+		msg.setCarnum(order.getResult().getCarNum());
 		// 调用发送信息内
 		ms.sendMsg(citycode, msg);
 		MQAbsMsg returnmsg = msgpool.getMsg(customid, 0x3002);
@@ -94,12 +100,12 @@ public class LocationService {
 			return new CarInfo();
 		MQMsg3002 rm = (MQMsg3002) returnmsg;
 		CarInfo ci = new CarInfo();
-		ci.setId(rm.getCar_number());
-		ci.setDriverName(rm.getDriver_name());
-		ci.setLisencenumber(rm.getDriver_tel());
+		ci.setDriverName(order.getResult().getDriver_name());
+		ci.setLisencenumber(order.getResult().getCarNum());
 		ci.setLat(rm.getLat());
 		ci.setLon(rm.getLon());
-		ci.setCompany(rm.getCommpany());
+		ci.setCompany(order.getResult().getCar_company());
+		ci.setDriverphone(order.getResult().getDriver_tel());
 		return ci;
 	}
 
