@@ -6,12 +6,21 @@ import java.util.List;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.hdsx.taxi.woxing.bean.CarInfo;
+import com.hdsx.taxi.woxing.bean.Index;
+import com.hdsx.taxi.woxing.bean.Station;
 import com.hdsx.taxi.woxing.mqutil.MQService;
 import com.hdsx.taxi.woxing.mqutil.message.MQAbsMsg;
 import com.hdsx.taxi.woxing.mqutil.message.location.MQMsg2001;
 import com.hdsx.taxi.woxing.mqutil.message.location.MQMsg2002;
+import com.hdsx.taxi.woxing.mqutil.message.location.MQMsg2004;
+import com.hdsx.taxi.woxing.mqutil.message.location.MQMsg2005;
+import com.hdsx.taxi.woxing.mqutil.message.location.MQMsg2006;
+import com.hdsx.taxi.woxing.mqutil.message.location.MQMsg2007;
 import com.hdsx.taxi.woxing.mqutil.message.location.MQMsg3001;
 import com.hdsx.taxi.woxing.mqutil.message.location.MQMsg3002;
+import com.hdsx.taxi.woxing.mqutil.message.location.MQMsg3004;
+import com.hdsx.taxi.woxing.mqutil.message.location.MQMsg3005;
+import com.hdsx.taxi.woxing.mqutil.message.location.MQMsg3006;
 import com.hdsx.taxi.woxing.mqutil.msgpool.MQMsgPool;
 
 /**
@@ -94,4 +103,138 @@ public class LocationService {
 		return ci;
 	}
 
+	/**
+	 * 查询打车指数
+	 * @param x 经度
+	 * @param y 纬度
+	 * @param citycode
+	 * @param customid
+	 * @return
+	 */
+	public int getCurLocationIndex(double x, double y,String citycode ,String customid) {
+		// 消息体
+		MQMsg2004 msg = new MQMsg2004(customid);
+		msg.setLat(y);
+		msg.setLon(x);
+
+		// 调用发送信息内
+		ms.sendMsg(citycode, msg);
+
+		MQAbsMsg returnmsg = msgpool.getMsg(customid, 0x3004);
+		if (returnmsg == null)
+			return 0;
+		if (!returnmsg.getClass().isInstance(MQMsg3004.class))
+			return 0;
+		MQMsg3004 rmsg = (MQMsg3004)returnmsg;
+
+		if (rmsg != null) {
+			return rmsg.getResult();
+		} else {
+			return 0;
+		}
+	}
+
+	/**
+	 * 查询打车热点区域
+	 * @param x
+	 * @param y
+	 * @param dx
+	 * @param dy
+	 * @param citycode
+	 * @param customid
+	 * @return
+	 */
+	public List<Index> getTaxiIndex(double x, double y, double dx,
+			double dy,String citycode, String customid) {
+		// 消息体
+		MQMsg2005 msg = new MQMsg2005(customid);
+		msg.setLat(y);
+		msg.setLon(x);
+		msg.setDlat(dy);
+		msg.setDlon(dx);
+
+		// 调用发送信息内
+		ms.sendMsg(citycode, msg);
+		MQAbsMsg returnmsg = msgpool.getMsg(customid, 0x3005);
+		if (returnmsg == null)
+			return null;
+		if (!returnmsg.getClass().isInstance(MQMsg3005.class))
+			return null;
+		MQMsg3005 rmsg = (MQMsg3005)returnmsg;
+
+		if (rmsg != null) {
+			return rmsg.getLs();
+		} else {
+			return null;
+		}
+	}
+
+	/**
+	 * 查询周边扬招站
+	 * @param lat
+	 * @param lon
+	 * @param distance
+	 * @param citycode
+	 * @param customid
+	 * @return
+	 */
+	public List<Station> getStation(double lat, double lon,
+			int distance,String citycode, String customid) {
+		// 消息体
+		MQMsg2006 msg = new MQMsg2006(customid);
+		msg.setLat(lat);
+		msg.setLon(lon);
+		msg.setRange((short) distance);
+
+		// 调用发送信息内
+		ms.sendMsg(citycode, msg);
+		MQAbsMsg returnmsg = msgpool.getMsg(customid, 0x3006);
+		if (returnmsg == null)
+			return null;
+		if (!returnmsg.getClass().isInstance(MQMsg3006.class))
+			return null;
+		MQMsg3006 rmsg = (MQMsg3006)returnmsg;
+
+		if (rmsg != null) {
+			return rmsg.getRl();
+		} else {
+			return null;
+		}
+
+	}
+
+	/**
+	 * 通过区域查询扬招站
+	 * @param xlon
+	 * @param ylat
+	 * @param xdlon
+	 * @param ydlat
+	 * @param citycode
+	 * @param customid
+	 * @return
+	 */
+	public List<Station> getStationArea(double xlon,double ylat, double xdlon,
+			 double ydlat,String citycode, String customid) {
+		// 消息体
+		MQMsg2007 msg = new MQMsg2007(customid);
+		msg.setXlon(xlon);
+		msg.setYlat(ylat);
+		msg.setXdlon(xdlon);
+		msg.setYdlat(ydlat);
+		// 调用发送信息内
+		ms.sendMsg(citycode, msg);
+		MQAbsMsg returnmsg = msgpool.getMsg(customid, 0x3006);
+		if (returnmsg == null)
+			return null;
+		if (!returnmsg.getClass().isInstance(MQMsg3006.class))
+			return null;
+		MQMsg3006 rmsg = (MQMsg3006)returnmsg;
+
+		if (rmsg != null) {
+			return rmsg.getRl();
+		} else {
+			return null;
+		}
+
+	}
 }

@@ -16,8 +16,8 @@ import com.hdsx.taxi.woxing.mqutil.message.MQAbsMsg;
  ******************************************************************************/
 public class MQMsg2007 extends MQAbsMsg {
 
-	double xlat, ylon;
-	double xdlat, ydlon;
+	double xlon, ylat;
+	double xdlon, ydlat;
 
 	public MQMsg2007() {
 		super();
@@ -34,51 +34,53 @@ public class MQMsg2007 extends MQAbsMsg {
 
 	@Override
 	protected void decodebody(BytesMessage msg) throws JMSException {
-		this.xlat = msg.readInt() / 10E6;
-		this.xdlat = msg.readInt() / 10E6;
-		this.ylon = msg.readInt() / 10E6;
-		this.ydlon = msg.readInt() / 10E6;
+		this.xlon = msg.readInt() / 10E6;
+		this.xdlon = msg.readInt() / 10E6;
+		this.ylat = msg.readInt() / 10E6;
+		this.ydlat = msg.readInt() / 10E6;
 	}
 
 	@Override
 	protected BytesMessage encodebody(BytesMessage msg) throws JMSException {
-		msg.writeInt((int) (this.xlat * 10E6));
-		msg.writeInt((int) (this.xdlat * 10E6));
-		msg.writeInt((int) (this.ylon * 10E6));
-		msg.writeInt((int) (this.ydlon * 10E6));
+		msg.writeInt((int) (this.xlon * 10E6));
+		msg.writeInt((int) (this.xdlon * 10E6));
+		msg.writeInt((int) (this.ylat * 10E6));
+		msg.writeInt((int) (this.ydlat * 10E6));
 		return msg;
 	}
 
-	public double getXlat() {
-		return xlat;
+	public double getXlon() {
+		return xlon;
 	}
 
-	public void setXlat(double xlat) {
-		this.xlat = xlat;
+	public void setXlon(double xlon) {
+		this.xlon = xlon;
 	}
 
-	public double getYlon() {
-		return ylon;
+	public double getYlat() {
+		return ylat;
 	}
 
-	public void setYlon(double ylon) {
-		this.ylon = ylon;
+	public void setYlat(double ylat) {
+		this.ylat = ylat;
 	}
 
-	public double getXdlat() {
-		return xdlat;
+	public double getXdlon() {
+		return xdlon;
 	}
 
-	public void setXdlat(double xdlat) {
-		this.xdlat = xdlat;
+	public void setXdlon(double xdlon) {
+		this.xdlon = xdlon;
 	}
 
-	public double getYdlon() {
-		return ydlon;
+	public double getYdlat() {
+		return ydlat;
 	}
 
-	public void setYdlon(double ydlon) {
-		this.ydlon = ydlon;
+	public void setYdlat(double ydlat) {
+		this.ydlat = ydlat;
 	}
+
+	
 
 }
