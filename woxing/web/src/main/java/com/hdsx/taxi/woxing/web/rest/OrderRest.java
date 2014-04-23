@@ -61,7 +61,7 @@ public class OrderRest {
 	 * @param customid
 	 * @return
 	 */
-	@Path("/2/customid")
+	@Path("/2/{customid}")
 	@GET
 	@Produces("application/json;charset=UTF-8")
 	public RestBean getHistoryOrder(@PathParam("customid") String customid){
@@ -90,7 +90,7 @@ public class OrderRest {
 	 * @param customid
 	 * @return
 	 */
-	@Path("/3/customid")
+	@Path("/3/{customid}")
 	@GET
 	@Produces("application/json;charset=UTF-8")
 	public RestBean getReservationOrder(@PathParam("customid") String customid){
@@ -121,7 +121,7 @@ public class OrderRest {
 	 * @param orderid
 	 * @return
 	 */
-	@Path("/4/orderid")
+	@Path("/4/{orderid}")
 	@GET
 	@Produces("application/json;charset=UTF-8")
 	public RestBean cancelOrder(@PathParam("orderid") long orderid){
@@ -150,7 +150,7 @@ public class OrderRest {
 	 * @param orderid
 	 * @return
 	 */
-	@Path("/5/orderid")
+	@Path("/5/{orderid}")
 	@GET
 	@Produces("application/json;charset=UTF-8")
 	public RestBean queryCarInfoByOrder(@PathParam("orderid") long orderid){
