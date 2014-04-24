@@ -37,10 +37,13 @@ public class OrderRest {
 		RestBean<Integer> r = new RestBean<>();
 		String success="成功";
 		String fail = "失败";
-		boolean operResult=true;
+		boolean operResult=false;
 		//*业务逻辑开始
 		//ordermapper.insert(order);
-		r.setResult(orderservice.submit(order));
+		System.out.println("order ----->"+order.toString());
+		int rtn = orderservice.submit(order);
+		if(1==rtn)
+			operResult=true;
 		
 		//业务逻辑结束
 		if(operResult){

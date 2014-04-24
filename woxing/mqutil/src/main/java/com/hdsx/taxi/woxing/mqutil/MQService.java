@@ -163,7 +163,6 @@ public class MQService {
 			bmsg = msg.encode(bmsg);
 			producerMap.get(citycode).send(bmsg);
 		} catch (JMSException e) {
-
 			logger.error("sendMsg(MQMessage)", e);
 		}
 	}

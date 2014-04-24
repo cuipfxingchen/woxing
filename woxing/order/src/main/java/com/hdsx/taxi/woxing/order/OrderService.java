@@ -60,10 +60,11 @@ public class OrderService implements IOrderService {
 
 			MQService.getInstance().sendMsg(order.getCitycode(), msg);
 			orderpool.put(order);
-			return 0;
+			return 1;
 		} catch (Exception ex) {
 			logger.error("提交订单失败:" + ex);
-			return 1;
+			ex.printStackTrace();
+			return 0;
 		}
      
 	}

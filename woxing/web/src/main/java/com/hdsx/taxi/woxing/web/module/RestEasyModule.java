@@ -1,5 +1,6 @@
 package com.hdsx.taxi.woxing.web.module;
 
+import org.jboss.resteasy.spi.ResteasyProviderFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -7,6 +8,7 @@ import com.google.inject.Binder;
 import com.google.inject.Module;
 import com.google.inject.Singleton;
 import com.hdsx.taxi.woxing.bean.util.CacheManagerUtil;
+import com.hdsx.taxi.woxing.bean.util.DateTimeParamConverterProvider;
 import com.hdsx.taxi.woxing.mqutil.msgpool.MQMsgPool;
 import com.hdsx.taxi.woxing.order.IOrderService;
 import com.hdsx.taxi.woxing.order.OrderPool;
@@ -30,6 +32,8 @@ public class RestEasyModule implements Module {
 
 	@Override
 	public void configure(Binder binder) {
+		
+		ResteasyProviderFactory.getInstance().registerProvider(DateTimeParamConverterProvider.class);
 
 		/**
 		 * 绑定工具类

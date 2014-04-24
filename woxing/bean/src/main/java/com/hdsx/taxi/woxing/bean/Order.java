@@ -481,4 +481,33 @@ public class Order implements Serializable {
 	@FormParam("taxiResponse2CityTime")
 	private String taxiResponse2CityTime;
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Order [result=" + result + ", citycode=" + citycode
+				+ ", useriphone=" + useriphone + ", paytype=" + paytype
+				+ ", fee=" + fee + ", state=" + state + ", orderId=" + orderId
+				+ ", customid=" + customid + ", nickName=" + nickName
+				+ ", sex=" + sex + ", getOnTime=" + getOnTime
+				+ ", lastReplTime=" + lastReplTime + ", contractTaxi="
+				+ contractTaxi + ", vipMark=" + vipMark + ", reservation="
+				+ reservation + ", takeTaxiType=" + takeTaxiType
+				+ ", serverLevel=" + serverLevel + ", firstChoiceCompany="
+				+ firstChoiceCompany + ", personCount=" + personCount
+				+ ", getOnLon=" + getOnLon + ", getOnLat=" + getOnLat
+				+ ", getOffLon=" + getOffLon + ", getOffLat=" + getOffLat
+				+ ", getOnPlaceName=" + getOnPlaceName + ", getOffPlaceName="
+				+ getOffPlaceName + ", notes=" + notes + ", motorcycleType="
+				+ motorcycleType + ", anotherCellPhoneNo=" + anotherCellPhoneNo
+				+ ", specialRequirements=" + specialRequirements
+				+ ", orderCreateTime=" + orderCreateTime
+				+ ", cityResponse2CenterTime=" + cityResponse2CenterTime
+				+ ", taxiResponse2CityTime=" + taxiResponse2CityTime + "]";
+	}
+	
+	
+	
+
 }
