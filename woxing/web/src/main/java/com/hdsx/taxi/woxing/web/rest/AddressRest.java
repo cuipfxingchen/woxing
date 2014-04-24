@@ -80,7 +80,7 @@ public class AddressRest {
 	 * @return
 	 */
 	@GET
-	@Path("/3/citycode/customid")
+	@Path("/3/{citycode}/{customid}")
 	@Produces("application/json;charset=UTF-8")
 	public RestBean<List<Address>> getAddAddressRest(
 			@PathParam("customid") String customid,
@@ -104,7 +104,7 @@ public class AddressRest {
 	 * @return
 	 */
 	@GET
-	@Path("/4/id")
+	@Path("/4/{id}")
 	@Produces("application/json;charset=UTF-8")
 	public RestBean deleteAddAddressRest(@PathParam("id") String id) {
 		RestBean restBean = new RestBean<>();

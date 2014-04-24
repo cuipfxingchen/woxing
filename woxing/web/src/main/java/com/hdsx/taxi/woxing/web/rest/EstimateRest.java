@@ -35,7 +35,7 @@ public class EstimateRest {
 
 	/* 查询评论 */
 	@GET
-	@Path("/1/estimateId")
+	@Path("/1/{estimateId}")
 	@Produces("application/json;charset=UTF-8")
 	public RestBean getEstimateById(@PathParam("estimateId") long estimateId) {
 		RestBean<String> re = new RestBean<>();
@@ -85,7 +85,7 @@ public class EstimateRest {
 
 	/* 删除评论 */
 	@GET
-	@Path("/4/estimateId")
+	@Path("/4/{estimateId}")
 	@Produces("application/json;charset=UTF-8")
 	public RestBean deleteEstimate(@PathParam("estimateId") long estimateId) {
 		RestBean<String> re = new RestBean<>();

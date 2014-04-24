@@ -140,7 +140,7 @@ public class LocationRest {
 	 * @return
 	 */
 	@GET
-	@Path("/3/code/name")
+	@Path("/3/{code}/{name}")
 	@Produces("application/json;charset=utf-8")
 	public RestBean getCheckTip(@PathParam("code") String ct,
 			@PathParam("name") String cn) {
