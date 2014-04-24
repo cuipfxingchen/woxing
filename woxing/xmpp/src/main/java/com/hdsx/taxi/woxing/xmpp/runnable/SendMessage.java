@@ -3,6 +3,7 @@ package com.hdsx.taxi.woxing.xmpp.runnable;
 import java.io.File;
 
 import org.jivesoftware.smack.Chat;
+import org.jivesoftware.smack.ChatManager;
 import org.jivesoftware.smack.XMPPException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +25,9 @@ public class SendMessage implements Runnable {
 
 
 	public void run() {
-		Chat chat =JoinRoom.muc.createPrivateChat(InitApp.ROOM+File.separatorChar+driverid, null);
+//		Chat chat =JoinRoom.muc.createPrivateChat(InitApp.ROOM+File.separatorChar+driverid, null);
+		ChatManager charManager=XmppConnection.getConnection().getChatManager();
+		Chat chat=charManager.createChat(driverid+"@"+InitApp.SERVER_NAME, null);
 		try {
 			chat.sendMessage(msgString);
 			logger.info("向"+driverid+"发送成功："+msgString);

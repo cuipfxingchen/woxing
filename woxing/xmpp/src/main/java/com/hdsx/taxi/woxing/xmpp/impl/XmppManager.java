@@ -33,7 +33,7 @@ public class XmppManager {
 		connectionList =new ArrayList<Runnable>();
 		addConnectionTash(new XmppConnection());
 		addConnectionTash(new XmppLogin());
-		addConnectionTash(new JoinRoom());
+//		addConnectionTash(new JoinRoom());
 	}
 	
 	public  void addConnectionTash(Runnable runnable){

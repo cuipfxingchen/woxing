@@ -26,21 +26,21 @@ public interface IXMPPService {
 	 * @param msgString
 	 *            消息内容
 	 */
-	void sendMessagetoAll(String msgString);
+	void sendMessagetoAll(String group,String msgString);
 
-	/**
-	 * 获取群组在线用户名集合
-	 * 
-	 * @return 在线用户名集合
-	 */
-	List<String> GetOnlineDriverList();
-
-	/**
-	 * 获取群组在线人数
-	 * 
-	 * @return 在线人数
-	 */
-	int GetOnlineDriverCount();
+//	/**
+//	 * 获取群组在线用户名集合
+//	 * 
+//	 * @return 在线用户名集合
+//	 */
+//	List<String> GetOnlineDriverList();
+//
+//	/**
+//	 * 获取群组在线人数
+//	 * 
+//	 * @return 在线人数
+//	 */
+//	int GetOnlineDriverCount();
 
 	/**
 	 * 发送消息
@@ -48,4 +48,11 @@ public interface IXMPPService {
 	 * @param value
 	 */
 	void sendMessage(String customid, XMPPBean value);
+	
+	/**
+	 * 添加用户到指定分组
+	 * @param customid
+	 * @param group
+	 */
+	void addUserToGroup(String customid,String group);
 }
