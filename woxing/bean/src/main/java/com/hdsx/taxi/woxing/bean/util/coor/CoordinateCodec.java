@@ -71,7 +71,7 @@ public class CoordinateCodec {
 		}
 		return numE4;
 	}
-	
+
 	@SuppressWarnings("unused")
 	private static int doubletoIntE5(double value) {
 		int numE4 = (int) Math.floor(value * 10E5);
@@ -81,7 +81,7 @@ public class CoordinateCodec {
 		}
 		return numE4;
 	}
-	
+
 	private static int doubletoIntE6(double value) {
 		int numE4 = (int) Math.floor(value * 10E6);
 		int numE5 = (int) Math.floor(value * 10E7);
@@ -137,9 +137,31 @@ public class CoordinateCodec {
 			lng += dlng;
 
 			Coordinate c = new Coordinate(lat, lng);
-			list.add(c);			
+			list.add(c);
 		}
 		return list;
-
 	}
+
+	/**
+	 * 将int的坐标转为float，int表示1/10000分，float表示度
+	 * 
+	 * @param v
+	 * @return
+	 */
+	public static float Coor2Float(int v) {
+
+		return v / 60f / 10000f;
+	}
+
+	/**
+	 * 将float的坐标转为int
+	 * int表示1/10000分，float表示度
+	 * @param v
+	 * @return
+	 */
+	public static int Coor2UInt(float v) {
+		double a = v * 60 * 10000;
+		return (int) a;
+	}
+
 }

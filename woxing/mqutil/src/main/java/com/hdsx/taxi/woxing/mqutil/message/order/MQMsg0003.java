@@ -25,6 +25,10 @@ public class MQMsg0003 extends MQAbsMsg {
 
 	long orderId;
 	String cancel;
+	String passengerName;// 乘客名称 String
+	byte passengerSex;// 乘客性别 byte 1：男，2：女
+	String passengerPhone;// 乘客电话 String
+	byte causecode; // 取消原因
 
 	public MQMsg0003() {
 		super();
@@ -59,13 +63,53 @@ public class MQMsg0003 extends MQAbsMsg {
 	protected void decodebody(BytesMessage msg) throws JMSException {
 		this.orderId = msg.readLong();
 		this.cancel = msg.readUTF();
+		this.passengerName = msg.readUTF();
+		this.passengerPhone = msg.readUTF();
+		this.passengerSex = msg.readByte();
+		this.causecode = msg.readByte();
 	}
 
 	@Override
 	protected BytesMessage encodebody(BytesMessage msg) throws JMSException {
 		msg.writeLong(this.orderId);
 		msg.writeUTF(this.cancel);
+		msg.writeUTF(this.passengerName);
+		msg.writeUTF(this.passengerPhone);
+		msg.writeByte(passengerSex);
+		msg.writeByte(this.causecode);
 		return msg;
+	}
+
+	public String getPassengerName() {
+		return passengerName;
+	}
+
+	public void setPassengerName(String passengerName) {
+		this.passengerName = passengerName;
+	}
+
+	public byte getPassengerSex() {
+		return passengerSex;
+	}
+
+	public void setPassengerSex(byte passengerSex) {
+		this.passengerSex = passengerSex;
+	}
+
+	public String getPassengerPhone() {
+		return passengerPhone;
+	}
+
+	public void setPassengerPhone(String passengerPhone) {
+		this.passengerPhone = passengerPhone;
+	}
+
+	public byte getCausecode() {
+		return causecode;
+	}
+
+	public void setCausecode(byte causecode) {
+		this.causecode = causecode;
 	}
 
 }

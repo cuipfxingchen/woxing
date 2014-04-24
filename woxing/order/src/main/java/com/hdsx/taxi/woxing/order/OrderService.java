@@ -1,9 +1,10 @@
 package com.hdsx.taxi.woxing.order;
 
+import java.util.HashMap;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.List;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -12,7 +13,9 @@ import com.hdsx.taxi.woxing.bean.Order;
 import com.hdsx.taxi.woxing.dao.OrderMapper;
 import com.hdsx.taxi.woxing.mqutil.MQService;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg0001;
+import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg0003;
 import com.hdsx.taxi.woxing.xmpp.IXMPPService;
+import com.hdsx.taxi.woxing.xmpp.XMPPBean;
 
 /**
  * 订单服务实现类
@@ -56,11 +59,14 @@ public class OrderService implements IOrderService {
 
 			msg.setNickName(order.getNickName());
 			msg.setSex(order.getSex());
-			// TODO 用户电话赋值 msg.setUserphone(order.getUserId());
-
+			msg.setUserphone(order.getUseriphone());
 			MQService.getInstance().sendMsg(order.getCitycode(), msg);
+			
+			
 			orderpool.put(order);
+			orderMapper.insert(order);
 			return 1;
+
 		} catch (Exception ex) {
 			logger.error("提交订单失败:" + ex);
 			ex.printStackTrace();
@@ -69,9 +75,6 @@ public class OrderService implements IOrderService {
      
 	}
 
-
-	
-
 	/**
 	 * 查询历史订单
 	 * 
@@ -79,8 +82,7 @@ public class OrderService implements IOrderService {
 	 * @return
 	 */
 	@Override
-	public List<Order> getHistoryOrder(String customid){
-		System.out.println("getHistoryOrder:customid="+customid);
+	public List<Order> getHistoryOrder(String customid) {
 		return orderMapper.getHistoryOrderByCustomId(customid);
 	}
 
@@ -91,9 +93,9 @@ public class OrderService implements IOrderService {
 	 * @return
 	 */
 	@Override
-	public List<Order> getReservationOrder(String customid){
+	public List<Order> getReservationOrder(String customid) {
 		return orderMapper.getReservationOrder(customid);
-		
+
 	}
 
 	/**
@@ -103,8 +105,8 @@ public class OrderService implements IOrderService {
 	 * @return
 	 */
 	@Override
-	public boolean cancelOrder(long orderid){
-		
+	public boolean cancelOrder(long orderid) {
+
 		return true;
 	}
 
@@ -115,22 +117,82 @@ public class OrderService implements IOrderService {
 	 * @return
 	 */
 	@Override
-	public CarInfo queryCarInfoByOrder(long orderid){
+	public CarInfo queryCarInfoByOrder(long orderid) {
 		Order order = orderMapper.getOrderById(orderid);
-		//TBD.......通过订单查询关联车辆信息
+		// TODO.......通过订单查询关联车辆信息
 		return null;
 	}
 
-	
 	/**
 	 * 更新订单，包括状态
+	 * 
 	 * @param order
 	 * @return
 	 */
 	@Override
-	public boolean update(Order order){
-		
+	public boolean update(Order order) {
+
 		return true;
 	}
 
+	/**
+	 * 收到订单成功消息
+	 */
+	@Override
+	public void doSucess(long l, CarInfo c) {
+
+		Order order = this.orderpool.getOrder(l);
+		order.setState(Order.STATE_HASCAR);
+		order.getResult().setDriver_name(c.getDriverName());
+		order.getResult().setDriver_tel(c.getDriverphone());
+		orderpool.put(order);
+
+		HashMap<String, Object> result = new HashMap<>();
+
+		result.put("orderid", order.getOrderId());
+		result.put("carNum", c.getLisencenumber());
+		result.put("driver_tel", c.getDriverphone());
+
+		XMPPBean<HashMap> bean = new XMPPBean<>();
+		bean.setMsgid(0x0001);
+		bean.setResult(result);
+		this.xmppservice.sendMessage(order.getCustomid(), bean);
+		orderMapper.updateOrder(order);
+
+	}
+
+	/**
+	 * 处理失败的消息
+	 */
+	@Override
+	public void doFail(long l, String describ, byte code) {
+		Order order = this.orderpool.getOrder(l);
+		order.setState(code);
+		HashMap map = new HashMap();
+		map.put("orderid", l);
+		map.put("msg", describ);
+		XMPPBean<HashMap> bean = new XMPPBean<>();
+		bean.setMsgid(0x0002);
+		bean.setResult(map);
+		this.xmppservice.sendMessage(order.getCustomid(), bean);
+		orderMapper.updateOrder(order);
+	}
+
+	/**
+	 * 取消订单
+	 */
+	@Override
+	public void cancelOrder(long l, String reason) {
+		Order order = this.orderpool.getOrder(l);
+		order.setState(Order.STATE_CANCEL_BY_PASS);
+		MQMsg0003 mqmsg = new MQMsg0003(order.getCustomid());
+
+		mqmsg.setOrderId(order.getOrderId());
+		mqmsg.setCancel(reason);
+		mqmsg.setPassengerName(order.getNickName());
+		mqmsg.setPassengerPhone(order.getUseriphone());
+		MQService.getInstance().sendMsg(order.getCitycode(), mqmsg);
+		orderMapper.updateOrder(order);
+
+	}
 }

@@ -25,4 +25,7 @@ public class InitApp {
 	public static final String ROOM =Config.getInstance(configFileName).getProperty("ROOM");
 	public static final int PINGINTERVAL = Integer.parseInt(Config.getInstance(configFileName).getProperty("PINGINTERVAL"));//心跳包间隔时间毫秒
 
+	public static final String DRIVERGROUPNAME =Config.getInstance(configFileName).getProperty("DRIVERGROUPNAME");
+	public static final String PASSAGERGROUPNAME =Config.getInstance(configFileName).getProperty("PASSAGERGROUPNAME");
+	
 }

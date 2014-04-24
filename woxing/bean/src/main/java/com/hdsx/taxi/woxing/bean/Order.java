@@ -15,6 +15,43 @@ import javax.ws.rs.FormParam;
 public class Order implements Serializable {
 	private static final long serialVersionUID = -5167741453339721565L;
 
+	/**
+	 * 订单已发送
+	 */
+	public static byte STATE_SENDED = 0;
+	/**
+	 * 已经找到车
+	 */
+	public static byte STATE_HASCAR = 1;
+	/**
+	 * 找不到车
+	 */
+	public static byte STATE_NOCAR = 2;
+	/**
+	 * 乘客已经上车
+	 */
+	public static byte STATE_PASSAGER_ON = 3;
+
+	/**
+	 * 乘客已支付
+	 */
+	public static byte STATE_PAYED = 4;
+
+	/**
+	 * 预约订单还未开始执行
+	 */
+	public static byte STATE_WAITE_FOR_OPERATE = 11;
+
+	/**
+	 * 预约订单正在执行
+	 */
+	public static byte STATE_OPERATING = 12;
+	
+	/**
+	 * 乘客取消订单
+	 */
+	public static byte STATE_CANCEL_BY_PASS = 20;
+
 	public String getUseriphone() {
 		return useriphone;
 	}
@@ -276,8 +313,8 @@ public class Order implements Serializable {
 	/**
 	 * 返回结果集对象
 	 */
-	//@FormParam("result")
-	private OrderResult result;
+
+	private OrderResult result = new OrderResult();
 
 	/**
 	 * 城市编码
@@ -306,7 +343,7 @@ public class Order implements Serializable {
 	 * 订单状态
 	 */
 	@FormParam("state")
-	private byte state;
+	private byte state = -1;
 
 	/**
 	 * Order的Object主键ID

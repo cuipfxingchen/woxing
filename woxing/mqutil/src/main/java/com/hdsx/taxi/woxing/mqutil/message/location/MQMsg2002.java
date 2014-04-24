@@ -28,7 +28,7 @@ import com.hdsx.taxi.woxing.mqutil.message.MQAbsMsg;
  */
 public class MQMsg2002 extends MQAbsMsg {
 
-	long orderId;
+	String carnum;
 
 	public MQMsg2002() {
 		super();
@@ -38,12 +38,14 @@ public class MQMsg2002 extends MQAbsMsg {
 		super(customId);
 	}
 
-	public Long getOrderId() {
-		return orderId;
+	
+
+	public String getCarnum() {
+		return carnum;
 	}
 
-	public void setOrderid(long orderId) {
-		this.orderId = orderId;
+	public void setCarnum(String carnum) {
+		this.carnum = carnum;
 	}
 
 	@Override
@@ -55,14 +57,14 @@ public class MQMsg2002 extends MQAbsMsg {
 	@Override
 	protected void decodebody(BytesMessage msg) throws JMSException {
 
-		this.orderId = msg.readLong();
+		this.carnum = msg.readUTF();
 
 	}
 
 	@Override
 	protected BytesMessage encodebody(BytesMessage msg) throws JMSException {
 
-		msg.writeLong(this.orderId);
+		msg.writeUTF(this.carnum);
 
 		return msg;
 	}
