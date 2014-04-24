@@ -17,23 +17,22 @@ public interface OrderMapper {
 	@Select("SELECT * FROM db_order WHERE 1=1 AND orderId=#{orderId}")
 	public Order getOrderById(long orderId);
 	
-	/* 查询历史订单 */
-	@Select("SELECT * FROM db_order WHERE 1=1 AND orderId=#{orderId}")
-	public List getHistoryOrderByCustomId(String customid);
+	/* 查询历史订单  WHERE 1=1 AND customid=#{customid}*/							
+	@Select("SELECT * FROM db_order WHERE 1=1 and customid=#{customid}")
+	public List<Order> getHistoryOrderByCustomId(String customid);
 
 	/* 查询预约单*/
 	@Select("SELECT * FROM db_order WHERE 1=1 AND orderId=#{orderId}")
-	public List getReservationOrder(String customid);
+	public List<Order> getReservationOrder(String customid);
 
-	
 	/* 新建订单 */
-	@Insert("INSERT INTO db_order (result,citycode,useriphone,paytype,fee,state,"
+	@Insert("INSERT INTO db_order (citycode,useriphone,paytype,fee,state,"
 			+ "orderId,customid,nickName,sex,getOnTime,lastReplTime,contractTaxi,"
 			+ "vipMark,reservation,takeTaxiType,serverLevel,firstChoiceCompany,"
 			+ "personCount,getOnLon,getOnLat,getOffLon,getOffLat,getOnPlaceName,"
 			+ "getOffPlaceName,notes,motorcycleType,anotherCellPhoneNo,specialRequirements,"
 			+ "orderCreateTime,cityResponse2CenterTime,taxiResponse2CityTime)"
-			+ " VALUES (#{result}, #{citycode}, #{useriphone}, #{paytype}, #{fee}, #{state},"
+			+ " VALUES (#{citycode}, #{useriphone}, #{paytype}, #{fee}, #{state},"
 			+ " #{orderId}, #{customid}, #{nickName}, #{sex}, #{getOnTime}, #{lastReplTime},"
 			+ " #{contractTaxi}, #{vipMark}, #{reservation}, #{takeTaxiType}, #{serverLevel},"
 			+ " #{firstChoiceCompany}, #{personCount}, #{getOnLon}, #{getOnLat}, #{getOffLon},"
@@ -42,7 +41,7 @@ public interface OrderMapper {
 	public int insert(Order order);
 
 	/* 修改订单 */
-	@Update("UPDATE db_order SET result=#{result},citycode=#{citycode},useriphone=#{useriphone},paytype=#{paytype},"
+	@Update("UPDATE db_order SET citycode=#{citycode},useriphone=#{useriphone},paytype=#{paytype},"
 			+ "fee=#{fee},state=#{state},orderId=#{orderId},customid=#{customid},nickName=#{nickName},sex=#{sex},"
 			+ "getOnTime=#{getOnTime},lastReplTime=#{lastReplTime},contractTaxi=#{contractTaxi},vipMark=#{vipMark},"
 			+ "reservation=#{reservation},takeTaxiType=#{takeTaxiType},serverLevel=#{serverLevel},firstChoiceCompany=#{firstChoiceCompany},"

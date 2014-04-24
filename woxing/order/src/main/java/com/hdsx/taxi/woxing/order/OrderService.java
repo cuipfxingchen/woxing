@@ -61,17 +61,18 @@ public class OrderService implements IOrderService {
 			msg.setSex(order.getSex());
 			msg.setUserphone(order.getUseriphone());
 			MQService.getInstance().sendMsg(order.getCitycode(), msg);
-
+			
+			
 			orderpool.put(order);
-
 			orderMapper.insert(order);
+			return 1;
 
-			return 0;
 		} catch (Exception ex) {
 			logger.error("提交订单失败:" + ex);
-			return 1;
+			ex.printStackTrace();
+			return 0;
 		}
-
+     
 	}
 
 	/**

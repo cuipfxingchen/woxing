@@ -221,7 +221,6 @@ public class MQMsg0001 extends MQAbsMsg {
 
 	@Override
 	protected short getMessageId() {
-
 		return 0x0001;
 	}
 
@@ -233,9 +232,11 @@ public class MQMsg0001 extends MQAbsMsg {
 		this.lastReplTime = DateFormatUtil.dateString2JavaUtilDate(msg
 				.readUTF());
 		this.contractTaxi = msg.readByte();
-		this.vipMark = msg.readUTF();
+		
+		this.vipMark = msg.readUTF(); 
 		this.takeTaxiType = msg.readByte();
 		this.serverLevel = msg.readByte();
+		
 		this.firstChoiceCompany = msg.readUTF();
 		this.personCount = msg.readInt();
 		this.getOnLon = msg.readInt() / 10E6d;
@@ -261,7 +262,7 @@ public class MQMsg0001 extends MQAbsMsg {
 		msg.writeUTF(DateFormatUtil.date2MySQLDateTimeString(this.getOnTime));
 		msg.writeUTF(DateFormatUtil.date2MySQLDateTimeString(this.lastReplTime));
 		msg.writeByte(this.contractTaxi);
-		msg.writeUTF(this.vipMark);
+		// msg.writeUTF(this.vipMark);
 		msg.writeByte(this.takeTaxiType);
 		msg.writeByte(this.serverLevel);
 		msg.writeUTF(firstChoiceCompany);

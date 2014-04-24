@@ -5,7 +5,10 @@ import java.util.List;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+
+import org.jboss.resteasy.annotations.Form;
 
 import com.google.inject.Inject;
 import com.hdsx.taxi.woxing.bean.CarInfo;
@@ -30,14 +33,17 @@ public class OrderRest {
 	@Path("/1")
 	@POST
 	@Produces("application/json;charset=UTF-8")
-	public RestBean submit(Order order) {
+	public RestBean submit(@Form Order order) {
 		RestBean<Integer> r = new RestBean<>();
 		String success="成功";
 		String fail = "失败";
-		boolean operResult=true;
+		boolean operResult=false;
 		//*业务逻辑开始
-		r.setResult(orderservice.submit(order));
-		
+		//ordermapper.insert(order);
+		System.out.println("order ----->"+order.toString());
+		int rtn = orderservice.submit(order);
+		if(1==rtn)
+			operResult=true;
 		
 		//业务逻辑结束
 		if(operResult){
@@ -47,7 +53,7 @@ public class OrderRest {
 			r.setState(RestBean.FAILCODE);
 			r.setMsg(fail);
 		}
-		
+		   
 		return r;
 	}
 	
@@ -58,18 +64,21 @@ public class OrderRest {
 	 * @param customid
 	 * @return
 	 */
-	@Path("/2")
+	@Path("/2/{customid}")
 	@GET
 	@Produces("application/json;charset=UTF-8")
-	public RestBean getHistoryOrder(String customid){
+	public RestBean getHistoryOrder(@PathParam("customid") String customid){
 		RestBean<List<Order>> r = new RestBean<>();
 		String success = "成功";
-		String fail = "失败";
+		String fail = "没有订单";
 		boolean operResult = false;
 		//业务逻辑开始
-		r.setResult(orderservice.getHistoryOrder(customid));
-		operResult = true;
-
+		List<Order> rtn = orderservice.getHistoryOrder(customid);
+		if (rtn!=null)
+		{
+			r.setResult(rtn);
+			operResult=true;
+		} 
 		//业务逻辑结束
 		if (operResult) {
 			r.setState(RestBean.SUCESSCODE);
@@ -87,10 +96,10 @@ public class OrderRest {
 	 * @param customid
 	 * @return
 	 */
-	@Path("/3")
+	@Path("/3/{customid}")
 	@GET
 	@Produces("application/json;charset=UTF-8")
-	public RestBean getReservationOrder(String customid){
+	public RestBean getReservationOrder(@PathParam("customid") String customid){
 		RestBean<List<Order>> r = new RestBean<>();
 		String success = "成功";
 		String fail = "失败";
@@ -118,10 +127,10 @@ public class OrderRest {
 	 * @param orderid
 	 * @return
 	 */
-	@Path("/4")
+	@Path("/4/{orderid}")
 	@GET
 	@Produces("application/json;charset=UTF-8")
-	public RestBean cancelOrder(long orderid){
+	public RestBean cancelOrder(@PathParam("orderid") long orderid){
 		RestBean<Boolean> r = new RestBean<>();
 		String success = "成功";
 		String fail = "失败";
@@ -147,10 +156,10 @@ public class OrderRest {
 	 * @param orderid
 	 * @return
 	 */
-	@Path("/5")
+	@Path("/5/{orderid}")
 	@GET
 	@Produces("application/json;charset=UTF-8")
-	public RestBean queryCarInfoByOrder(long orderid){
+	public RestBean queryCarInfoByOrder(@PathParam("orderid") long orderid){
 		RestBean<CarInfo> r = new RestBean<>();
 		String success = "成功";
 		String fail = "失败";
@@ -179,7 +188,7 @@ public class OrderRest {
 	@Path("/6")
 	@GET
 	@Produces("application/json;charset=UTF-8")
-	public RestBean update(Order order){		
+	public RestBean update(@Form Order order){		
 		RestBean<Boolean> r = new RestBean<>();
 		String success = "成功";
 		String fail = "失败";
