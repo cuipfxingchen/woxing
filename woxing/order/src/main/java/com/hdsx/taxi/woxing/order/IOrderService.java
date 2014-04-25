@@ -42,9 +42,10 @@ public interface IOrderService {
 	 * 取消订单
 	 * 
 	 * @param orderid
+	 * @param b 
 	 * @return
 	 */
-	public boolean cancelOrderByDriver(long orderid);
+	public boolean cancelOrderByDriver(long orderid, byte b);
 
 	/**
 	 * 通过订单查询车辆信息
