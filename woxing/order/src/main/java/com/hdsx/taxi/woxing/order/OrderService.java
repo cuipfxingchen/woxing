@@ -242,8 +242,8 @@ public class OrderService implements IOrderService {
 		o.setFee2(msg.getFee2());
 		HashMap map = new HashMap();
 		map.put("orderid", msg.getOrderid());
-		map.put("fee", msg.getFee());
-		map.put("fee2", msg.getFee2());
+		map.put("cost", msg.getFee());
+		map.put("fee", msg.getFee2());
 		XMPPBean<HashMap> bean = new XMPPBean<>();
 		bean.setMsgid(0x0004);
 		bean.setResult(map);
