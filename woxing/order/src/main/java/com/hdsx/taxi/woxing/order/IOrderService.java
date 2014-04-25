@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.hdsx.taxi.woxing.bean.CarInfo;
 import com.hdsx.taxi.woxing.bean.Order;
+import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1005;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1009;
 
 /**
@@ -42,9 +43,10 @@ public interface IOrderService {
 	 * 取消订单
 	 * 
 	 * @param orderid
+	 * @param b 
 	 * @return
 	 */
-	public boolean cancelOrder(long orderid);
+	public boolean cancelOrderByDriver(long orderid, byte b);
 
 	/**
 	 * 通过订单查询车辆信息
@@ -89,6 +91,12 @@ public interface IOrderService {
 	 * @param l
 	 * @param reason
 	 */
-	void cancelOrder(long l,String reason);
+	boolean cancelOrderByPassenger(long l,byte reason);
+
+	/**
+	 * 开始执行预约订单
+	 * @param msg
+	 */
+	public void startReversation(MQMsg1005 msg);
 
 }

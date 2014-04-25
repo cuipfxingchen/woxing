@@ -1,7 +1,11 @@
 package com.hdsx.taxi.woxing.web.rest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.List;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -19,6 +23,11 @@ import com.hdsx.taxi.woxing.web.rest.bean.RestBean;
 
 @Path("/rest/order")
 public class OrderRest {
+	/**
+	 * Logger for this class
+	 */
+	private static final Logger logger = LoggerFactory
+			.getLogger(OrderRest.class);
 
 	@Inject
 	OrderMapper ordermapper;
@@ -27,6 +36,7 @@ public class OrderRest {
 
 	/**
 	 * 提交订单
+	 * 
 	 * @param order
 	 * @return
 	 */
@@ -35,29 +45,31 @@ public class OrderRest {
 	@Produces("application/json;charset=UTF-8")
 	public RestBean submit(@Form Order order) {
 		RestBean<Integer> r = new RestBean<>();
-		String success="成功";
+		String success = "成功";
 		String fail = "失败";
-		boolean operResult=false;
-		//*业务逻辑开始
-		//ordermapper.insert(order);
-		System.out.println("order ----->"+order.toString());
+		boolean operResult = false;
+		// *业务逻辑开始
+		// ordermapper.insert(order);
+		if (logger.isDebugEnabled()) {
+			logger.debug(
+					"submit(Order) - {}", "order ----->" + order.toString()); //$NON-NLS-1$ //$NON-NLS-2$
+		}
 		int rtn = orderservice.submit(order);
-		if(1==rtn)
-			operResult=true;
-		
-		//业务逻辑结束
-		if(operResult){
+		if (1 == rtn)
+			operResult = true;
+
+		// 业务逻辑结束
+		if (operResult) {
 			r.setState(RestBean.SUCESSCODE);
 			r.setMsg(success);
-		}else{
+		} else {
 			r.setState(RestBean.FAILCODE);
 			r.setMsg(fail);
 		}
-		   
+
 		return r;
 	}
-	
-	
+
 	/**
 	 * 查询历史订单
 	 * 
@@ -67,19 +79,18 @@ public class OrderRest {
 	@Path("/2/{customid}")
 	@GET
 	@Produces("application/json;charset=UTF-8")
-	public RestBean getHistoryOrder(@PathParam("customid") String customid){
+	public RestBean getHistoryOrder(@PathParam("customid") String customid) {
 		RestBean<List<Order>> r = new RestBean<>();
 		String success = "成功";
 		String fail = "没有订单";
 		boolean operResult = false;
-		//业务逻辑开始
+		// 业务逻辑开始
 		List<Order> rtn = orderservice.getHistoryOrder(customid);
-		if (rtn!=null)
-		{
+		if (rtn != null) {
 			r.setResult(rtn);
-			operResult=true;
-		} 
-		//业务逻辑结束
+			operResult = true;
+		}
+		// 业务逻辑结束
 		if (operResult) {
 			r.setState(RestBean.SUCESSCODE);
 			r.setMsg(success);
@@ -88,7 +99,7 @@ public class OrderRest {
 			r.setMsg(fail);
 		}
 		return r;
-	} 
+	}
 
 	/**
 	 * 查询预约订单
@@ -99,18 +110,18 @@ public class OrderRest {
 	@Path("/3/{customid}")
 	@GET
 	@Produces("application/json;charset=UTF-8")
-	public RestBean getReservationOrder(@PathParam("customid") String customid){
+	public RestBean getReservationOrder(@PathParam("customid") String customid) {
 		RestBean<List<Order>> r = new RestBean<>();
 		String success = "成功";
 		String fail = "失败";
 		boolean operResult = false;
-		//业务逻辑开始
-		//r.setResult();
+		// 业务逻辑开始
+		// r.setResult();
 		r.setResult(orderservice.getReservationOrder(customid));
 
 		operResult = true;
 
-		//业务逻辑结束
+		// 业务逻辑结束
 		if (operResult) {
 			r.setState(RestBean.SUCESSCODE);
 			r.setMsg(success);
@@ -125,21 +136,23 @@ public class OrderRest {
 	 * 取消订单
 	 * 
 	 * @param orderid
-	 * @return
+	 * @param reason  reason
+	 * @return 
 	 */
-	@Path("/4/{orderid}")
-	@GET
+	@Path("/4/{orderid}/{reason}")
+	@POST
 	@Produces("application/json;charset=UTF-8")
-	public RestBean cancelOrder(@PathParam("orderid") long orderid){
+	public RestBean cancelOrder(@PathParam("orderid") long orderid,
+			@PathParam("reason") byte reason) {
 		RestBean<Boolean> r = new RestBean<>();
 		String success = "成功";
 		String fail = "失败";
 		boolean operResult = false;
-		//业务逻辑开始
-		r.setResult(new Boolean(orderservice.cancelOrder(orderid) ));
+		// 业务逻辑开始
+		r.setResult(orderservice.cancelOrderByPassenger(orderid,reason));
 		operResult = true;
 
-		//业务逻辑结束
+		// 业务逻辑结束
 		if (operResult) {
 			r.setState(RestBean.SUCESSCODE);
 			r.setMsg(success);
@@ -159,16 +172,16 @@ public class OrderRest {
 	@Path("/5/{orderid}")
 	@GET
 	@Produces("application/json;charset=UTF-8")
-	public RestBean queryCarInfoByOrder(@PathParam("orderid") long orderid){
+	public RestBean queryCarInfoByOrder(@PathParam("orderid") long orderid) {
 		RestBean<CarInfo> r = new RestBean<>();
 		String success = "成功";
 		String fail = "失败";
 		boolean operResult = false;
-		//业务逻辑开始
-		r.setResult( orderservice.queryCarInfoByOrder(orderid));
+		// 业务逻辑开始
+		r.setResult(orderservice.queryCarInfoByOrder(orderid));
 		operResult = true;
 
-		//业务逻辑结束
+		// 业务逻辑结束
 		if (operResult) {
 			r.setState(RestBean.SUCESSCODE);
 			r.setMsg(success);
@@ -179,25 +192,25 @@ public class OrderRest {
 		return r;
 	}
 
-	
 	/**
 	 * 更新订单，包括状态
+	 * 
 	 * @param order
 	 * @return
 	 */
 	@Path("/6")
 	@GET
 	@Produces("application/json;charset=UTF-8")
-	public RestBean update(@Form Order order){		
+	public RestBean update(@Form Order order) {
 		RestBean<Boolean> r = new RestBean<>();
 		String success = "成功";
 		String fail = "失败";
 		boolean operResult = false;
-		//业务逻辑开始
+		// 业务逻辑开始
 		r.setResult(new Boolean(orderservice.update(order)));
 		operResult = true;
 
-		//业务逻辑结束
+		// 业务逻辑结束
 		if (operResult) {
 			r.setState(RestBean.SUCESSCODE);
 			r.setMsg(success);
@@ -206,7 +219,7 @@ public class OrderRest {
 			r.setMsg(fail);
 		}
 		return r;
-		
+
 	}
 
 }

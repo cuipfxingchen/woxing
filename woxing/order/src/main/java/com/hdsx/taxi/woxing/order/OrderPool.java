@@ -1,6 +1,7 @@
 package com.hdsx.taxi.woxing.order;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import net.sf.ehcache.Ehcache;
@@ -32,10 +33,9 @@ public class OrderPool {
 		this.custompool = cm.getCm().getEhcache(CUSTOMPOOL_CACHE_NAME);
 	}
 
-	
-	
 	/**
 	 * 通过订单号获取订单
+	 * 
 	 * @param orderid
 	 * @return
 	 */
@@ -138,6 +138,52 @@ public class OrderPool {
 	}
 
 	/**
+	 * 从订单池中移除订单对象
+	 * 
+	 * @param o
+	 */
+	public void remove(Order o) {
+		this.pool.remove(o.getOrderId());
+
+		Element e = this.custompool.get(o.getCustomid());
+		if (e == null) {
+			return;
+		}
+
+		CutomOrderMapper om = (CutomOrderMapper) e.getObjectValue();
+		if (om.getCurOrderid() == o.getOrderId()) {
+			om.setCurOrderid(0);
+		} else {
+
+			for (int i = 0; i < om.getReorderlist().size(); i++) {
+				if (o.getOrderId() == om.getReorderlist().get(i)) {
+					om.getReorderlist().remove(i);
+				}
+			}
+
+			this.custompool.put(e);
+		}
+
+	}
+
+	/**
+	 * 开始执行预约订单
+	 * 
+	 * @param o
+	 */
+	public void onProduce(Order o) {
+
+		this.put(o);
+		Element e = this.custompool.get(o.getCustomid());
+		if (e == null)
+			return;
+		CutomOrderMapper cm = (CutomOrderMapper) e.getObjectValue();
+		cm.setCurOrderid(o.getOrderId());
+		cm.getReorderlist().remove(o.getOrderId());
+
+	}
+
+	/**
 	 * 乘客Id和订单信息的关联
 	 * 
 	 * @author Steven
@@ -173,4 +219,5 @@ public class OrderPool {
 		}
 
 	}
+
 }

@@ -14,6 +14,7 @@ import com.hdsx.taxi.woxing.dao.OrderMapper;
 import com.hdsx.taxi.woxing.mqutil.MQService;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg0001;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg0003;
+import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1005;
 import com.hdsx.taxi.woxing.xmpp.IXMPPService;
 import com.hdsx.taxi.woxing.xmpp.XMPPBean;
 
@@ -61,8 +62,7 @@ public class OrderService implements IOrderService {
 			msg.setSex(order.getSex());
 			msg.setUserphone(order.getUseriphone());
 			MQService.getInstance().sendMsg(order.getCitycode(), msg);
-			
-			
+
 			orderpool.put(order);
 			orderMapper.insert(order);
 			return 1;
@@ -72,7 +72,7 @@ public class OrderService implements IOrderService {
 			ex.printStackTrace();
 			return 0;
 		}
-     
+
 	}
 
 	/**
@@ -99,14 +99,28 @@ public class OrderService implements IOrderService {
 	}
 
 	/**
-	 * 取消订单
+	 * 驾驶员取消订单
 	 * 
 	 * @param orderid
 	 * @return
 	 */
 	@Override
-	public boolean cancelOrder(long orderid) {
+	public boolean cancelOrderByDriver(long orderid, byte reason) {
 
+		Order o = this.orderpool.getOrder(orderid);
+		o.setState(Order.STATE_CANCEL_BY_DRIVE);
+		this.orderpool.remove(o);
+
+		this.orderMapper.updateOrder(o);
+
+		XMPPBean<HashMap> bean = new XMPPBean<>();
+		bean.setMsgid(0x0003);
+		HashMap map = new HashMap<>();
+		map.put("orderid", orderid);
+		map.put("msg", reason);
+		bean.setResult(map);
+
+		xmppservice.sendMessage(o.getCustomid(), bean);
 		return true;
 	}
 
@@ -179,20 +193,40 @@ public class OrderService implements IOrderService {
 	}
 
 	/**
-	 * 取消订单
+	 * 乘客取消订单
 	 */
 	@Override
-	public void cancelOrder(long l, String reason) {
+	public boolean cancelOrderByPassenger(long l, byte reason) {
 		Order order = this.orderpool.getOrder(l);
+		if (order == null)
+			return true;
 		order.setState(Order.STATE_CANCEL_BY_PASS);
+
+		this.orderpool.remove(order);
 		MQMsg0003 mqmsg = new MQMsg0003(order.getCustomid());
 
 		mqmsg.setOrderId(order.getOrderId());
-		mqmsg.setCancel(reason);
+		// mqmsg.setCancel(reason);
+		mqmsg.setCausecode(reason);
 		mqmsg.setPassengerName(order.getNickName());
 		mqmsg.setPassengerPhone(order.getUseriphone());
 		MQService.getInstance().sendMsg(order.getCitycode(), mqmsg);
 		orderMapper.updateOrder(order);
+
+		return true;
+
+	}
+
+	/**
+	 * 开始执行预约订单
+	 */
+	@Override
+	public void startReversation(MQMsg1005 msg) {
+
+		long orderid = msg.getOrderid();
+		Order o = this.orderpool.getOrder(orderid);
+		o.getResult().setCarNum(msg.getCarLicensenumber());
+		this.orderpool.onProduce(o);
 
 	}
 }

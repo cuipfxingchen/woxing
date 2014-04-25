@@ -51,6 +51,11 @@ public class Order implements Serializable {
 	 * 乘客取消订单
 	 */
 	public static byte STATE_CANCEL_BY_PASS = 20;
+	
+	/**
+	 * 驾驶员取消订单
+	 */
+	public static byte STATE_CANCEL_BY_DRIVE = 20;
 
 	public String getUseriphone() {
 		return useriphone;
