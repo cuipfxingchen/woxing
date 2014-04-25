@@ -16,6 +16,7 @@ import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg0001;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg0003;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1005;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1006;
+import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1007;
 import com.hdsx.taxi.woxing.xmpp.IXMPPService;
 import com.hdsx.taxi.woxing.xmpp.XMPPBean;
 
@@ -237,7 +238,7 @@ public class OrderService implements IOrderService {
 	@Override
 	public void onPay(MQMsg1006 msg) {
 		Order o = this.orderpool.getOrder(msg.getOrderid());
-		o.setState(o.STATE_PAYED);
+		o.setState(Order.STATE_PAYED);
 		o.setFee(msg.getFee());
 		o.setFee2(msg.getFee2());
 		HashMap map = new HashMap();
@@ -251,5 +252,22 @@ public class OrderService implements IOrderService {
 		this.orderpool.put(o);
 		this.orderMapper.updateOrder(o);
 
+	}
+
+	@Override
+	public void passengerGeton(MQMsg1007 msg) {
+		Order o = this.orderpool.getOrder(msg.getOrderid());
+		o.setState(Order.STATE_PASSAGER_ON);
+		HashMap map = new HashMap();
+		map.put("orderid", msg.getOrderid());
+		map.put("lat", msg.getLat());
+		map.put("lon", msg.getLon());
+		XMPPBean<HashMap> bean = new XMPPBean<>();
+		bean.setMsgid(0x0005);
+		bean.setResult(map);
+		this.xmppservice.sendMessage(o.getCustomid(), bean);
+		this.orderpool.put(o);
+		this.orderMapper.updateOrder(o);
+		
 	}
 }

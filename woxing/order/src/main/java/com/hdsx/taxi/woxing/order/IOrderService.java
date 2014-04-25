@@ -6,6 +6,7 @@ import com.hdsx.taxi.woxing.bean.CarInfo;
 import com.hdsx.taxi.woxing.bean.Order;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1005;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1006;
+import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1007;
 
 /**
  * 订单服务接口
@@ -105,5 +106,11 @@ public interface IOrderService {
 	 * @param mqmsg
 	 */
 	public void onPay(MQMsg1006 mqmsg);
+
+	/**
+	 * 乘客上车
+	 * @param msg
+	 */
+	public void passengerGeton(MQMsg1007 msg);
 
 }
