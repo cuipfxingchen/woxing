@@ -31,6 +31,7 @@ public class HanlderFactory {
 		strateg.put((short) 0x1002, new MQHandler1002());
 		strateg.put((short) 0x1003, new MQHandler1003());
 		strateg.put((short) 0x1004, new MQHandler1004());
+		strateg.put((short) 0x1005, new MQHandler1005());
 		strateg.put((short) 0x1009, new MQHandler1009());
 		strateg.put((short) 0x3001, new MQHandler3001());
 		strateg.put((short) 0x3002, new MQHandler3002());

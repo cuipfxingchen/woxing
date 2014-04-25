@@ -14,6 +14,7 @@ import com.hdsx.taxi.woxing.dao.OrderMapper;
 import com.hdsx.taxi.woxing.mqutil.MQService;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg0001;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg0003;
+import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1005;
 import com.hdsx.taxi.woxing.xmpp.IXMPPService;
 import com.hdsx.taxi.woxing.xmpp.XMPPBean;
 
@@ -213,6 +214,19 @@ public class OrderService implements IOrderService {
 		orderMapper.updateOrder(order);
 
 		return true;
+
+	}
+
+	/**
+	 * 开始执行预约订单
+	 */
+	@Override
+	public void startReversation(MQMsg1005 msg) {
+
+		long orderid = msg.getOrderid();
+		Order o = this.orderpool.getOrder(orderid);
+		o.getResult().setCarNum(msg.getCarLicensenumber());
+		this.orderpool.onProduce(o);
 
 	}
 }

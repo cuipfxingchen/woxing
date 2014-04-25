@@ -167,6 +167,23 @@ public class OrderPool {
 	}
 
 	/**
+	 * 开始执行预约订单
+	 * 
+	 * @param o
+	 */
+	public void onProduce(Order o) {
+
+		this.put(o);
+		Element e = this.custompool.get(o.getCustomid());
+		if (e == null)
+			return;
+		CutomOrderMapper cm = (CutomOrderMapper) e.getObjectValue();
+		cm.setCurOrderid(o.getOrderId());
+		cm.getReorderlist().remove(o.getOrderId());
+
+	}
+
+	/**
 	 * 乘客Id和订单信息的关联
 	 * 
 	 * @author Steven
