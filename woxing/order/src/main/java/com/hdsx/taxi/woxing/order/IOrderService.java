@@ -5,7 +5,7 @@ import java.util.List;
 import com.hdsx.taxi.woxing.bean.CarInfo;
 import com.hdsx.taxi.woxing.bean.Order;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1005;
-import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1009;
+import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1006;
 
 /**
  * 订单服务接口
@@ -98,5 +98,12 @@ public interface IOrderService {
 	 * @param msg
 	 */
 	public void startReversation(MQMsg1005 msg);
+
+	
+	/**
+	 * 付款通知
+	 * @param mqmsg
+	 */
+	public void onPay(MQMsg1006 mqmsg);
 
 }

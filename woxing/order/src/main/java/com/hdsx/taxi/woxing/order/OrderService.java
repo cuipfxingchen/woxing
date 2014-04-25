@@ -15,6 +15,7 @@ import com.hdsx.taxi.woxing.mqutil.MQService;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg0001;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg0003;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1005;
+import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1006;
 import com.hdsx.taxi.woxing.xmpp.IXMPPService;
 import com.hdsx.taxi.woxing.xmpp.XMPPBean;
 
@@ -227,6 +228,28 @@ public class OrderService implements IOrderService {
 		Order o = this.orderpool.getOrder(orderid);
 		o.getResult().setCarNum(msg.getCarLicensenumber());
 		this.orderpool.onProduce(o);
+
+	}
+
+	/**
+	 * 付款
+	 */
+	@Override
+	public void onPay(MQMsg1006 msg) {
+		Order o = this.orderpool.getOrder(msg.getOrderid());
+		o.setState(o.STATE_PAYED);
+		o.setFee(msg.getFee());
+		o.setFee2(msg.getFee2());
+		HashMap map = new HashMap();
+		map.put("orderid", msg.getOrderid());
+		map.put("fee", msg.getFee());
+		map.put("fee2", msg.getFee2());
+		XMPPBean<HashMap> bean = new XMPPBean<>();
+		bean.setMsgid(0x0004);
+		bean.setResult(map);
+		this.xmppservice.sendMessage(o.getCustomid(), bean);
+		this.orderpool.put(o);
+		this.orderMapper.updateOrder(o);
 
 	}
 }
