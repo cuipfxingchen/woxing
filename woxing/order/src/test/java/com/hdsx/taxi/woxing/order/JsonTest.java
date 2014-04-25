@@ -17,6 +17,7 @@ public class JsonTest {
 		map.put("name", "王翔");
 		map.put("age", 13810195316L);
 
+		map.put("sss", null);
 		String json = mapper.writeValueAsString(map);
 		System.out.println(json);
 

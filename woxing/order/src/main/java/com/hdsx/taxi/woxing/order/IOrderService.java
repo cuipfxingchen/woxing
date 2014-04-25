@@ -44,7 +44,7 @@ public interface IOrderService {
 	 * @param orderid
 	 * @return
 	 */
-	public boolean cancelOrder(long orderid);
+	public boolean cancelOrderByDriver(long orderid);
 
 	/**
 	 * 通过订单查询车辆信息
@@ -89,6 +89,6 @@ public interface IOrderService {
 	 * @param l
 	 * @param reason
 	 */
-	void cancelOrder(long l,String reason);
+	boolean cancelOrderByPassenger(long l,byte reason);
 
 }

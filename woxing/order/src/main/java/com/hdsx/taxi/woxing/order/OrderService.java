@@ -61,8 +61,7 @@ public class OrderService implements IOrderService {
 			msg.setSex(order.getSex());
 			msg.setUserphone(order.getUseriphone());
 			MQService.getInstance().sendMsg(order.getCitycode(), msg);
-			
-			
+
 			orderpool.put(order);
 			orderMapper.insert(order);
 			return 1;
@@ -72,7 +71,7 @@ public class OrderService implements IOrderService {
 			ex.printStackTrace();
 			return 0;
 		}
-     
+
 	}
 
 	/**
@@ -105,7 +104,7 @@ public class OrderService implements IOrderService {
 	 * @return
 	 */
 	@Override
-	public boolean cancelOrder(long orderid) {
+	public boolean cancelOrderByDriver(long orderid) {
 
 		return true;
 	}
@@ -182,17 +181,20 @@ public class OrderService implements IOrderService {
 	 * 取消订单
 	 */
 	@Override
-	public void cancelOrder(long l, String reason) {
+	public boolean cancelOrderByPassenger(long l, byte reason) {
 		Order order = this.orderpool.getOrder(l);
 		order.setState(Order.STATE_CANCEL_BY_PASS);
 		MQMsg0003 mqmsg = new MQMsg0003(order.getCustomid());
 
 		mqmsg.setOrderId(order.getOrderId());
-		mqmsg.setCancel(reason);
+		// mqmsg.setCancel(reason);
+		mqmsg.setCausecode(reason);
 		mqmsg.setPassengerName(order.getNickName());
 		mqmsg.setPassengerPhone(order.getUseriphone());
 		MQService.getInstance().sendMsg(order.getCitycode(), mqmsg);
 		orderMapper.updateOrder(order);
+
+		return true;
 
 	}
 }
