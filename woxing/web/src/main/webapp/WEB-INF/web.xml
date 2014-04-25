@@ -19,10 +19,6 @@
  	<listener>
 		<listener-class>com.hdsx.taxi.woxing.web.listener.MQListener</listener-class>
 	</listener>
-	<listener>
-		<!-- 启动mybatis日志 -->
-		<listener-class>com.hdsx.taxi.woxing.web.listener.MyBatisLogListener</listener-class>
-	</listener>
 	
 	<servlet>
 		<servlet-name>Rest</servlet-name>

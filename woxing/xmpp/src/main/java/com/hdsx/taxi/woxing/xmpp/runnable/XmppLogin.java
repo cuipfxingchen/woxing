@@ -18,7 +18,7 @@ public class XmppLogin implements Runnable {
 	
 	public void run() {
 		login();
-		XmppManager.getXmppManager().runConnectionTask();
+		XmppManager.getXmppManager().runTask();
 	}
 	
 	public void login(){

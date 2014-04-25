@@ -13,10 +13,14 @@ import com.hdsx.taxi.woxing.mqutil.msgpool.MQMsgPool;
 import com.hdsx.taxi.woxing.order.IOrderService;
 import com.hdsx.taxi.woxing.order.OrderPool;
 import com.hdsx.taxi.woxing.order.OrderService;
+import com.hdsx.taxi.woxing.web.rest.AddressRest;
 import com.hdsx.taxi.woxing.web.rest.ComplaintRest;
 import com.hdsx.taxi.woxing.web.rest.EstimateRest;
 import com.hdsx.taxi.woxing.web.rest.LocationRest;
 import com.hdsx.taxi.woxing.web.rest.OrderRest;
+import com.hdsx.taxi.woxing.web.rest.TestRest;
+import com.hdsx.taxi.woxing.web.service.AddressService;
+import com.hdsx.taxi.woxing.web.service.CityService;
 import com.hdsx.taxi.woxing.web.service.ComplaintService;
 import com.hdsx.taxi.woxing.web.service.EstimateService;
 import com.hdsx.taxi.woxing.web.service.LocationService;
@@ -51,6 +55,8 @@ public class RestEasyModule implements Module {
 		binder.bind(LocationService.class); // 位置服务
 		binder.bind(ComplaintService.class); // 投诉服务
 		binder.bind(EstimateService.class); // 评价服务
+		binder.bind(AddressService.class); // 常用地址服务
+		binder.bind(CityService.class); // 城市相关服务
 
 		binder.bind(IOrderService.class).to(OrderService.class)
 				.in(Singleton.class); // 订单服务
@@ -61,6 +67,8 @@ public class RestEasyModule implements Module {
 		binder.bind(LocationRest.class);
 		binder.bind(ComplaintRest.class);
 		binder.bind(EstimateRest.class);
+		binder.bind(AddressRest.class);
+		binder.bind(TestRest.class);
 
 	}
 
