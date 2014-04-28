@@ -12,9 +12,17 @@ import com.hdsx.taxi.woxing.bean.CarInfo;
 import com.hdsx.taxi.woxing.bean.Order;
 import com.hdsx.taxi.woxing.dao.OrderMapper;
 import com.hdsx.taxi.woxing.mqutil.MQService;
+import com.hdsx.taxi.woxing.mqutil.message.MQAbsMsg;
+import com.hdsx.taxi.woxing.mqutil.message.location.MQMsg3002;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg0001;
+import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg0002;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg0003;
+import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1002;
+import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1003;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1005;
+import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1006;
+import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1007;
+import com.hdsx.taxi.woxing.mqutil.msgpool.MQMsgPool;
 import com.hdsx.taxi.woxing.xmpp.IXMPPService;
 import com.hdsx.taxi.woxing.xmpp.XMPPBean;
 
@@ -35,12 +43,14 @@ public class OrderService implements IOrderService {
 	IXMPPService xmppservice;
 	OrderMapper orderMapper;
 	OrderPool orderpool;
+	MQMsgPool msgpool;
 
 	@Inject
-	public OrderService(IXMPPService xmpp, OrderMapper om, OrderPool pool) {
+	public OrderService(IXMPPService xmpp, OrderMapper om, OrderPool pool,MQMsgPool msgpool) {
 		this.xmppservice = xmpp;
 		this.orderMapper = om;
 		this.orderpool = pool;
+		this.msgpool=msgpool;
 	}
 
 	@Override
@@ -114,7 +124,7 @@ public class OrderService implements IOrderService {
 		this.orderMapper.updateOrder(o);
 
 		XMPPBean<HashMap> bean = new XMPPBean<>();
-		bean.setMsgid(0x0003);
+		bean.setMsgid(0x1004);
 		HashMap map = new HashMap<>();
 		map.put("orderid", orderid);
 		map.put("msg", reason);
@@ -145,10 +155,24 @@ public class OrderService implements IOrderService {
 	 */
 	@Override
 	public boolean update(Order order) {
-
 		return true;
 	}
 
+	/**
+	 * 更新订单号
+	 * @param newOrderId
+	 * @param oldOrderId
+	 */
+	@Override
+	public void update(long newOrderId,long oldOrderId){
+		Order order1 = this.orderpool.getOrder(oldOrderId);
+		this.orderpool.remove(order1);
+		order1.setOrderId(newOrderId);
+		order1.setState(Order.STATE_SENDED);
+		this.orderpool.put(order1);
+		orderMapper.updateOrder(order1);
+	}
+	
 	/**
 	 * 收到订单成功消息
 	 */
@@ -160,7 +184,8 @@ public class OrderService implements IOrderService {
 		order.getResult().setDriver_name(c.getDriverName());
 		order.getResult().setDriver_tel(c.getDriverphone());
 		orderpool.put(order);
-
+		orderMapper.updateOrder(order);
+		
 		HashMap<String, Object> result = new HashMap<>();
 
 		result.put("orderid", order.getOrderId());
@@ -168,10 +193,9 @@ public class OrderService implements IOrderService {
 		result.put("driver_tel", c.getDriverphone());
 
 		XMPPBean<HashMap> bean = new XMPPBean<>();
-		bean.setMsgid(0x0001);
+		bean.setMsgid(0x1001);
 		bean.setResult(result);
 		this.xmppservice.sendMessage(order.getCustomid(), bean);
-		orderMapper.updateOrder(order);
 
 	}
 
@@ -182,14 +206,15 @@ public class OrderService implements IOrderService {
 	public void doFail(long l, String describ, byte code) {
 		Order order = this.orderpool.getOrder(l);
 		order.setState(code);
+		this.orderpool.remove(order);
+		orderMapper.updateOrder(order);
 		HashMap map = new HashMap();
 		map.put("orderid", l);
 		map.put("msg", describ);
 		XMPPBean<HashMap> bean = new XMPPBean<>();
-		bean.setMsgid(0x0002);
+		bean.setMsgid(0x1009);
 		bean.setResult(map);
 		this.xmppservice.sendMessage(order.getCustomid(), bean);
-		orderMapper.updateOrder(order);
 	}
 
 	/**
@@ -211,9 +236,18 @@ public class OrderService implements IOrderService {
 		mqmsg.setPassengerName(order.getNickName());
 		mqmsg.setPassengerPhone(order.getUseriphone());
 		MQService.getInstance().sendMsg(order.getCitycode(), mqmsg);
-		orderMapper.updateOrder(order);
-
-		return true;
+		MQAbsMsg returnmsg = msgpool.getMsg(order.getCustomid(), 0x1003);
+		if (returnmsg == null)
+			return false;
+		if (!returnmsg.getClass().isInstance(MQMsg1003.class))
+			return false;
+		MQMsg1003 rm = (MQMsg1003) returnmsg;
+		if(rm.getCancle()==0){
+			orderMapper.updateOrder(order);
+			return true;
+		}else{
+			return false;
+		}
 
 	}
 
@@ -226,7 +260,57 @@ public class OrderService implements IOrderService {
 		long orderid = msg.getOrderid();
 		Order o = this.orderpool.getOrder(orderid);
 		o.getResult().setCarNum(msg.getCarLicensenumber());
+		o.setState(Order.STATE_OPERATING);//预约订单开始执行状态
 		this.orderpool.onProduce(o);
 
 	}
+
+	@Override
+	public byte getOrderState(long orderId, String customid, String citycode) {
+		MQMsg0002 mqmsg = new MQMsg0002(customid);
+		mqmsg.setOrderId(orderId);
+		MQService.getInstance().sendMsg(citycode, mqmsg);
+		MQAbsMsg returnmsg = msgpool.getMsg(customid, 0x1002);
+		if (returnmsg == null)
+			return 0;
+		if (!returnmsg.getClass().isInstance(MQMsg1002.class))
+			return 0;
+		MQMsg1002 rm = (MQMsg1002) returnmsg;
+		return rm.getState();
+	}
+
+	@Override
+	public void payMoney(MQMsg1006 msg) {
+		Order order=orderpool.getOrder(msg.getOrderid());
+		order.setState(Order.STATE_FUKUAN);
+		orderpool.put(order);
+		XMPPBean<HashMap> bean = new XMPPBean<>();
+		bean.setMsgid(0x1006);
+		HashMap map = new HashMap<>();
+		map.put("orderId", msg.getOrderid());
+		map.put("carnum", msg.getCarlicensenumber());
+		map.put("driverId", msg.getDriverid());
+		map.put("fee", msg.getFee());
+		map.put("fee2", msg.getFee2());
+		map.put("sj", msg.getTime());
+		bean.setResult(map);
+		xmppservice.sendMessage(order.getCustomid(), bean);
+	}
+
+	@Override
+	public void getOnCarMsg(MQMsg1007 msg) {
+		Order order=orderpool.getOrder(msg.getOrderid());
+		XMPPBean<HashMap> bean = new XMPPBean<>();
+		bean.setMsgid(0x1007);
+		HashMap map = new HashMap<>();
+		map.put("orderId", msg.getOrderid());
+		map.put("lon", msg.getLon());
+		map.put("lat", msg.getLat());
+		map.put("sj", msg.getTime());
+		bean.setResult(map);
+		xmppservice.sendMessage(order.getCustomid(), bean);
+		
+	}
+
+	
 }

@@ -139,10 +139,10 @@ public class OrderRest {
 	 * @param reason  reason
 	 * @return 
 	 */
-	@Path("/4/{orderid}/{reason}")
+	@Path("/4/{orderId}/{reason}")
 	@POST
 	@Produces("application/json;charset=UTF-8")
-	public RestBean cancelOrder(@PathParam("orderid") long orderid,
+	public RestBean cancelOrder(@PathParam("orderId") long orderid,
 			@PathParam("reason") byte reason) {
 		RestBean<Boolean> r = new RestBean<>();
 		String success = "成功";
@@ -221,5 +221,22 @@ public class OrderRest {
 		return r;
 
 	}
-
+	
+	/**
+	 * 根据订单id查询订单状态
+	 * @param orderId
+	 * @param citycode
+	 * @param customid
+	 * @return
+	 */
+	@Path("/7/{orderId}/{customid}/{citycode}")
+	@GET
+	@Produces("application/json;charset=UTF-8")
+	public RestBean getOrderState(@PathParam("orderId") String orderId,@PathParam("citycode") String citycode,
+			@PathParam("customid") String customid){
+		RestBean r = new RestBean<>();
+		long orderid=Long.parseLong(orderId);
+		r.setState(orderservice.getOrderState(orderid, customid, citycode));
+		return r;
+	}
 }

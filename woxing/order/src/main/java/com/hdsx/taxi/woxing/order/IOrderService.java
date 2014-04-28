@@ -5,6 +5,8 @@ import java.util.List;
 import com.hdsx.taxi.woxing.bean.CarInfo;
 import com.hdsx.taxi.woxing.bean.Order;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1005;
+import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1006;
+import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1007;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1009;
 
 /**
@@ -65,6 +67,13 @@ public interface IOrderService {
 	public boolean update(Order order);
 
 	/**
+	 * 更新订单号
+	 * @param newOrderId
+	 * @param oldOrderId
+	 */
+	public void update(long newOrderId,long oldOrderId);
+	
+	/**
 	 * 更新订单信息
 	 * 
 	 * @param l
@@ -98,5 +107,22 @@ public interface IOrderService {
 	 * @param msg
 	 */
 	public void startReversation(MQMsg1005 msg);
+	
+	/**
+	 * 查询订单状态
+	 * @param orderId
+	 */
+	byte getOrderState(long orderId,String customid,String citycode);
 
+	/**
+	 * 付款通知
+	 * @param msg
+	 */
+	void payMoney(MQMsg1006 msg);
+	
+	/**
+	 * 上车通知
+	 * @param msg
+	 */
+	void getOnCarMsg(MQMsg1007 msg);
 }

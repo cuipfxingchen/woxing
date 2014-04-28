@@ -27,6 +27,12 @@ public class Order implements Serializable {
 	 * 找不到车
 	 */
 	public static byte STATE_NOCAR = 2;
+	
+	/**
+	 * 无车抢单
+	 */
+	public static byte STATE_NOCARCall = 2;
+	
 	/**
 	 * 乘客已经上车
 	 */
@@ -55,8 +61,18 @@ public class Order implements Serializable {
 	/**
 	 * 驾驶员取消订单
 	 */
-	public static byte STATE_CANCEL_BY_DRIVE = 20;
+	public static byte STATE_CANCEL_BY_DRIVE = 21;
 
+	/**
+	 * 待付款状态
+	 */
+	public static byte STATE_FUKUAN=30;
+	
+	/**
+	 * 订单完成
+	 */
+	public static byte STATE_OVER=100;
+	
 	public String getUseriphone() {
 		return useriphone;
 	}
