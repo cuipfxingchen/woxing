@@ -359,6 +359,12 @@ public class Order implements Serializable {
 	 */
 	@FormParam("fee")
 	private short fee;
+	
+	
+	/**
+	 * 电招费
+	 */
+	private short fee2;
 
 	/**
 	 * 订单状态
@@ -563,6 +569,14 @@ public class Order implements Serializable {
 				+ ", orderCreateTime=" + orderCreateTime
 				+ ", cityResponse2CenterTime=" + cityResponse2CenterTime
 				+ ", taxiResponse2CityTime=" + taxiResponse2CityTime + "]";
+	}
+
+	public short getFee2() {
+		return fee2;
+	}
+
+	public void setFee2(short fee2) {
+		this.fee2 = fee2;
 	}
 	
 	

@@ -9,6 +9,7 @@ import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1006;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1007;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1009;
 
+
 /**
  * 订单服务接口
  * 
@@ -125,4 +126,5 @@ public interface IOrderService {
 	 * @param msg
 	 */
 	void getOnCarMsg(MQMsg1007 msg);
+
 }

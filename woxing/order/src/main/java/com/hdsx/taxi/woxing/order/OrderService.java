@@ -284,6 +284,7 @@ public class OrderService implements IOrderService {
 		Order order=orderpool.getOrder(msg.getOrderid());
 		order.setState(Order.STATE_FUKUAN);
 		orderpool.put(order);
+		orderMapper.updateOrder(order);
 		XMPPBean<HashMap> bean = new XMPPBean<>();
 		bean.setMsgid(0x1006);
 		HashMap map = new HashMap<>();
@@ -300,6 +301,7 @@ public class OrderService implements IOrderService {
 	@Override
 	public void getOnCarMsg(MQMsg1007 msg) {
 		Order order=orderpool.getOrder(msg.getOrderid());
+		orderMapper.updateOrder(order);
 		XMPPBean<HashMap> bean = new XMPPBean<>();
 		bean.setMsgid(0x1007);
 		HashMap map = new HashMap<>();
@@ -311,6 +313,4 @@ public class OrderService implements IOrderService {
 		xmppservice.sendMessage(order.getCustomid(), bean);
 		
 	}
-
-	
 }
