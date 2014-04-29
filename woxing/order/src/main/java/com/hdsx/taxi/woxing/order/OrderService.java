@@ -46,11 +46,12 @@ public class OrderService implements IOrderService {
 	MQMsgPool msgpool;
 
 	@Inject
-	public OrderService(IXMPPService xmpp, OrderMapper om, OrderPool pool,MQMsgPool msgpool) {
+	public OrderService(IXMPPService xmpp, OrderMapper om, OrderPool pool,
+			MQMsgPool msgpool) {
 		this.xmppservice = xmpp;
 		this.orderMapper = om;
 		this.orderpool = pool;
-		this.msgpool=msgpool;
+		this.msgpool = msgpool;
 	}
 
 	@Override
@@ -62,7 +63,7 @@ public class OrderService implements IOrderService {
 		try {
 
 			MQMsg0001 msg = new MQMsg0001(order.getCustomid());
-			msg.setRevesation(order.getReservation()==1?true:false);
+			msg.setRevesation(order.getReservation() == 1 ? true : false);
 			msg.setGetOnTime(order.getGetOnTime());
 			msg.setGetOnPlaceName(order.getGetOnPlaceName());
 			msg.setGetOnLat(order.getGetOnLat());
@@ -73,7 +74,7 @@ public class OrderService implements IOrderService {
 			msg.setNotes(order.getNotes());
 
 			if (logger.isInfoEnabled()) {
-				logger.info("submit(Order)"+order.getNickName()); //$NON-NLS-1$
+				logger.info("submit(Order)" + order.getNickName()); //$NON-NLS-1$
 			}
 
 			msg.setNickName(order.getNickName());
@@ -81,8 +82,8 @@ public class OrderService implements IOrderService {
 			msg.setUserphone(order.getUseriphone());
 			msg.setFirstChoiceCompany(order.getFirstChoiceCompany());
 			msg.setContractTaxi(order.getContractTaxi());
-			msg.setVipMark(order.getVipMark()+"");
-			
+			msg.setVipMark(order.getVipMark() + "");
+
 			logger.info("mq发送开始");
 			MQService.getInstance().sendMsg(order.getCitycode(), msg);
 			logger.info("mq发送结束");
@@ -145,7 +146,7 @@ public class OrderService implements IOrderService {
 		this.orderMapper.updateOrder(o);
 
 		XMPPBean<HashMap> bean = new XMPPBean<>();
-		bean.setMsgid(0x1004);
+		bean.setMsgid(0x0003);
 		HashMap map = new HashMap<>();
 		map.put("orderid", orderid);
 		map.put("msg", reason);
@@ -181,11 +182,12 @@ public class OrderService implements IOrderService {
 
 	/**
 	 * 更新订单号
+	 * 
 	 * @param newOrderId
 	 * @param oldOrderId
 	 */
 	@Override
-	public void update(long newOrderId,long oldOrderId){
+	public void update(long newOrderId, long oldOrderId) {
 		Order order1 = this.orderpool.getOrder(oldOrderId);
 		this.orderpool.remove(order1);
 		order1.setOrderId(newOrderId);
@@ -193,7 +195,7 @@ public class OrderService implements IOrderService {
 		this.orderpool.put(order1);
 		orderMapper.updateOrder(order1);
 	}
-	
+
 	/**
 	 * 收到订单成功消息
 	 */
@@ -206,15 +208,15 @@ public class OrderService implements IOrderService {
 		order.getResult().setDriver_tel(c.getDriverphone());
 		orderpool.put(order);
 		orderMapper.updateOrder(order);
-		
+
 		HashMap<String, Object> result = new HashMap<>();
 
 		result.put("orderid", order.getOrderId());
-		result.put("carNum", c.getLisencenumber());
+		result.put("carnum", c.getLisencenumber());
 		result.put("driver_tel", c.getDriverphone());
 
 		XMPPBean<HashMap> bean = new XMPPBean<>();
-		bean.setMsgid(0x1001);
+		bean.setMsgid(0x0001);
 		bean.setResult(result);
 		this.xmppservice.sendMessage(order.getCustomid(), bean);
 
@@ -233,7 +235,7 @@ public class OrderService implements IOrderService {
 		map.put("orderid", l);
 		map.put("msg", describ);
 		XMPPBean<HashMap> bean = new XMPPBean<>();
-		bean.setMsgid(0x1009);
+		bean.setMsgid(0x0002);
 		bean.setResult(map);
 		this.xmppservice.sendMessage(order.getCustomid(), bean);
 	}
@@ -263,10 +265,10 @@ public class OrderService implements IOrderService {
 		if (!returnmsg.getClass().isInstance(MQMsg1003.class))
 			return false;
 		MQMsg1003 rm = (MQMsg1003) returnmsg;
-		if(rm.getCancle()==0){
+		if (rm.getCancle() == 0) {
 			orderMapper.updateOrder(order);
 			return true;
-		}else{
+		} else {
 			return false;
 		}
 
@@ -281,8 +283,18 @@ public class OrderService implements IOrderService {
 		long orderid = msg.getOrderid();
 		Order o = this.orderpool.getOrder(orderid);
 		o.getResult().setCarNum(msg.getCarLicensenumber());
-		o.setState(Order.STATE_OPERATING);//预约订单开始执行状态
+		o.setState(Order.STATE_OPERATING);// 预约订单开始执行状态
 		this.orderpool.onProduce(o);
+
+		XMPPBean<HashMap> bean = new XMPPBean<>();
+		bean.setMsgid(0x0006);
+		HashMap map = new HashMap<>();
+		map.put("orderid", msg.getOrderid());
+		map.put("carnum", msg.getCarLicensenumber());
+		map.put("lat", msg.getLat());
+		map.put("lon", msg.getLon());
+		bean.setResult(map);
+		xmppservice.sendMessage(o.getCustomid(), bean);
 
 	}
 
@@ -302,37 +314,32 @@ public class OrderService implements IOrderService {
 
 	@Override
 	public void payMoney(MQMsg1006 msg) {
-		Order order=orderpool.getOrder(msg.getOrderid());
+		Order order = orderpool.getOrder(msg.getOrderid());
 		order.setState(Order.STATE_FUKUAN);
 		orderpool.put(order);
 		orderMapper.updateOrder(order);
 		XMPPBean<HashMap> bean = new XMPPBean<>();
-		bean.setMsgid(0x1006);
+		bean.setMsgid(0x0004);
 		HashMap map = new HashMap<>();
-		map.put("orderId", msg.getOrderid());
-		map.put("carnum", msg.getCarlicensenumber());
-		map.put("driverId", msg.getDriverid());
-		map.put("fee", msg.getFee());
-		map.put("fee2", msg.getFee2());
-		map.put("sj", msg.getTime());
+		map.put("orderid", msg.getOrderid());
+		map.put("cost", msg.getFee());
+		map.put("fee", msg.getFee2());
 		bean.setResult(map);
 		xmppservice.sendMessage(order.getCustomid(), bean);
 	}
 
 	@Override
 	public void passengerGeton(MQMsg1007 msg) {
-		Order order=orderpool.getOrder(msg.getOrderid());
+		Order order = orderpool.getOrder(msg.getOrderid());
 		orderMapper.updateOrder(order);
 		XMPPBean<HashMap> bean = new XMPPBean<>();
-		bean.setMsgid(0x1007);
+		bean.setMsgid(0x0005);
 		HashMap map = new HashMap<>();
-		map.put("orderId", msg.getOrderid());
+		map.put("orderid", msg.getOrderid());
 		map.put("lon", msg.getLon());
-		map.put("lat", msg.getLat());
-		map.put("sj", msg.getTime());
+		map.put("lat", msg.getLat());	
 		bean.setResult(map);
 		xmppservice.sendMessage(order.getCustomid(), bean);
-		
 
 	}
 
@@ -341,10 +348,8 @@ public class OrderService implements IOrderService {
 	 */
 	@Override
 	public void updateOrderId(long oldid, long newid) {
-		this.orderpool.updateOrderId(oldid,newid);	
-		 
+		this.orderpool.updateOrderId(oldid, newid);
+
 	}
-
-
 
 }

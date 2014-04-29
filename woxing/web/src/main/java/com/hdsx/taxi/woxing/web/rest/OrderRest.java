@@ -151,7 +151,7 @@ public class OrderRest {
 	 * @return 
 	 */
 	@Path("/4/{orderId}/{reason}")
-	@POST
+	@GET
 	@Produces("application/json;charset=UTF-8")
 	public RestBean cancelOrder(@PathParam("orderId") long orderid,
 			@PathParam("reason") byte reason) {
