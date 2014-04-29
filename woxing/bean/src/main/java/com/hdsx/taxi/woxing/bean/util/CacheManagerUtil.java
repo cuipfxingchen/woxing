@@ -20,10 +20,10 @@ public class CacheManagerUtil {
 	 */
 	private static final Logger logger = LoggerFactory.getLogger(CacheManagerUtil.class);
 
-//	public static String path = CacheManagerUtil.class.getClassLoader()
-//			.getResource("/").getPath()
-//			+ "ehcache.xml";
-	public static String path;
+	private static String path = CacheManagerUtil.class
+			.getResource("/").getPath()
+			+ "ehcache.xml";
+//	public static String path;
 //	private static String path =Constance.resourcePath;
 //	public static String path =System.getProperty("user.dir")+"/ehcache.xml";
 	private CacheManager cm;
