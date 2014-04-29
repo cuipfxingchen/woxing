@@ -27,6 +27,12 @@ public class Order implements Serializable {
 	 * 找不到车
 	 */
 	public static byte STATE_NOCAR = 2;
+	
+	/**
+	 * 无车抢单
+	 */
+	public static byte STATE_NOCARCall = 2;
+	
 	/**
 	 * 乘客已经上车
 	 */
@@ -55,8 +61,18 @@ public class Order implements Serializable {
 	/**
 	 * 驾驶员取消订单
 	 */
-	public static byte STATE_CANCEL_BY_DRIVE = 20;
+	public static byte STATE_CANCEL_BY_DRIVE = 21;
 
+	/**
+	 * 待付款状态
+	 */
+	public static byte STATE_FUKUAN=30;
+	
+	/**
+	 * 订单完成
+	 */
+	public static byte STATE_OVER=100;
+	
 	public String getUseriphone() {
 		return useriphone;
 	}
@@ -154,28 +170,29 @@ public class Order implements Serializable {
 	public void setLastReplTime(Date lastReplTime) {
 		this.lastReplTime = lastReplTime;
 	}
+	
 
-	public boolean isContractTaxi() {
+	public byte getContractTaxi() {
 		return contractTaxi;
 	}
 
-	public void setContractTaxi(boolean contractTaxi) {
+	public void setContractTaxi(byte contractTaxi) {
 		this.contractTaxi = contractTaxi;
 	}
 
-	public boolean isVipMark() {
+	public byte getVipMark() {
 		return vipMark;
 	}
 
-	public void setVipMark(boolean vipMark) {
+	public void setVipMark(byte vipMark) {
 		this.vipMark = vipMark;
 	}
 
-	public boolean isReservation() {
+	public byte getReservation() {
 		return reservation;
 	}
 
-	public void setReservation(boolean reservation) {
+	public void setReservation(byte reservation) {
 		this.reservation = reservation;
 	}
 
@@ -406,21 +423,24 @@ public class Order implements Serializable {
 
 	/**
 	 * 是否搜索签约出租车
+	 * 1:是，0：否
 	 */
 	@FormParam("contractTaxi")
-	private boolean contractTaxi;
+	private byte contractTaxi;
 
 	/**
 	 * vip标记
+	 * 1:是，0：否
 	 */
 	@FormParam("vipMark")
-	private boolean vipMark;
+	private byte vipMark;
 
 	/**
 	 * 是否预约标记
+	 * 1:是，0：否
 	 */
 	@FormParam("reservation")
-	private boolean reservation;
+	private byte reservation;
 	/**
 	 * 打车类型 0是普通, 1是等级,2指派
 	 */

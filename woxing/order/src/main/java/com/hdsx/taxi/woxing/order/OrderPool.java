@@ -101,7 +101,7 @@ public class OrderPool {
 		if (customelement == null) {
 			CutomOrderMapper mapper = new CutomOrderMapper();
 			mapper.setCustomid(order.getCustomid());
-			if (order.isReservation()) {
+			if (order.getReservation()==1) {
 				mapper.getReorderlist().add(order.getOrderId());
 			} else {
 				mapper.setCurOrderid(order.getOrderId());
@@ -111,7 +111,7 @@ public class OrderPool {
 		} else {
 			CutomOrderMapper mapper = (CutomOrderMapper) customelement
 					.getObjectValue();
-			if (order.isReservation()) {
+			if (order.getReservation()==1) {
 				mapper.getReorderlist().add(order.getOrderId());
 			} else {
 				mapper.setCurOrderid(order.getOrderId());

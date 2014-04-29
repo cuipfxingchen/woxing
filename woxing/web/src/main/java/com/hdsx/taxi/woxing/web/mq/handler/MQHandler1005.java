@@ -6,6 +6,11 @@ import com.hdsx.taxi.woxing.mqutil.message.handle.IMQMsgHanlder;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1005;
 import com.hdsx.taxi.woxing.order.IOrderService;
 
+/**
+ * 预约订单执行
+ * @author cuipengfei
+ *
+ */
 public class MQHandler1005 implements IMQMsgHanlder {
 
 	@Inject

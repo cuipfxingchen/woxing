@@ -7,6 +7,8 @@ import com.hdsx.taxi.woxing.bean.Order;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1005;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1006;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1007;
+import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1009;
+
 
 /**
  * 订单服务接口
@@ -66,6 +68,13 @@ public interface IOrderService {
 	public boolean update(Order order);
 
 	/**
+	 * 更新订单号
+	 * @param newOrderId
+	 * @param oldOrderId
+	 */
+	public void update(long newOrderId,long oldOrderId);
+	
+	/**
 	 * 更新订单信息
 	 * 
 	 * @param l
@@ -99,18 +108,18 @@ public interface IOrderService {
 	 * @param msg
 	 */
 	public void startReversation(MQMsg1005 msg);
-
 	
 	/**
-	 * 付款通知
-	 * @param mqmsg
+	 * 查询订单状态
+	 * @param orderId
 	 */
-	public void onPay(MQMsg1006 mqmsg);
+	byte getOrderState(long orderId,String customid,String citycode);
 
 	/**
-	 * 乘客上车
+	 * 付款通知
 	 * @param msg
 	 */
+
 	public void passengerGeton(MQMsg1007 msg);
 
 	
@@ -120,5 +129,11 @@ public interface IOrderService {
 	 * @param newid
 	 */
 	public void updateOrderId(long oldid, long newid);
+
+
+	void payMoney(MQMsg1006 msg);
+	
+
+
 
 }

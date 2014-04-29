@@ -233,7 +233,7 @@ public class MQMsg0001 extends MQAbsMsg {
 				.readUTF());
 		this.contractTaxi = msg.readByte();
 		
-		this.vipMark = msg.readUTF(); 
+//		this.vipMark = msg.readUTF(); 
 		this.takeTaxiType = msg.readByte();
 		this.serverLevel = msg.readByte();
 		

@@ -41,14 +41,16 @@ public interface OrderMapper {
 	public int insert(Order order);
 
 	/* 修改订单 */
-	@Update("UPDATE db_order SET citycode=#{citycode},useriphone=#{useriphone},paytype=#{paytype},"
+	@Update("UPDATE db_order SET orderId=#{orderId},citycode=#{citycode},useriphone=#{useriphone},paytype=#{paytype},"
 			+ "fee=#{fee},state=#{state},orderId=#{orderId},customid=#{customid},nickName=#{nickName},sex=#{sex},"
 			+ "getOnTime=#{getOnTime},lastReplTime=#{lastReplTime},contractTaxi=#{contractTaxi},vipMark=#{vipMark},"
 			+ "reservation=#{reservation},takeTaxiType=#{takeTaxiType},serverLevel=#{serverLevel},firstChoiceCompany=#{firstChoiceCompany},"
 			+ "personCount=#{personCount},getOnLon=#{getOnLon},getOnLat=#{getOnLat},getOffLon=#{getOffLon},getOffLat=#{getOffLat},"
 			+ "getOnPlaceName=#{getOnPlaceName},getOffPlaceName=#{getOffPlaceName},notes=#{notes},motorcycleType=#{motorcycleType},"
 			+ "anotherCellPhoneNo=#{anotherCellPhoneNo},specialRequirements=#{specialRequirements},orderCreateTime=#{orderCreateTime},"
-			+ "cityResponse2CenterTime=#{cityResponse2CenterTime},taxiResponse2CityTime=#{taxiResponse2CityTime}")
+			+ "cityResponse2CenterTime=#{cityResponse2CenterTime},taxiResponse2CityTime=#{taxiResponse2CityTime}"
+			+ " where orderId=#{orderId}"
+			)
 	public int updateOrder(Order order);
 	
 	/*取消订单*/
