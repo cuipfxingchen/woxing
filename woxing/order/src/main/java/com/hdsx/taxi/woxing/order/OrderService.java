@@ -55,10 +55,14 @@ public class OrderService implements IOrderService {
 
 	@Override
 	public int submit(Order order) {
+		if (logger.isDebugEnabled()) {
+			logger.debug("submit(Order) - start"); //$NON-NLS-1$
+		}
+
 		try {
 
 			MQMsg0001 msg = new MQMsg0001(order.getCustomid());
-			msg.setRevesation(order.isReservation());
+			msg.setRevesation(order.getReservation()==1?true:false);
 			msg.setGetOnTime(order.getGetOnTime());
 			msg.setGetOnPlaceName(order.getGetOnPlaceName());
 			msg.setGetOnLat(order.getGetOnLat());
@@ -68,18 +72,35 @@ public class OrderService implements IOrderService {
 			msg.setGetOffLon(order.getGetOffLon());
 			msg.setNotes(order.getNotes());
 
+			if (logger.isInfoEnabled()) {
+				logger.info("submit(Order)"+order.getNickName()); //$NON-NLS-1$
+			}
+
 			msg.setNickName(order.getNickName());
 			msg.setSex(order.getSex());
 			msg.setUserphone(order.getUseriphone());
+			msg.setFirstChoiceCompany(order.getFirstChoiceCompany());
+			msg.setContractTaxi(order.getContractTaxi());
+			msg.setVipMark(order.getVipMark()+"");
+			
+			logger.info("mq发送开始");
 			MQService.getInstance().sendMsg(order.getCitycode(), msg);
-
+			logger.info("mq发送结束");
 			orderpool.put(order);
 			orderMapper.insert(order);
+
+			if (logger.isDebugEnabled()) {
+				logger.debug("submit(Order) - end"); //$NON-NLS-1$
+			}
 			return 1;
 
 		} catch (Exception ex) {
 			logger.error("提交订单失败:" + ex);
 			ex.printStackTrace();
+
+			if (logger.isDebugEnabled()) {
+				logger.debug("submit(Order) - end"); //$NON-NLS-1$
+			}
 			return 0;
 		}
 

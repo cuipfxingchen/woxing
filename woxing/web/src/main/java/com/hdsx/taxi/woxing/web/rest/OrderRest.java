@@ -80,6 +80,8 @@ public class OrderRest {
 	@GET
 	@Produces("application/json;charset=UTF-8")
 	public RestBean getHistoryOrder(@PathParam("customid") String customid) {
+		logger.info("getHistoryOrder(String) - start"); //$NON-NLS-1$
+		
 		RestBean<List<Order>> r = new RestBean<>();
 		String success = "成功";
 		String fail = "没有订单";
@@ -98,6 +100,10 @@ public class OrderRest {
 			r.setState(RestBean.FAILCODE);
 			r.setMsg(fail);
 		}
+
+		if (logger.isDebugEnabled()) {
+			logger.debug("getHistoryOrder(String) - end"); //$NON-NLS-1$
+		}
 		return r;
 	}
 
@@ -111,6 +117,7 @@ public class OrderRest {
 	@GET
 	@Produces("application/json;charset=UTF-8")
 	public RestBean getReservationOrder(@PathParam("customid") String customid) {
+		logger.debug("getReservationOrder(String) - start"); //$NON-NLS-1$
 		RestBean<List<Order>> r = new RestBean<>();
 		String success = "成功";
 		String fail = "失败";
@@ -128,6 +135,10 @@ public class OrderRest {
 		} else {
 			r.setState(RestBean.FAILCODE);
 			r.setMsg(fail);
+		}
+
+		if (logger.isDebugEnabled()) {
+			logger.debug("getReservationOrder(String) - end"); //$NON-NLS-1$
 		}
 		return r;
 	}
