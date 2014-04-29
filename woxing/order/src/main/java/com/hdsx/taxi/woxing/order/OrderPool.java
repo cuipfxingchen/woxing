@@ -184,6 +184,33 @@ public class OrderPool {
 	}
 
 	/**
+	 * 更新订单号
+	 * 
+	 * @param oldid
+	 * @param newid
+	 */
+	public void updateOrderId(long oldid, long newid) {
+		Order o = this.getOrder(oldid);
+		o.setOrderId(newid);
+		this.pool.remove(oldid);
+		this.pool.put(new Element(o.getOrderId(), o));
+
+		Element e = this.custompool.get(o.getCustomid());
+		if (e != null) {
+			CutomOrderMapper m = (CutomOrderMapper) e.getObjectValue();
+			if (m.getCurOrderid() == oldid) {
+				m.setCurOrderid(newid);
+			} else {
+				m.getReorderlist().remove(oldid);
+				m.getReorderlist().add(newid);
+			}
+			this.custompool.put(new Element(o.getCustomid(), m));
+
+		}
+
+	}
+
+	/**
 	 * 乘客Id和订单信息的关联
 	 * 
 	 * @author Steven

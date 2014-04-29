@@ -270,4 +270,12 @@ public class OrderService implements IOrderService {
 		this.orderMapper.updateOrder(o);
 		
 	}
+
+	/**
+	 * 更新订单号
+	 */
+	@Override
+	public void updateOrderId(long oldid, long newid) {
+		this.orderpool.updateOrderId(oldid,newid);	
+	}
 }

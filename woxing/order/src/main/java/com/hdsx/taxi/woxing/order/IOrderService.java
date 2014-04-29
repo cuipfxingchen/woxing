@@ -113,4 +113,12 @@ public interface IOrderService {
 	 */
 	public void passengerGeton(MQMsg1007 msg);
 
+	
+	/**
+	 * 更新订单号
+	 * @param oldid
+	 * @param newid
+	 */
+	public void updateOrderId(long oldid, long newid);
+
 }
