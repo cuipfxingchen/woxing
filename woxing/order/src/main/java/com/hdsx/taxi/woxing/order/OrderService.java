@@ -191,11 +191,14 @@ public class OrderService implements IOrderService {
 	@Override
 	public void update(long newOrderId, long oldOrderId) {
 		Order order1 = this.orderpool.getOrder(oldOrderId);
+		logger.debug("oldorder:"+(order1==null));
 		this.orderpool.remove(order1);
 		order1.setOrderId(newOrderId);
 		order1.setState(Order.STATE_SENDED);
 		this.orderpool.put(order1);
-		orderMapper.updateOrder(order1);
+		orderMapper.updateOrderId(oldOrderId, newOrderId);
+//		this.orderpool.updateOrderId(oldOrderId, newOrderId);
+		
 	}
 
 	/**
@@ -343,15 +346,6 @@ public class OrderService implements IOrderService {
 		bean.setResult(map);
 		xmppservice.sendMessage(order.getCustomid(), bean);
 
-	}
-
-	/**
-	 * 更新订单号
-	 */
-	@Override
-	public void updateOrderId(long oldid, long newid) {
-		this.orderpool.updateOrderId(oldid, newid);
-		orderMapper.updateOrderId(oldid, newid);
 	}
 
 }

@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 import com.hdsx.taxi.woxing.mqutil.message.MQAbsMsg;
 import com.hdsx.taxi.woxing.mqutil.message.handle.IMQMsgHanlder;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1008;
-import com.hdsx.taxi.woxing.web.module.GuiceUtil;
+import com.hdsx.taxi.woxing.web.guice.GuiceFactory;
 
 
 public class MQHandler1008 implements IMQMsgHanlder {
@@ -22,7 +22,10 @@ public class MQHandler1008 implements IMQMsgHanlder {
 
 		if(mqmsg instanceof MQMsg1008){
 			MQMsg1008 msg = (MQMsg1008) mqmsg;
-			GuiceUtil.os.updateOrderId(msg.getOldid(), msg.getNewid());
+			logger.info("duixiang:"+(GuiceFactory.getInstance()==null));
+//			GuiceFactory.getInstance().update(msg.getNewid(),msg.getOldid() );
+			GuiceFactory.getInstance2().update(msg.getNewid(),msg.getOldid() );
+//			os.updateOrderId(msg.getOldid(), msg.getNewid());
 		}
 		
 

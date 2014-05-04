@@ -59,7 +59,7 @@ public interface OrderMapper {
 	 * @param newId
 	 * @return
 	 */
-	@Update("update db_order set orderId=#{newId} where orderId=#{oldId}")
+	@Update("update db_order set orderId=#{param2} where orderId=#{param1}")
 	public int updateOrderId(long oldId,long newId);
 	
 	/*取消订单*/
