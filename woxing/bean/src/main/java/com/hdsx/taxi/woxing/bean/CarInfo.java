@@ -18,7 +18,7 @@ public class CarInfo {
 	double lat, lon;
 	int direction=0;
 	float speed=0;
-	boolean gpsavailabe;
+	boolean gpsavailabe=true;
 
 	String lisencenumber = "";// 车牌号码
 	String DriverName = "";// 司机称呼
