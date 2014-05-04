@@ -1,5 +1,6 @@
 package com.hdsx.taxi.woxing.order;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -61,8 +62,9 @@ public class OrderService implements IOrderService {
 		}
 
 		try {
-
+			order.setOrderId(new Date().getTime());
 			MQMsg0001 msg = new MQMsg0001(order.getCustomid());
+			msg.setOrderId(order.getOrderId());
 			msg.setRevesation(order.getReservation() == 1 ? true : false);
 			msg.setGetOnTime(order.getGetOnTime());
 			msg.setGetOnPlaceName(order.getGetOnPlaceName());
@@ -349,7 +351,7 @@ public class OrderService implements IOrderService {
 	@Override
 	public void updateOrderId(long oldid, long newid) {
 		this.orderpool.updateOrderId(oldid, newid);
-
+		orderMapper.updateOrderId(oldid, newid);
 	}
 
 }

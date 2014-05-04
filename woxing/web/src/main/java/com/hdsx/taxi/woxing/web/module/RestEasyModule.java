@@ -5,8 +5,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.inject.Binder;
+import com.google.inject.MembersInjector;
 import com.google.inject.Module;
 import com.google.inject.Singleton;
+import com.google.inject.binder.AnnotatedBindingBuilder;
 import com.hdsx.taxi.woxing.bean.util.CacheManagerUtil;
 import com.hdsx.taxi.woxing.bean.util.DateTimeParamConverterProvider;
 import com.hdsx.taxi.woxing.mqutil.msgpool.MQMsgPool;
@@ -58,8 +60,11 @@ public class RestEasyModule implements Module {
 		binder.bind(AddressService.class); // 常用地址服务
 		binder.bind(CityService.class); // 城市相关服务
 
+//		GuiceUtil.os
 		binder.bind(IOrderService.class).to(OrderService.class)
 				.in(Singleton.class); // 订单服务
+//		MembersInjector<IOrderService> s= binder.getMembersInjector(IOrderService.class);
+		
 		/**
 		 * RESTeasy
 		 */

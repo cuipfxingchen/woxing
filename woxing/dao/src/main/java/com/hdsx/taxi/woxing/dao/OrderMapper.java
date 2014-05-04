@@ -53,6 +53,15 @@ public interface OrderMapper {
 			)
 	public int updateOrder(Order order);
 	
+	/**
+	 * 更新订单号
+	 * @param oldId
+	 * @param newId
+	 * @return
+	 */
+	@Update("update db_order set orderId=#{newId} where orderId=#{oldId}")
+	public int updateOrderId(long oldId,long newId);
+	
 	/*取消订单*/
 	@Update("UPDATE db_order SET state=1 where orderId=#{orderId}")
 	public int cancelOrder(long orderId);
