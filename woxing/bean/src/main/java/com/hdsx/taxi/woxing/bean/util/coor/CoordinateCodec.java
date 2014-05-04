@@ -148,20 +148,20 @@ public class CoordinateCodec {
 	 * @param v
 	 * @return
 	 */
-	public static float Coor2Float(int v) {
+	public static float Coor2Float(long v) {
 
-		return v / 60f / 10000f;
+		return (float) (v / 60d / 10000d);
 	}
 
 	/**
-	 * 将float的坐标转为int
-	 * int表示1/10000分，float表示度
+	 * 将float的坐标转为int int表示1/10000分，float表示度
+	 * 
 	 * @param v
 	 * @return
 	 */
-	public static int Coor2UInt(float v) {
+	public static long Coor2UInt(double v) {
 		double a = v * 60 * 10000;
-		return (int) a;
+		return (long) a;
 	}
 
 }
