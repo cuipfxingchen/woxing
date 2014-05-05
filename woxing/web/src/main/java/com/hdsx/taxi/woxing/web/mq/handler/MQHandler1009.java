@@ -6,6 +6,7 @@ import com.hdsx.taxi.woxing.mqutil.message.MQAbsMsg;
 import com.hdsx.taxi.woxing.mqutil.message.handle.IMQMsgHanlder;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1009;
 import com.hdsx.taxi.woxing.order.IOrderService;
+import com.hdsx.taxi.woxing.web.guice.GuiceFactory;
 
 /**
  * 抢单失败
@@ -13,9 +14,6 @@ import com.hdsx.taxi.woxing.order.IOrderService;
  *
  */
 public class MQHandler1009 implements IMQMsgHanlder {
-
-	@Inject
-	IOrderService os;
 
 	@Override
 	public void dohandle(MQAbsMsg mqmsg) {
@@ -31,7 +29,7 @@ public class MQHandler1009 implements IMQMsgHanlder {
 		}else if(state==1){//无车应答
 			state=Order.STATE_NOCARCall;
 		}
-		os.doFail(msg.getOrderid(), msg.getDescribtion(), state);
+		GuiceFactory.getInstance().doFail(msg.getOrderid(), msg.getDescribtion(), state);
 	}
 
 }

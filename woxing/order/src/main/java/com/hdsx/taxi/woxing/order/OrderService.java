@@ -86,11 +86,12 @@ public class OrderService implements IOrderService {
 			msg.setContractTaxi(order.getContractTaxi());
 			msg.setVipMark(order.getVipMark() + "");
 
+			orderpool.put(order);
+			orderMapper.insert(order);
 			logger.info("mq发送开始");
 			MQService.getInstance().sendMsg(order.getCitycode(), msg);
 			logger.info("mq发送结束");
-			orderpool.put(order);
-			orderMapper.insert(order);
+			
 
 			if (logger.isDebugEnabled()) {
 				logger.debug("submit(Order) - end"); //$NON-NLS-1$

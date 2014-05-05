@@ -55,7 +55,7 @@ public class LocationService {
 	 * @param citycode
 	 * @return
 	 */
-	public List<CarInfo> findCars(double lat, double lon, short r,
+	public List<CarInfo> findCars( double lon,double lat, short r,
 			String citycode, String customid) {
 		MQMsg2001 msg = new MQMsg2001(customid);
 		msg.setLat(lat);
@@ -65,7 +65,7 @@ public class LocationService {
 		MQAbsMsg returnmsg = msgpool.getMsg(customid, 0x3001);
 		if (returnmsg == null)
 			return new ArrayList<>();
-		if (!returnmsg.getClass().isInstance(MQMsg3001.class))
+		if (!(returnmsg instanceof MQMsg3001))
 			return new ArrayList<>();
 		MQMsg3001 m = (MQMsg3001) returnmsg;
 		return m.getCars();
