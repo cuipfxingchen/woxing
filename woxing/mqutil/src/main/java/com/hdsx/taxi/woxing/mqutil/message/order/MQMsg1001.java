@@ -24,7 +24,7 @@ import com.hdsx.taxi.woxing.mqutil.message.MQAbsMsg;
 public class MQMsg1001 extends MQAbsMsg {
 
 	long orderId; // 订单ID
-	String taxiId; // 出租车ID 对应Order中taxiId(出租车驾驶员编号)
+//	String taxiId; // 出租车ID 对应Order中taxiId(出租车驾驶员编号)
 
 	String number; // 抢单车牌号 对应Order中taxiPlateNumber(出租车牌号)
 	String phone; // 抢单电话 抢单司机电话 对应Order中taxiDriverCellPhoneNo(出租车司机手机号)
@@ -34,7 +34,7 @@ public class MQMsg1001 extends MQAbsMsg {
 	String commpany; // 出租车公司 对应Order中taxiCompany(出租车所属公司)
 	String driverid; // 驾驶员的从业资格证号
 	String time;// 抢单时间
-	float lat, lon;
+	double lat, lon;
 
 	public MQMsg1001() {
 		super();
@@ -60,13 +60,13 @@ public class MQMsg1001 extends MQAbsMsg {
 		super(customId);
 	}
 
-	public String getTaxiId() {
-		return taxiId;
-	}
-
-	public void setTaxiId(String taxiId) {
-		this.taxiId = taxiId;
-	}
+//	public String getTaxiId() {
+//		return taxiId;
+//	}
+//
+//	public void setTaxiId(String taxiId) {
+//		this.taxiId = taxiId;
+//	}
 
 	public long getOrderId() {
 		return orderId;
@@ -131,7 +131,7 @@ public class MQMsg1001 extends MQAbsMsg {
 
 	@Override
 	protected void decodebody(BytesMessage msg) throws JMSException {
-		this.taxiId = msg.readUTF();
+//		this.taxiId = msg.readUTF();
 		this.orderId = msg.readLong();
 		this.number = msg.readUTF();
 		this.phone = msg.readUTF();
@@ -141,15 +141,15 @@ public class MQMsg1001 extends MQAbsMsg {
 		this.commpany = msg.readUTF();
 		this.driverid = msg.readUTF();
 		this.time = msg.readUTF();
-		this.lat=msg.readFloat();
-		this.lon=msg.readFloat();
+		this.lat=msg.readDouble();
+		this.lon=msg.readDouble();
 
 	}
 
 	@Override
 	protected BytesMessage encodebody(BytesMessage msg) throws JMSException {
 
-		msg.writeUTF(this.taxiId);
+//		msg.writeUTF(this.taxiId);
 		msg.writeLong(this.orderId);
 		msg.writeUTF(this.number);
 		msg.writeUTF(this.phone);
@@ -159,25 +159,27 @@ public class MQMsg1001 extends MQAbsMsg {
 		msg.writeUTF(this.commpany);
 		msg.writeUTF(this.driverid);
 		msg.writeUTF(this.time);
-		msg.writeFloat(this.lat);
-		msg.writeFloat(this.lon);
+		msg.writeDouble(this.lat);
+		msg.writeDouble(this.lon);
 		return msg;
 	}
 
-	public float getLat() {
+	public double getLat() {
 		return lat;
 	}
 
-	public void setLat(float lat) {
+	public void setLat(double lat) {
 		this.lat = lat;
 	}
 
-	public float getLon() {
+	public double getLon() {
 		return lon;
 	}
 
-	public void setLon(float lon) {
+	public void setLon(double lon) {
 		this.lon = lon;
 	}
+
+	
 
 }
