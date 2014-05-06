@@ -252,11 +252,12 @@ public class OrderService implements IOrderService {
 	@Override
 	public boolean cancelOrderByPassenger(long l, byte reason) {
 		Order order = this.orderpool.getOrder(l);
-		if (order == null)
-			return true;
+//		if (order == null){
+//			order=orderMapper.getOrderById(l);
+//		}else{
+			this.orderpool.remove(order);
+//		}
 		order.setState(Order.STATE_CANCEL_BY_PASS);
-
-		this.orderpool.remove(order);
 		MQMsg0003 mqmsg = new MQMsg0003(order.getCustomid());
 
 		mqmsg.setOrderId(order.getOrderId());
@@ -268,7 +269,7 @@ public class OrderService implements IOrderService {
 		MQAbsMsg returnmsg = msgpool.getMsg(order.getCustomid(), 0x1003);
 		if (returnmsg == null)
 			return false;
-		if (!returnmsg.getClass().isInstance(MQMsg1003.class))
+		if (!(returnmsg instanceof MQMsg1003))
 			return false;
 		MQMsg1003 rm = (MQMsg1003) returnmsg;
 		if (rm.getCancle() == 0) {
