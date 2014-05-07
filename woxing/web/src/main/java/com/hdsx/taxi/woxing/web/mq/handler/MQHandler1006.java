@@ -1,10 +1,9 @@
 package com.hdsx.taxi.woxing.web.mq.handler;
 
-import com.google.inject.Inject;
 import com.hdsx.taxi.woxing.mqutil.message.MQAbsMsg;
 import com.hdsx.taxi.woxing.mqutil.message.handle.IMQMsgHanlder;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1006;
-import com.hdsx.taxi.woxing.order.IOrderService;
+import com.hdsx.taxi.woxing.web.guice.GuiceFactory;
 
 /**
  * 付款通知
@@ -12,15 +11,12 @@ import com.hdsx.taxi.woxing.order.IOrderService;
  *
  */
 public class MQHandler1006 implements IMQMsgHanlder {
-
-	@Inject
-	IOrderService os;
 	
 	@Override
 	public void dohandle(MQAbsMsg mqmsg) {
 
 		MQMsg1006 msg = (MQMsg1006) mqmsg;
-		os.payMoney(msg);
+		GuiceFactory.getInstance().payMoney(msg);
 	}
 
 }

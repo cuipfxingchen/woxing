@@ -295,11 +295,15 @@ public class OrderService implements IOrderService {
 	@Override
 	public void startReversation(MQMsg1005 msg) {
 
-		long orderid = msg.getOrderid();
-		Order o = this.orderpool.getOrder(orderid);
-		o.getResult().setCarNum(msg.getCarLicensenumber());
-		o.setState(Order.STATE_OPERATING);// 预约订单开始执行状态
-		this.orderpool.onProduce(o);
+		long orderid=msg.getOrderid();
+		Order order = orderpool.getOrder(msg.getOrderid());
+		if(order==null){
+			order=orderMapper.getOrderById(orderid);
+		}
+		order.getResult().setCarNum(msg.getCarLicensenumber());
+		order.setState(Order.STATE_OPERATING);// 预约订单开始执行状态
+		this.orderpool.onProduce(order);
+		orderMapper.updateOrder(order);
 
 		XMPPBean<HashMap> bean = new XMPPBean<>();
 		bean.setMsgid(0x0006);
@@ -309,7 +313,7 @@ public class OrderService implements IOrderService {
 		map.put("lat", msg.getLat());
 		map.put("lon", msg.getLon());
 		bean.setResult(map);
-		xmppservice.sendMessage(o.getCustomid(), bean);
+		xmppservice.sendMessage(order.getCustomid(), bean);
 
 	}
 
