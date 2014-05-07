@@ -15,8 +15,8 @@ public class MQMsg1005 extends MQAbsMsg {
 	long orderid;
 
 	String carLicensenumber;
-	float lat;
-	float lon;
+	double lat;
+	double lon;
 	String time;
 
 	@Override
@@ -24,8 +24,8 @@ public class MQMsg1005 extends MQAbsMsg {
 
 		this.orderid = msg.readLong();
 		this.carLicensenumber = msg.readUTF();
-		this.lat = msg.readFloat();
-		this.lon = msg.readFloat();
+		this.lat = msg.readDouble();
+		this.lon = msg.readDouble();
 		this.time = msg.readUTF();
 
 	}
@@ -34,8 +34,8 @@ public class MQMsg1005 extends MQAbsMsg {
 	protected BytesMessage encodebody(BytesMessage msg) throws JMSException {
 		msg.writeLong(this.orderid);
 		msg.writeUTF(this.carLicensenumber);
-		msg.writeFloat(this.lat);
-		msg.writeFloat(this.lon);
+		msg.writeDouble(this.lat);
+		msg.writeDouble(this.lon);
 		msg.writeUTF(this.time);
 		return msg;
 	}
@@ -56,19 +56,20 @@ public class MQMsg1005 extends MQAbsMsg {
 		this.carLicensenumber = carLicensenumber;
 	}
 
-	public float getLat() {
+	
+	public double getLat() {
 		return lat;
 	}
 
-	public void setLat(float lat) {
+	public void setLat(double lat) {
 		this.lat = lat;
 	}
 
-	public float getLon() {
+	public double getLon() {
 		return lon;
 	}
 
-	public void setLon(float lon) {
+	public void setLon(double lon) {
 		this.lon = lon;
 	}
 

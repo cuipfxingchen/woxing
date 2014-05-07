@@ -115,14 +115,23 @@ public interface IOrderService {
 	 */
 	byte getOrderState(long orderId,String customid,String citycode);
 
+
+	/**
+	 * 电召平台推送乘客已上车
+	 * @param msg
+	 */
+	public void passengerGeton(MQMsg1007 msg);
+
+	/**
+	 * 主动请求乘客已上车
+	 * @param msg
+	 */
+	public boolean passengerGeton(long orderId,double lon,double lat,String customid,String citycode);
+
 	/**
 	 * 付款通知
 	 * @param msg
 	 */
-
-	public void passengerGeton(MQMsg1007 msg);
-
-
 	void payMoney(MQMsg1006 msg);
 	
 

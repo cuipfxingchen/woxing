@@ -34,7 +34,6 @@ public class OrderRest {
 	@Inject
 	IOrderService orderservice;
 
-	
 	/**
 	 * 提交订单
 	 * 
@@ -82,7 +81,7 @@ public class OrderRest {
 	@Produces("application/json;charset=UTF-8")
 	public RestBean getHistoryOrder(@PathParam("customid") String customid) {
 		logger.info("getHistoryOrder(String) - start"); //$NON-NLS-1$
-		
+
 		RestBean<List<Order>> r = new RestBean<>();
 		String success = "成功";
 		String fail = "没有订单";
@@ -148,8 +147,9 @@ public class OrderRest {
 	 * 取消订单
 	 * 
 	 * @param orderid
-	 * @param reason  reason
-	 * @return 
+	 * @param reason
+	 *            reason
+	 * @return
 	 */
 	@Path("/4/{orderId}/{reason}")
 	@GET
@@ -161,7 +161,7 @@ public class OrderRest {
 		String fail = "失败";
 		boolean operResult = false;
 		// 业务逻辑开始
-		r.setResult(orderservice.cancelOrderByPassenger(orderid,reason));
+		r.setResult(orderservice.cancelOrderByPassenger(orderid, reason));
 		operResult = true;
 
 		// 业务逻辑结束
@@ -233,9 +233,10 @@ public class OrderRest {
 		return r;
 
 	}
-	
+
 	/**
 	 * 根据订单id查询订单状态
+	 * 
 	 * @param orderId
 	 * @param citycode
 	 * @param customid
@@ -244,11 +245,31 @@ public class OrderRest {
 	@Path("/7/{orderId}/{customid}/{citycode}")
 	@GET
 	@Produces("application/json;charset=UTF-8")
-	public RestBean getOrderState(@PathParam("orderId") String orderId,@PathParam("citycode") String citycode,
-			@PathParam("customid") String customid){
+	public RestBean getOrderState(@PathParam("orderId") String orderId,
+			@PathParam("citycode") String citycode,
+			@PathParam("customid") String customid) {
 		RestBean r = new RestBean<>();
-		long orderid=Long.parseLong(orderId);
+		long orderid = Long.parseLong(orderId);
 		r.setState(orderservice.getOrderState(orderid, customid, citycode));
+		return r;
+	}
+
+	@Path("/8/{orderId}/{lon}/{lat}/{customid}/{citycode}")
+	@GET
+	@Produces("application/json;charset=UTF-8")
+	public RestBean getOnTaxi(@PathParam("orderId") String orderId,
+			@PathParam("lon") String lon,
+			@PathParam("lat") String lat,
+			@PathParam("citycode") String citycode,
+			@PathParam("customid") String customid) {
+		RestBean r = new RestBean<>();
+		long orderid = Long.parseLong(orderId);
+		boolean result=orderservice.passengerGeton(orderid, Double.parseDouble(lon), Double.parseDouble(lat), customid, citycode);
+		if(result){
+			r.setState(RestBean.SUCESSCODE);
+		}else{
+			r.setState(RestBean.FAILCODE);
+		}
 		return r;
 	}
 }

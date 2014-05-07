@@ -1,8 +1,10 @@
 package com.hdsx.taxi.woxing.order;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.SimpleFormatter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -319,7 +321,7 @@ public class OrderService implements IOrderService {
 		MQAbsMsg returnmsg = msgpool.getMsg(customid, 0x1002);
 		if (returnmsg == null)
 			return 0;
-		if (!returnmsg.getClass().isInstance(MQMsg1002.class))
+		if (!(returnmsg instanceof MQMsg1002))
 			return 0;
 		MQMsg1002 rm = (MQMsg1002) returnmsg;
 		return rm.getState();
@@ -328,6 +330,9 @@ public class OrderService implements IOrderService {
 	@Override
 	public void payMoney(MQMsg1006 msg) {
 		Order order = orderpool.getOrder(msg.getOrderid());
+		if(order==null){
+			order=orderMapper.getOrderById(msg.getOrderid());
+		}
 		order.setState(Order.STATE_FUKUAN);
 		orderpool.put(order);
 		orderMapper.updateOrder(order);
@@ -344,6 +349,11 @@ public class OrderService implements IOrderService {
 	@Override
 	public void passengerGeton(MQMsg1007 msg) {
 		Order order = orderpool.getOrder(msg.getOrderid());
+		if(order==null){
+			order=orderMapper.getOrderById(msg.getOrderid());
+		}
+		order.setState(Order.STATE_PASSAGER_ON);
+		orderpool.put(order);
 		orderMapper.updateOrder(order);
 		XMPPBean<HashMap> bean = new XMPPBean<>();
 		bean.setMsgid(0x0005);
@@ -355,5 +365,30 @@ public class OrderService implements IOrderService {
 		xmppservice.sendMessage(order.getCustomid(), bean);
 
 	}
+
+	@Override
+	public boolean passengerGeton(long orderId, double lon, double lat,
+			String customid, String citycode) {
+		boolean result=false;
+		Order order = orderpool.getOrder(orderId);
+		if(order==null){
+			order=orderMapper.getOrderById(orderId);
+		}
+		order.setState(Order.STATE_PASSAGER_ON);
+		orderpool.put(order);
+		orderMapper.updateOrder(order);
+		MQMsg1007 msg = new MQMsg1007();
+		msg.getHead().setCustomId(order.getCustomid());
+		msg.setOrderid(orderId);
+		SimpleDateFormat df = new SimpleDateFormat("yyyyMMddhhmmss");
+		msg.setTime(df.format(new Date()));
+		msg.setLon(lon);
+		msg.setLat(lat);
+		MQService.getInstance().sendMsg(order.getCitycode(), msg);
+		result=true;
+		return result;
+	}
+
+	
 
 }

@@ -15,7 +15,7 @@ import com.hdsx.taxi.woxing.mqutil.message.MQAbsMsg;
  */
 public class MQMsg1007 extends MQAbsMsg {
 	long orderid;
-	float lat, lon;
+	double lat, lon;
 	String time;
 
 	@Override
@@ -31,19 +31,20 @@ public class MQMsg1007 extends MQAbsMsg {
 		this.orderid = orderid;
 	}
 
-	public float getLat() {
+
+	public double getLat() {
 		return lat;
 	}
 
-	public void setLat(float lat) {
+	public void setLat(double lat) {
 		this.lat = lat;
 	}
 
-	public float getLon() {
+	public double getLon() {
 		return lon;
 	}
 
-	public void setLon(float lon) {
+	public void setLon(double lon) {
 		this.lon = lon;
 	}
 
@@ -58,16 +59,16 @@ public class MQMsg1007 extends MQAbsMsg {
 	@Override
 	protected void decodebody(BytesMessage msg) throws JMSException {
 		this.orderid = msg.readLong();
-		this.lat = msg.readFloat();
-		this.lon = msg.readFloat();
+		this.lat = msg.readDouble();
+		this.lon = msg.readDouble();
 		this.time = msg.readUTF();
 	}
 
 	@Override
 	protected BytesMessage encodebody(BytesMessage msg) throws JMSException {
 		msg.writeLong(orderid);
-		msg.writeFloat(lat);
-		msg.writeFloat(lon);
+		msg.writeDouble(lat);
+		msg.writeDouble(lon);
 		msg.writeUTF(time);
 		return msg;
 	}
