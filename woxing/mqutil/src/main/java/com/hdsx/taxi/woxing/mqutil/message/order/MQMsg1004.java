@@ -98,7 +98,7 @@ public class MQMsg1004 extends MQAbsMsg {
 	@Override
 	protected short getMessageId() {
 
-		return 0x0004;
+		return 0x1004;
 	}
 
 	@Override
@@ -120,7 +120,7 @@ public class MQMsg1004 extends MQAbsMsg {
 		msg.writeUTF(this.time);
 		msg.writeUTF(this.phone);
 		msg.writeLong(this.orderid);
-		return null;
+		return msg;
 	}
 
 }

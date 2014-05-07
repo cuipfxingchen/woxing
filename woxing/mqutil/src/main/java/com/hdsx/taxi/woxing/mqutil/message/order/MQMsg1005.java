@@ -37,7 +37,7 @@ public class MQMsg1005 extends MQAbsMsg {
 		msg.writeFloat(this.lat);
 		msg.writeFloat(this.lon);
 		msg.writeUTF(this.time);
-		return null;
+		return msg;
 	}
 
 	public long getOrderid() {

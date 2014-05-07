@@ -143,9 +143,12 @@ public class OrderService implements IOrderService {
 	public boolean cancelOrderByDriver(long orderid, byte reason) {
 
 		Order o = this.orderpool.getOrder(orderid);
+		if(o!=null){
+			this.orderpool.remove(o);
+		}else{
+			o=orderMapper.getOrderById(orderid);
+		}
 		o.setState(Order.STATE_CANCEL_BY_DRIVE);
-		this.orderpool.remove(o);
-
 		this.orderMapper.updateOrder(o);
 
 		XMPPBean<HashMap> bean = new XMPPBean<>();
@@ -251,17 +254,20 @@ public class OrderService implements IOrderService {
 	 */
 	@Override
 	public boolean cancelOrderByPassenger(long l, byte reason) {
+		
+		
+		logger.debug("乘客取消订单");
 		Order order = this.orderpool.getOrder(l);
-//		if (order == null){
-//			order=orderMapper.getOrderById(l);
-//		}else{
+		if (order == null){
+			order=orderMapper.getOrderById(l);
+		}else{
 			this.orderpool.remove(order);
-//		}
+		}
 		order.setState(Order.STATE_CANCEL_BY_PASS);
 		MQMsg0003 mqmsg = new MQMsg0003(order.getCustomid());
 
 		mqmsg.setOrderId(order.getOrderId());
-		// mqmsg.setCancel(reason);
+		 mqmsg.setCancel("不爽");
 		mqmsg.setCausecode(reason);
 		mqmsg.setPassengerName(order.getNickName());
 		mqmsg.setPassengerPhone(order.getUseriphone());

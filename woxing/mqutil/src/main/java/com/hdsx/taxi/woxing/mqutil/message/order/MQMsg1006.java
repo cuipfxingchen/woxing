@@ -92,7 +92,7 @@ public class MQMsg1006 extends MQAbsMsg {
 		msg.writeShort(this.fee);
 		msg.writeShort(this.fee2);
 		msg.writeUTF(this.time);
-		return null;
+		return msg;
 	}
 
 }
