@@ -397,7 +397,7 @@ public class OrderService implements IOrderService {
 	@Override
 	public boolean upPassengerSite(long orderId, double lon, double lat,
 			String customid, String citycode) {
-		MQMsg1007 msg = new MQMsg1007();
+		MQMsg1010 msg = new MQMsg1010();
 		msg.getHead().setCustomId(customid);
 		msg.setOrderid(orderId);
 		msg.setLon(lon);
