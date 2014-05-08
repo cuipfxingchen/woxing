@@ -8,6 +8,7 @@ import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1005;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1006;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1007;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1009;
+import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1010;
 
 
 /**
@@ -135,6 +136,11 @@ public interface IOrderService {
 	void payMoney(MQMsg1006 msg);
 	
 
-
+	/**
+	 * 乘客位置上傳
+	 * @param msg
+	 */
+	boolean upPassengerSite(long orderId, double lon, double lat,
+			String customid, String citycode);
 
 }

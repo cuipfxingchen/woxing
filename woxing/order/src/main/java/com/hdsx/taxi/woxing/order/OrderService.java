@@ -25,6 +25,7 @@ import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1003;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1005;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1006;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1007;
+import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1010;
 import com.hdsx.taxi.woxing.mqutil.msgpool.MQMsgPool;
 import com.hdsx.taxi.woxing.xmpp.IXMPPService;
 import com.hdsx.taxi.woxing.xmpp.XMPPBean;
@@ -391,6 +392,18 @@ public class OrderService implements IOrderService {
 		MQService.getInstance().sendMsg(order.getCitycode(), msg);
 		result=true;
 		return result;
+	}
+
+	@Override
+	public boolean upPassengerSite(long orderId, double lon, double lat,
+			String customid, String citycode) {
+		MQMsg1007 msg = new MQMsg1007();
+		msg.getHead().setCustomId(customid);
+		msg.setOrderid(orderId);
+		msg.setLon(lon);
+		msg.setLat(lat);
+		MQService.getInstance().sendMsg(citycode, msg);
+		return true;
 	}
 
 	

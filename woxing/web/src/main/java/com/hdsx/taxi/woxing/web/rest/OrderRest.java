@@ -272,4 +272,23 @@ public class OrderRest {
 		}
 		return r;
 	}
+	
+	@Path("/9/{orderId}/{lon}/{lat}/{customid}/{citycode}")
+	@GET
+	@Produces("application/json;charset=UTF-8")
+	public RestBean upPassegerSite(@PathParam("orderId") String orderId,
+			@PathParam("lon") String lon,
+			@PathParam("lat") String lat,
+			@PathParam("citycode") String citycode,
+			@PathParam("customid") String customid) {
+		RestBean r = new RestBean<>();
+		long orderid = Long.parseLong(orderId);
+		boolean result=orderservice.upPassengerSite(orderid, Double.parseDouble(lon), Double.parseDouble(lat), customid, citycode);
+		if(result){
+			r.setState(RestBean.SUCESSCODE);
+		}else{
+			r.setState(RestBean.FAILCODE);
+		}
+		return r;
+	}
 }
