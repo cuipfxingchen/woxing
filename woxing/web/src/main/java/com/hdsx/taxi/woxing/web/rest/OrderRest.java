@@ -263,15 +263,18 @@ public class OrderRest {
 			@PathParam("lon") String lon, @PathParam("lat") String lat,
 			@PathParam("citycode") String citycode,
 			@PathParam("customid") String customid) {
-		RestBean r = new RestBean<>();
+		RestBean<Byte> r = new RestBean<>();
 		long orderid = Long.parseLong(orderId);
-		boolean result = orderservice.passengerGeton(orderid,
+		boolean result =false;
+		r.setResult(orderservice.passengerGeton(orderid,
 				Double.parseDouble(lon), Double.parseDouble(lat), customid,
-				citycode);
+				citycode));
 		if (result) {
 			r.setState(RestBean.SUCESSCODE);
+			r.setMsg("成功");
 		} else {
 			r.setState(RestBean.FAILCODE);
+			r.setMsg("失败");
 		}
 		return r;
 	}

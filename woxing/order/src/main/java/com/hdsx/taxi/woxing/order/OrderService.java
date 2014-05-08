@@ -18,6 +18,7 @@ import com.hdsx.taxi.woxing.mqutil.message.MQAbsMsg;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg0001;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg0002;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg0003;
+import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg0007;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1002;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1003;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1005;
@@ -267,6 +268,7 @@ public class OrderService implements IOrderService {
 			return 2;
 		}
 		order.setState(Order.STATE_CANCEL_BY_PASS);
+		orderMapper.updateOrder(order);
 		MQMsg0003 mqmsg = new MQMsg0003(order.getCustomid());
 
 		mqmsg.setOrderId(order.getOrderId());
@@ -372,12 +374,16 @@ public class OrderService implements IOrderService {
 	}
 
 	@Override
-	public boolean passengerGeton(long orderId, double lon, double lat,
+	public byte passengerGeton(long orderId, double lon, double lat,
 			String customid, String citycode) {
-		boolean result = false;
-		Order order = orderpool.getOrder(orderId);
+		Order order = this.orderpool.getOrder(orderId);
 		if (order == null) {
 			order = orderMapper.getOrderById(orderId);
+		} else {
+			this.orderpool.remove(order);
+		}
+		if (order == null) {
+			return 2;
 		}
 		order.setState(Order.STATE_PASSAGER_ON);
 		orderpool.put(order);
@@ -390,8 +396,18 @@ public class OrderService implements IOrderService {
 		msg.setLon(lon);
 		msg.setLat(lat);
 		MQService.getInstance().sendMsg(order.getCitycode(), msg);
-		result = true;
-		return result;
+		MQAbsMsg returnmsg = msgpool.getMsg(order.getCustomid(), 0x0007);
+		if (returnmsg == null)
+			return 1;
+		if (!(returnmsg instanceof MQMsg1003))
+			return 1;
+		MQMsg0007 rm = (MQMsg0007) returnmsg;
+		if (rm.getCancle() == 0) {
+			orderMapper.updateOrder(order);
+			return 0;
+		} else {
+			return 1;
+		}
 	}
 
 	@Override
