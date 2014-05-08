@@ -21,7 +21,7 @@ public class MQMsgPool {
 
 	final static String MQ_MSG_CACHE_NAME = "mqmsgpoolcache";
 
-	private static final byte MAXCOUNT = 100; // 从缓存中取消息的最大次数
+	private static final byte MAXCOUNT = (byte) 200; // 从缓存中取消息的最大次数
 
 	private static final byte SLEEP_PER_TIME = 50; // 每次取消息的间隔
 	Ehcache cache;
