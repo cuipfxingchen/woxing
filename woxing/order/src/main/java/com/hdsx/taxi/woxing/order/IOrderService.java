@@ -143,4 +143,16 @@ public interface IOrderService {
 	boolean upPassengerSite(long orderId, double lon, double lat,
 			String customid, String citycode);
 
+	
+	/**
+	 * 乘客反饋評價
+	 * @param orderId
+	 * @param type
+	 * @param desc
+	 * @param customid
+	 * @param citycode
+	 * @return
+	 */
+	boolean backPassegerEstimate(long orderId, byte type, String desc,
+			String customid, String citycode);
 }

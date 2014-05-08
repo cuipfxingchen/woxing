@@ -26,6 +26,7 @@ import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1005;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1006;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1007;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1010;
+import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1011;
 import com.hdsx.taxi.woxing.mqutil.msgpool.MQMsgPool;
 import com.hdsx.taxi.woxing.xmpp.IXMPPService;
 import com.hdsx.taxi.woxing.xmpp.XMPPBean;
@@ -404,6 +405,18 @@ public class OrderService implements IOrderService {
 		msg.setLat(lat);
 		MQService.getInstance().sendMsg(citycode, msg);
 		return true;
+	}
+
+	@Override
+	public boolean backPassegerEstimate(long orderId, byte type, String desc,
+			String customid, String citycode) {
+		MQMsg1011 msg = new MQMsg1011();
+		msg.getHead().setCustomId(customid);
+		msg.setOrderid(orderId);
+		msg.setType(type);
+		msg.setDesc(desc);
+		MQService.getInstance().sendMsg(citycode, msg);
+		return false;
 	}
 
 	
