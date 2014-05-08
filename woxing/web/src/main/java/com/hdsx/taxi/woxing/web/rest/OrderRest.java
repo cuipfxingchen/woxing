@@ -151,17 +151,19 @@ public class OrderRest {
 	 *            reason
 	 * @return
 	 */
-	@Path("/4/{orderId}/{reason}")
+	@Path("/4/{orderId}/{reason}/{customid}")
 	@GET
 	@Produces("application/json;charset=UTF-8")
 	public RestBean cancelOrder(@PathParam("orderId") long orderid,
-			@PathParam("reason") byte reason) {
-		RestBean<Boolean> r = new RestBean<>();
+			@PathParam("reason") byte reason,
+			@PathParam("customid") String customid) {
+		RestBean<Byte> r = new RestBean<>();
 		String success = "成功";
 		String fail = "失败";
 		boolean operResult = false;
 		// 业务逻辑开始
-		r.setResult(orderservice.cancelOrderByPassenger(orderid, reason));
+		r.setResult(orderservice.cancelOrderByPassenger(orderid, reason,
+				customid));
 		operResult = true;
 
 		// 业务逻辑结束
@@ -258,35 +260,37 @@ public class OrderRest {
 	@GET
 	@Produces("application/json;charset=UTF-8")
 	public RestBean getOnTaxi(@PathParam("orderId") String orderId,
-			@PathParam("lon") String lon,
-			@PathParam("lat") String lat,
+			@PathParam("lon") String lon, @PathParam("lat") String lat,
 			@PathParam("citycode") String citycode,
 			@PathParam("customid") String customid) {
 		RestBean r = new RestBean<>();
 		long orderid = Long.parseLong(orderId);
-		boolean result=orderservice.passengerGeton(orderid, Double.parseDouble(lon), Double.parseDouble(lat), customid, citycode);
-		if(result){
+		boolean result = orderservice.passengerGeton(orderid,
+				Double.parseDouble(lon), Double.parseDouble(lat), customid,
+				citycode);
+		if (result) {
 			r.setState(RestBean.SUCESSCODE);
-		}else{
+		} else {
 			r.setState(RestBean.FAILCODE);
 		}
 		return r;
 	}
-	
+
 	@Path("/9/{orderId}/{lon}/{lat}/{customid}/{citycode}")
 	@GET
 	@Produces("application/json;charset=UTF-8")
 	public RestBean upPassegerSite(@PathParam("orderId") String orderId,
-			@PathParam("type") String lon,
-			@PathParam("desc") String lat,
+			@PathParam("type") String lon, @PathParam("desc") String lat,
 			@PathParam("citycode") String citycode,
 			@PathParam("customid") String customid) {
 		RestBean r = new RestBean<>();
 		long orderid = Long.parseLong(orderId);
-		boolean result=orderservice.upPassengerSite(orderid, Double.parseDouble(lon), Double.parseDouble(lat), customid, citycode);
-		if(result){
+		boolean result = orderservice.upPassengerSite(orderid,
+				Double.parseDouble(lon), Double.parseDouble(lat), customid,
+				citycode);
+		if (result) {
 			r.setState(RestBean.SUCESSCODE);
-		}else{
+		} else {
 			r.setState(RestBean.FAILCODE);
 		}
 		return r;

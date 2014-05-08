@@ -24,10 +24,10 @@ import com.hdsx.taxi.woxing.mqutil.message.MQAbsMsg;
 public class MQMsg0003 extends MQAbsMsg {
 
 	long orderId;
-	String cancel;
-	String passengerName;// 乘客名称 String
+	String cancel="";
+	String passengerName="";// 乘客名称 String
 	byte passengerSex;// 乘客性别 byte 1：男，2：女
-	String passengerPhone;// 乘客电话 String
+	String passengerPhone="";// 乘客电话 String
 	byte causecode; // 取消原因
 
 	public MQMsg0003() {

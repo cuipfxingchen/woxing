@@ -136,10 +136,10 @@ public class OrderService implements IOrderService {
 	public boolean cancelOrderByDriver(long orderid, byte reason) {
 
 		Order o = this.orderpool.getOrder(orderid);
-		if(o!=null){
+		if (o != null) {
 			this.orderpool.remove(o);
-		}else{
-			o=orderMapper.getOrderById(orderid);
+		} else {
+			o = orderMapper.getOrderById(orderid);
 		}
 		o.setState(Order.STATE_CANCEL_BY_DRIVE);
 		this.orderMapper.updateOrder(o);
@@ -150,8 +150,8 @@ public class OrderService implements IOrderService {
 		map.put("orderid", orderid);
 		map.put("msg", reason);
 		bean.setResult(map);
-
 		xmppservice.sendMessage(o.getCustomid(), bean);
+
 		return true;
 	}
 
@@ -188,19 +188,20 @@ public class OrderService implements IOrderService {
 	@Override
 	public void update(long newOrderId, long oldOrderId) {
 		Order order1 = this.orderpool.getOrder(oldOrderId);
-		logger.debug("oldorder:"+(order1==null));
-		if(order1!=null){
+		logger.debug("oldorder:" + (order1 == null));
+		if (order1 != null) {
 			this.orderpool.remove(order1);
 			order1.setOrderId(newOrderId);
 			order1.setState(Order.STATE_SENDED);
 			this.orderpool.put(order1);
 			orderMapper.updateOrderId(oldOrderId, newOrderId);
-		}else{
-			logger.info("更新订单号错误【旧"+oldOrderId+"】+【新+"+newOrderId+"】：订单池里面没有旧订单");
+		} else {
+			logger.info("更新订单号错误【旧" + oldOrderId + "】+【新+" + newOrderId
+					+ "】：订单池里面没有旧订单");
 		}
-		
-//		this.orderpool.updateOrderId(oldOrderId, newOrderId);
-		
+
+		// this.orderpool.updateOrderId(oldOrderId, newOrderId);
+
 	}
 
 	/**
@@ -235,7 +236,7 @@ public class OrderService implements IOrderService {
 	@Override
 	public void doFail(long l, String describ, byte code) {
 		Order order = this.orderpool.getOrder(l);
-		if(order!=null){
+		if (order != null) {
 			order.setState(code);
 			this.orderpool.remove(order);
 			orderMapper.updateOrder(order);
@@ -246,46 +247,45 @@ public class OrderService implements IOrderService {
 			bean.setMsgid(0x0002);
 			bean.setResult(map);
 			this.xmppservice.sendMessage(order.getCustomid(), bean);
-		}else{
-			logger.info("doFail()订单池没有订单【"+l+"】");
+		} else {
+			logger.info("doFail()订单池没有订单【" + l + "】");
 		}
-		
+
 	}
 
-	/**
-	 * 乘客取消订单
-	 */
 	@Override
-	public boolean cancelOrderByPassenger(long l, byte reason) {
-		
-		
+	public byte cancelOrderByPassenger(long l, byte reason, String customid) {
+
 		logger.debug("乘客取消订单");
 		Order order = this.orderpool.getOrder(l);
-		if (order == null){
-			order=orderMapper.getOrderById(l);
-		}else{
+		if (order == null) {
+			order = orderMapper.getOrderById(l);
+		} else {
 			this.orderpool.remove(order);
+		}
+		if (order == null) {
+			return 2;
 		}
 		order.setState(Order.STATE_CANCEL_BY_PASS);
 		MQMsg0003 mqmsg = new MQMsg0003(order.getCustomid());
 
 		mqmsg.setOrderId(order.getOrderId());
-		 mqmsg.setCancel("不爽");
+		// mqmsg.setCancel("不爽");
 		mqmsg.setCausecode(reason);
 		mqmsg.setPassengerName(order.getNickName());
 		mqmsg.setPassengerPhone(order.getUseriphone());
 		MQService.getInstance().sendMsg(order.getCitycode(), mqmsg);
 		MQAbsMsg returnmsg = msgpool.getMsg(order.getCustomid(), 0x1003);
 		if (returnmsg == null)
-			return false;
+			return 1;
 		if (!(returnmsg instanceof MQMsg1003))
-			return false;
+			return 1;
 		MQMsg1003 rm = (MQMsg1003) returnmsg;
 		if (rm.getCancle() == 0) {
 			orderMapper.updateOrder(order);
-			return true;
+			return 0;
 		} else {
-			return false;
+			return 1;
 		}
 
 	}
@@ -296,10 +296,10 @@ public class OrderService implements IOrderService {
 	@Override
 	public void startReversation(MQMsg1005 msg) {
 
-		long orderid=msg.getOrderid();
+		long orderid = msg.getOrderid();
 		Order order = orderpool.getOrder(msg.getOrderid());
-		if(order==null){
-			order=orderMapper.getOrderById(orderid);
+		if (order == null) {
+			order = orderMapper.getOrderById(orderid);
 		}
 		order.getResult().setCarNum(msg.getCarLicensenumber());
 		order.setState(Order.STATE_OPERATING);// 预约订单开始执行状态
@@ -335,8 +335,8 @@ public class OrderService implements IOrderService {
 	@Override
 	public void payMoney(MQMsg1006 msg) {
 		Order order = orderpool.getOrder(msg.getOrderid());
-		if(order==null){
-			order=orderMapper.getOrderById(msg.getOrderid());
+		if (order == null) {
+			order = orderMapper.getOrderById(msg.getOrderid());
 		}
 		order.setState(Order.STATE_FUKUAN);
 		orderpool.put(order);
@@ -354,8 +354,8 @@ public class OrderService implements IOrderService {
 	@Override
 	public void passengerGeton(MQMsg1007 msg) {
 		Order order = orderpool.getOrder(msg.getOrderid());
-		if(order==null){
-			order=orderMapper.getOrderById(msg.getOrderid());
+		if (order == null) {
+			order = orderMapper.getOrderById(msg.getOrderid());
 		}
 		order.setState(Order.STATE_PASSAGER_ON);
 		orderpool.put(order);
@@ -365,7 +365,7 @@ public class OrderService implements IOrderService {
 		HashMap map = new HashMap<>();
 		map.put("orderid", msg.getOrderid());
 		map.put("lon", msg.getLon());
-		map.put("lat", msg.getLat());	
+		map.put("lat", msg.getLat());
 		bean.setResult(map);
 		xmppservice.sendMessage(order.getCustomid(), bean);
 
@@ -374,10 +374,10 @@ public class OrderService implements IOrderService {
 	@Override
 	public boolean passengerGeton(long orderId, double lon, double lat,
 			String customid, String citycode) {
-		boolean result=false;
+		boolean result = false;
 		Order order = orderpool.getOrder(orderId);
-		if(order==null){
-			order=orderMapper.getOrderById(orderId);
+		if (order == null) {
+			order = orderMapper.getOrderById(orderId);
 		}
 		order.setState(Order.STATE_PASSAGER_ON);
 		orderpool.put(order);
@@ -390,7 +390,7 @@ public class OrderService implements IOrderService {
 		msg.setLon(lon);
 		msg.setLat(lat);
 		MQService.getInstance().sendMsg(order.getCitycode(), msg);
-		result=true;
+		result = true;
 		return result;
 	}
 
@@ -417,7 +417,5 @@ public class OrderService implements IOrderService {
 		MQService.getInstance().sendMsg(citycode, msg);
 		return false;
 	}
-
-	
 
 }

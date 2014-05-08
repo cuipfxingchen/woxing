@@ -101,8 +101,9 @@ public interface IOrderService {
 	 * 取消订单
 	 * @param l
 	 * @param reason
+	 * @return  0：取消成功,2： 找不到订单   1：取消失败
 	 */
-	boolean cancelOrderByPassenger(long l,byte reason);
+	byte cancelOrderByPassenger(long l,byte reason,String customid);
 
 	/**
 	 * 开始执行预约订单

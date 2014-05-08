@@ -22,7 +22,7 @@ public class MQHandler1008 implements IMQMsgHanlder {
 
 		if(mqmsg instanceof MQMsg1008){
 			MQMsg1008 msg = (MQMsg1008) mqmsg;
-			logger.info("duixiang:"+(GuiceFactory.getInstance()==null));
+//			logger.info("duixiang:"+(GuiceFactory.getInstance()==null));
 //			GuiceFactory.getInstance().update(msg.getNewid(),msg.getOldid() );
 			GuiceFactory.getInstance2().update(msg.getNewid(),msg.getOldid() );
 //			os.updateOrderId(msg.getOldid(), msg.getNewid());

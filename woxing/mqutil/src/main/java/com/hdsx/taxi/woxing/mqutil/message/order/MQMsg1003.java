@@ -25,7 +25,7 @@ public class MQMsg1003 extends MQAbsMsg {
 
 	long orderId;
 	byte cancle; // 0 ：成功 , 1: 失败
-	String explain;
+	String explain="";
 
 	public MQMsg1003() {
 		super();
