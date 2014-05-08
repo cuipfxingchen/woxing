@@ -41,7 +41,7 @@ public class DateFormatUtil {
 	}
 
 	public static Date dateString2JavaUtilDate(String datestr) {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-ddHH:mm:ss");
 		Date date = null;
 		try {
 			if (datestr.length() == 19) {

@@ -60,7 +60,7 @@ public class OrderService implements IOrderService {
 	@Override
 	public int submit(Order order) {
 		if (logger.isDebugEnabled()) {
-			logger.debug("submit(Order) - start"); //$NON-NLS-1$
+			logger.debug("订单提交submit(Order) - start"); //$NON-NLS-1$
 		}
 
 		try {
@@ -76,27 +76,18 @@ public class OrderService implements IOrderService {
 			msg.setGetOffLat(order.getGetOffLat());
 			msg.setGetOffLon(order.getGetOffLon());
 			msg.setNotes(order.getNotes());
-
-			if (logger.isInfoEnabled()) {
-				logger.info("submit(Order)" + order.getNickName()); //$NON-NLS-1$
-			}
-
 			msg.setNickName(order.getNickName());
 			msg.setSex(order.getSex());
 			msg.setUserphone(order.getUseriphone());
 			msg.setFirstChoiceCompany(order.getFirstChoiceCompany());
 			msg.setContractTaxi(order.getContractTaxi());
 			msg.setVipMark(order.getVipMark() + "");
-
 			orderpool.put(order);
 			orderMapper.insert(order);
-			logger.debug("订单开始发送");
 			MQService.getInstance().sendMsg(order.getCitycode(), msg);
-			logger.debug("订单发送结束");
-			
 
 			if (logger.isDebugEnabled()) {
-				logger.debug("submit(Order) - end"); //$NON-NLS-1$
+				logger.debug("订单提交submit(Order) - end"); //$NON-NLS-1$
 			}
 			return 1;
 
@@ -244,16 +235,21 @@ public class OrderService implements IOrderService {
 	@Override
 	public void doFail(long l, String describ, byte code) {
 		Order order = this.orderpool.getOrder(l);
-		order.setState(code);
-		this.orderpool.remove(order);
-		orderMapper.updateOrder(order);
-		HashMap map = new HashMap();
-		map.put("orderid", l);
-		map.put("msg", describ);
-		XMPPBean<HashMap> bean = new XMPPBean<>();
-		bean.setMsgid(0x0002);
-		bean.setResult(map);
-		this.xmppservice.sendMessage(order.getCustomid(), bean);
+		if(order!=null){
+			order.setState(code);
+			this.orderpool.remove(order);
+			orderMapper.updateOrder(order);
+			HashMap map = new HashMap();
+			map.put("orderid", l);
+			map.put("msg", describ);
+			XMPPBean<HashMap> bean = new XMPPBean<>();
+			bean.setMsgid(0x0002);
+			bean.setResult(map);
+			this.xmppservice.sendMessage(order.getCustomid(), bean);
+		}else{
+			logger.info("doFail()订单池没有订单【"+l+"】");
+		}
+		
 	}
 
 	/**
