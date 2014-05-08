@@ -287,7 +287,6 @@ public class OrderService implements IOrderService {
 		} else {
 			return 1;
 		}
-
 	}
 
 	/**
