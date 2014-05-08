@@ -128,7 +128,7 @@ public interface IOrderService {
 	 * 主动请求乘客已上车
 	 * @param msg
 	 */
-	public boolean passengerGeton(long orderId,double lon,double lat,String customid,String citycode);
+	public byte passengerGeton(long orderId,double lon,double lat,String customid,String citycode);
 
 	/**
 	 * 付款通知
