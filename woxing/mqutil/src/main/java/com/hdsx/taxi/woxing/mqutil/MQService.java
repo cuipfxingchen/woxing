@@ -11,7 +11,6 @@ import java.util.ResourceBundle;
 import java.util.Set;
 
 import javax.jms.BytesMessage;
-import javax.jms.Connection;
 import javax.jms.JMSException;
 import javax.jms.MessageConsumer;
 import javax.jms.MessageListener;
@@ -19,6 +18,7 @@ import javax.jms.MessageProducer;
 import javax.jms.Queue;
 import javax.jms.Session;
 
+import org.apache.activemq.ActiveMQConnection;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,30 +52,34 @@ public class MQService {
 
 	HashMap<String, MessageConsumer> consumerMap;
 	HashMap<String, MessageProducer> producerMap;;
-	Connection connection;
+	ActiveMQConnection connection;
+
+	// ActiveMQConnection conn;
 
 	/**
 	 * 城市端使用的初始化。 城市端和中心服务端的差别在余中心端的服务连接多个Queue
 	 * 
 	 * @param listener
 	 * @throws JMSException
-	 * @throws IOException 
+	 * @throws IOException
 	 */
-	public void initcity(MessageListener listener) throws JMSException, IOException {
-		
-		
-		
+	public void initcity(MessageListener listener) throws JMSException,
+			IOException {
+
 		Properties p = new Properties();
 		p.load(MQService.class.getResourceAsStream("/mq.properties"));
-		
+
 		String url = p.getProperty("mq.url");
 		String user = p.getProperty("mq.user");
 		String password = p.getProperty("mq.password");
 		String citycode = p.getProperty("mq.citycode");
+		boolean useCompress = Boolean.parseBoolean(p
+				.getProperty("mq.usecompress"));
 		logger.info("开始连接ActiveMQ");
 		ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(
 				user, password, url);
-		connection = connectionFactory.createConnection();
+		connection = (ActiveMQConnection) connectionFactory.createConnection();
+		connection.setUseCompression(useCompress);
 		session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 		Queue inQueue = session.createQueue(citycode + ".tocity");// 接收队列
 		Queue outQueue = session.createQueue(citycode + ".fromcity");// 发送队列
@@ -98,6 +102,9 @@ public class MQService {
 		String user = rb.getString("mq.user");
 		String password = rb.getString("mq.password");
 		String cities = rb.getString("mq.cities");
+		boolean useCompress = Boolean.parseBoolean(rb
+				.getString("mq.usecompress"));
+
 		String[] cityes = cities.split(",");
 		List<String> list_citycode = new ArrayList<>();
 		for (String c : cityes) {
@@ -110,7 +117,8 @@ public class MQService {
 		logger.info("开始连接ActiveMQ");
 		ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(
 				user, password, url);
-		connection = connectionFactory.createConnection();
+		connection = (ActiveMQConnection) connectionFactory.createConnection();
+		connection.setUseCompression(useCompress);
 		session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 		consumerMap = new HashMap<>();
 		producerMap = new HashMap<>();
@@ -132,7 +140,8 @@ public class MQService {
 		ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(
 				user, password, url);
 		logger.info("MQ inited OKEY");
-		connection = connectionFactory.createConnection();
+		connection = (ActiveMQConnection) connectionFactory.createConnection();
+		connection.setUseCompression(true);
 		session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 
 		javax.jms.Queue indestination = session.createQueue(inqueue);
