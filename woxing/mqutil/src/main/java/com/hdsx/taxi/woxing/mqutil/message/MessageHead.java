@@ -20,7 +20,7 @@ public class MessageHead {
 
 	short msgId;
 	long msgsn;
-	String customId;
+	String customId="";
 
 	public MessageHead() {
 		this.msgsn = System.currentTimeMillis();

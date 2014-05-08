@@ -4,7 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.logging.SimpleFormatter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +15,6 @@ import com.hdsx.taxi.woxing.bean.Order;
 import com.hdsx.taxi.woxing.dao.OrderMapper;
 import com.hdsx.taxi.woxing.mqutil.MQService;
 import com.hdsx.taxi.woxing.mqutil.message.MQAbsMsg;
-import com.hdsx.taxi.woxing.mqutil.message.location.MQMsg3002;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg0001;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg0002;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg0003;
@@ -92,9 +90,9 @@ public class OrderService implements IOrderService {
 
 			orderpool.put(order);
 			orderMapper.insert(order);
-			logger.info("mq发送开始");
+			logger.debug("订单开始发送");
 			MQService.getInstance().sendMsg(order.getCitycode(), msg);
-			logger.info("mq发送结束");
+			logger.debug("订单发送结束");
 			
 
 			if (logger.isDebugEnabled()) {
@@ -200,11 +198,16 @@ public class OrderService implements IOrderService {
 	public void update(long newOrderId, long oldOrderId) {
 		Order order1 = this.orderpool.getOrder(oldOrderId);
 		logger.debug("oldorder:"+(order1==null));
-		this.orderpool.remove(order1);
-		order1.setOrderId(newOrderId);
-		order1.setState(Order.STATE_SENDED);
-		this.orderpool.put(order1);
-		orderMapper.updateOrderId(oldOrderId, newOrderId);
+		if(order1!=null){
+			this.orderpool.remove(order1);
+			order1.setOrderId(newOrderId);
+			order1.setState(Order.STATE_SENDED);
+			this.orderpool.put(order1);
+			orderMapper.updateOrderId(oldOrderId, newOrderId);
+		}else{
+			logger.info("更新订单号错误【旧"+oldOrderId+"】+【新+"+newOrderId+"】：订单池里面没有旧订单");
+		}
+		
 //		this.orderpool.updateOrderId(oldOrderId, newOrderId);
 		
 	}
