@@ -277,8 +277,8 @@ public class OrderRest {
 	@GET
 	@Produces("application/json;charset=UTF-8")
 	public RestBean upPassegerSite(@PathParam("orderId") String orderId,
-			@PathParam("lon") String lon,
-			@PathParam("lat") String lat,
+			@PathParam("type") String lon,
+			@PathParam("desc") String lat,
 			@PathParam("citycode") String citycode,
 			@PathParam("customid") String customid) {
 		RestBean r = new RestBean<>();
