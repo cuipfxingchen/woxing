@@ -163,8 +163,9 @@ public class MQService {
 	 * @param citycode
 	 *            城市代码
 	 * @param msg
+	 * @throws JMSException 
 	 */
-	public void sendMsg(String citycode, MQMessage msg) {
+	public void sendMsg(String citycode, MQMessage msg) throws JMSException {
 		try {
 			logger.debug("session：" + session);
 			BytesMessage bmsg = session.createBytesMessage();
@@ -173,13 +174,15 @@ public class MQService {
 			producerMap.get(citycode).send(bmsg);
 		} catch (JMSException e) {
 			logger.error("sendMsg(MQMessage)", e);
+			throw e;
 		}
 	}
 
 	/**
 	 * 用于城市端往中心端发送消息
+	 * @throws JMSException 
 	 */
-	public void sendMsg(MQMessage msg) {
+	public void sendMsg(MQMessage msg){
 		try {
 			BytesMessage bmsg = session.createBytesMessage();
 			if (logger.isDebugEnabled()) {
@@ -188,7 +191,6 @@ public class MQService {
 			bmsg = msg.encode(bmsg);
 			pro.send(bmsg);
 		} catch (JMSException e) {
-
 			logger.error("sendMsg(MQMessage)", e); //$NON-NLS-1$
 		}
 
