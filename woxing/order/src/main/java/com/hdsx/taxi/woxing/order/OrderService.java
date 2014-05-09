@@ -436,7 +436,7 @@ public class OrderService implements IOrderService {
 		MQAbsMsg returnmsg = msgpool.getMsg(order.getCustomid(), 0x0007);
 		if (returnmsg == null)
 			return 1;
-		if (!(returnmsg instanceof MQMsg1003))
+		if (!(returnmsg instanceof MQMsg0007))
 			return 1;
 		MQMsg0007 rm = (MQMsg0007) returnmsg;
 		if (rm.getCancle() == 0) {

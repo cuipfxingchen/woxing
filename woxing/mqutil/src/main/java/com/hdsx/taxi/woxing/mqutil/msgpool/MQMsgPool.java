@@ -23,7 +23,7 @@ public class MQMsgPool {
 
 	private static final byte MAXCOUNT = (byte) 200; // 从缓存中取消息的最大次数
 
-	private static final byte SLEEP_PER_TIME = 50; // 每次取消息的间隔
+	private static final byte SLEEP_PER_TIME = 100; // 每次取消息的间隔
 	Ehcache cache;
 
 	@Inject

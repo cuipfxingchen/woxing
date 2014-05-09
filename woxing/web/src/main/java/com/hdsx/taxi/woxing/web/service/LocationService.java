@@ -3,6 +3,8 @@ package com.hdsx.taxi.woxing.web.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.jms.JMSException;
+
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.hdsx.taxi.woxing.bean.CarInfo;
@@ -61,7 +63,11 @@ public class LocationService {
 		msg.setLat(lat);
 		msg.setLon(lon);
 		msg.setRange(r);
-		ms.sendMsg(citycode, msg);
+		try {
+			ms.sendMsg(citycode, msg);
+		} catch (JMSException e) {
+			e.printStackTrace();
+		}
 		MQAbsMsg returnmsg = msgpool.getMsg(customid, 0x3001);
 		if (returnmsg == null)
 			return new ArrayList<>();
@@ -92,7 +98,12 @@ public class LocationService {
 		
 		msg.setCarnum(order.getResult().getCarNum());
 		// 调用发送信息内
-		ms.sendMsg(citycode, msg);
+		try {
+			ms.sendMsg(citycode, msg);
+		} catch (JMSException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		MQAbsMsg returnmsg = msgpool.getMsg(customid, 0x3002);
 		if (returnmsg == null)
 			return new CarInfo();
@@ -124,7 +135,11 @@ public class LocationService {
 		msg.setLon(x);
 
 		// 调用发送信息内
-		ms.sendMsg(citycode, msg);
+		try {
+			ms.sendMsg(citycode, msg);
+		} catch (JMSException e) {
+			e.printStackTrace();
+		}
 
 		MQAbsMsg returnmsg = msgpool.getMsg(customid, 0x3004);
 		if (returnmsg == null)
@@ -160,7 +175,11 @@ public class LocationService {
 		msg.setDlon(dx);
 
 		// 调用发送信息内
-		ms.sendMsg(citycode, msg);
+		try {
+			ms.sendMsg(citycode, msg);
+		} catch (JMSException e) {
+			e.printStackTrace();
+		}
 		MQAbsMsg returnmsg = msgpool.getMsg(customid, 0x3005);
 		if (returnmsg == null)
 			return null;
@@ -193,7 +212,11 @@ public class LocationService {
 		msg.setRange((short) distance);
 
 		// 调用发送信息内
-		ms.sendMsg(citycode, msg);
+		try {
+			ms.sendMsg(citycode, msg);
+		} catch (JMSException e) {
+			e.printStackTrace();
+		}
 		MQAbsMsg returnmsg = msgpool.getMsg(customid, 0x3006);
 		if (returnmsg == null)
 			return null;
@@ -228,7 +251,11 @@ public class LocationService {
 		msg.setXdlon(xdlon);
 		msg.setYdlat(ydlat);
 		// 调用发送信息内
-		ms.sendMsg(citycode, msg);
+		try {
+			ms.sendMsg(citycode, msg);
+		} catch (JMSException e) {
+			e.printStackTrace();
+		}
 		MQAbsMsg returnmsg = msgpool.getMsg(customid, 0x3006);
 		if (returnmsg == null)
 			return null;
