@@ -26,14 +26,14 @@ public class MQMsg1001 extends MQAbsMsg {
 	long orderId; // 订单ID
 //	String taxiId; // 出租车ID 对应Order中taxiId(出租车驾驶员编号)
 
-	String number; // 抢单车牌号 对应Order中taxiPlateNumber(出租车牌号)
-	String phone; // 抢单电话 抢单司机电话 对应Order中taxiDriverCellPhoneNo(出租车司机手机号)
-	String name; // 抢单名称 出租车司机姓名 对应Order中taxiDriverName(出租车司机姓名 )
-	String type; // 抢单车型 对应Order中motorcycleType(出租车具体型号)
-	String color; // 抢单车颜色 对应Order中taxiColor(出租车颜色)
-	String commpany; // 出租车公司 对应Order中taxiCompany(出租车所属公司)
-	String driverid; // 驾驶员的从业资格证号
-	String time;// 抢单时间
+	String number=""; // 抢单车牌号 对应Order中taxiPlateNumber(出租车牌号)
+	String phone=""; // 抢单电话 抢单司机电话 对应Order中taxiDriverCellPhoneNo(出租车司机手机号)
+	String name=""; // 抢单名称 出租车司机姓名 对应Order中taxiDriverName(出租车司机姓名 )
+	String type=""; // 抢单车型 对应Order中motorcycleType(出租车具体型号)
+	String color=""; // 抢单车颜色 对应Order中taxiColor(出租车颜色)
+	String commpany=""; // 出租车公司 对应Order中taxiCompany(出租车所属公司)
+	String driverid=""; // 驾驶员的从业资格证号
+	String time="";// 抢单时间
 	double lat, lon;
 
 	public MQMsg1001() {
