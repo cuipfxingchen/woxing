@@ -501,4 +501,18 @@ public class OrderService implements IOrderService {
 		return true;
 	}
 
+	@Override
+	public String getMqCustomid(long orderId) {
+		Order order = this.orderpool.getOrder(orderId);
+		if (order == null) {
+			order = orderMapper.getOrderById(orderId);
+		}
+		if(order==null){
+			return null;
+		}else{
+			return order.getCustomid();
+		}
+	}
+
+	
 }

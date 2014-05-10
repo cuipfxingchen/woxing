@@ -2,6 +2,7 @@ package com.hdsx.taxi.woxing.web.guice;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
+import com.hdsx.taxi.woxing.dao.OrderMapper;
 import com.hdsx.taxi.woxing.mqutil.msgpool.MQMsgPool;
 import com.hdsx.taxi.woxing.order.IOrderService;
 
@@ -14,6 +15,7 @@ public class GuiceFactory {
 
 	@Inject
 	static MQMsgPool mqmsgpool;
+
 	
 	public static IOrderService getInstance() {
 		return orderServiceProvoider.get();
@@ -26,5 +28,5 @@ public class GuiceFactory {
 	public static MQMsgPool getMQMsgPool(){
 		return mqmsgpool;
 	}
-
+	
 }
