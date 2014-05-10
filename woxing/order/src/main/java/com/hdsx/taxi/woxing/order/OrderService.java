@@ -18,11 +18,9 @@ import com.hdsx.taxi.woxing.dao.OrderMapper;
 import com.hdsx.taxi.woxing.mqutil.MQService;
 import com.hdsx.taxi.woxing.mqutil.message.MQAbsMsg;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg0001;
-import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg0002;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg0003;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg0006;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg0007;
-import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1002;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1003;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1005;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1006;
@@ -30,6 +28,7 @@ import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1007;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1010;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1011;
 import com.hdsx.taxi.woxing.mqutil.msgpool.MQMsgPool;
+import com.hdsx.taxi.woxing.mqutil.msgpool.ReturnMsgUtil;
 import com.hdsx.taxi.woxing.xmpp.IXMPPService;
 import com.hdsx.taxi.woxing.xmpp.XMPPBean;
 
@@ -294,7 +293,9 @@ public class OrderService implements IOrderService {
 			e.printStackTrace();
 			return 1;
 		}
-		MQAbsMsg returnmsg = msgpool.getMsg(order.getCustomid(), 0x1003);
+		
+		ReturnMsgUtil getreturn=new ReturnMsgUtil();
+		MQAbsMsg returnmsg = getreturn.getMsg(order.getCustomid(), 0x1003);
 		if (returnmsg == null)
 			return 1;
 		if (!(returnmsg instanceof MQMsg1003))
@@ -433,7 +434,8 @@ public class OrderService implements IOrderService {
 			e.printStackTrace();
 			return 1;
 		}
-		MQAbsMsg returnmsg = msgpool.getMsg(order.getCustomid(), 0x0007);
+		ReturnMsgUtil getreturn=new ReturnMsgUtil();
+		MQAbsMsg returnmsg = getreturn.getMsg(order.getCustomid(), 0x0007);
 		if (returnmsg == null)
 			return 1;
 		if (!(returnmsg instanceof MQMsg0007))

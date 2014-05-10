@@ -25,6 +25,7 @@ import com.hdsx.taxi.woxing.mqutil.message.location.MQMsg3004;
 import com.hdsx.taxi.woxing.mqutil.message.location.MQMsg3005;
 import com.hdsx.taxi.woxing.mqutil.message.location.MQMsg3006;
 import com.hdsx.taxi.woxing.mqutil.msgpool.MQMsgPool;
+import com.hdsx.taxi.woxing.mqutil.msgpool.ReturnMsgUtil;
 import com.hdsx.taxi.woxing.order.OrderPool;
 
 /**
@@ -68,7 +69,8 @@ public class LocationService {
 		} catch (JMSException e) {
 			e.printStackTrace();
 		}
-		MQAbsMsg returnmsg = msgpool.getMsg(customid, 0x3001);
+		ReturnMsgUtil getreturn=new ReturnMsgUtil();
+		MQAbsMsg returnmsg = getreturn.getMsg(customid, 0x3001);
 		if (returnmsg == null)
 			return new ArrayList<>();
 		if (!(returnmsg instanceof MQMsg3001))
@@ -104,7 +106,8 @@ public class LocationService {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		MQAbsMsg returnmsg = msgpool.getMsg(customid, 0x3002);
+		ReturnMsgUtil getreturn=new ReturnMsgUtil();
+		MQAbsMsg returnmsg = getreturn.getMsg(customid, 0x3002);
 		if (returnmsg == null)
 			return new CarInfo();
 		if (!returnmsg.getClass().isInstance(MQMsg3002.class))
@@ -140,8 +143,8 @@ public class LocationService {
 		} catch (JMSException e) {
 			e.printStackTrace();
 		}
-
-		MQAbsMsg returnmsg = msgpool.getMsg(customid, 0x3004);
+		ReturnMsgUtil getreturn=new ReturnMsgUtil();
+		MQAbsMsg returnmsg = getreturn.getMsg(customid, 0x3004);
 		if (returnmsg == null)
 			return 0;
 		if (!returnmsg.getClass().isInstance(MQMsg3004.class))
@@ -180,7 +183,8 @@ public class LocationService {
 		} catch (JMSException e) {
 			e.printStackTrace();
 		}
-		MQAbsMsg returnmsg = msgpool.getMsg(customid, 0x3005);
+		ReturnMsgUtil getreturn=new ReturnMsgUtil();
+		MQAbsMsg returnmsg = getreturn.getMsg(customid, 0x3005);
 		if (returnmsg == null)
 			return null;
 		if (!returnmsg.getClass().isInstance(MQMsg3005.class))
@@ -217,7 +221,8 @@ public class LocationService {
 		} catch (JMSException e) {
 			e.printStackTrace();
 		}
-		MQAbsMsg returnmsg = msgpool.getMsg(customid, 0x3006);
+		ReturnMsgUtil getreturn=new ReturnMsgUtil();
+		MQAbsMsg returnmsg = getreturn.getMsg(customid, 0x3006);
 		if (returnmsg == null)
 			return null;
 		if (!returnmsg.getClass().isInstance(MQMsg3006.class))
@@ -256,7 +261,8 @@ public class LocationService {
 		} catch (JMSException e) {
 			e.printStackTrace();
 		}
-		MQAbsMsg returnmsg = msgpool.getMsg(customid, 0x3006);
+		ReturnMsgUtil getreturn=new ReturnMsgUtil();
+		MQAbsMsg returnmsg = getreturn.getMsg(customid, 0x3006);
 		if (returnmsg == null)
 			return null;
 		if (!returnmsg.getClass().isInstance(MQMsg3006.class))

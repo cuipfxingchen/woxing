@@ -6,7 +6,7 @@
 	<display-name>我行召车服务</display-name>
 	<context-param>
 		<param-name>resteasy.guice.modules</param-name>
-		<param-value>com.hdsx.taxi.woxing.web.module.RestEasyModule,com.hdsx.taxi.woxing.dao.module.DaoModule,com.hdsx.taxi.woxing.web.guice.GuiceModule</param-value>
+		<param-value>com.hdsx.taxi.woxing.web.module.RestEasyModule,com.hdsx.taxi.woxing.dao.module.DaoModule,com.hdsx.taxi.woxing.web.guice.GuiceModule,com.hdsx.taxi.woxing.mqutil.guice.MqGuiceModule</param-value>
 	</context-param>
 
 

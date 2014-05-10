@@ -41,6 +41,14 @@ public class MQMsgPool {
 		cache.put(e);
 		logger.debug("添加消息成功");
 	}
+	
+	public MQAbsMsg  get(String key)
+	{
+		Element e = this.cache.get(key);
+		if(e==null) return null;
+		
+		return (MQAbsMsg) e.getObjectValue();
+	}
 
 	/**
 	 * 定义消息的唯一id
@@ -65,7 +73,7 @@ public class MQMsgPool {
 	 * @param msgid
 	 * @return
 	 */
-	String toKey(String customid, int msgid) {
+	public static String toKey(String customid, int msgid) {
 		return new String(customid + "," + msgid);
 	}
 
@@ -76,7 +84,7 @@ public class MQMsgPool {
 	 * @param msgid
 	 * @return
 	 */
-	public MQAbsMsg getMsg(String customid, int msgid) {
+	public MQAbsMsg getMsg_depa(String customid, int msgid) {
 
 		int count = 0;
 		while (count < MAXCOUNT) {
@@ -107,5 +115,7 @@ public class MQMsgPool {
 	public boolean Remove(String customid, int msgid) {
 		return cache.remove(toKey(customid, msgid));
 	}
+
+
 
 }

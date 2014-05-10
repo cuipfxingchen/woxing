@@ -265,7 +265,7 @@ public class OrderRest {
 			@PathParam("customid") String customid) {
 		RestBean<Byte> r = new RestBean<>();
 		long orderid = Long.parseLong(orderId);
-		boolean result =false;
+		boolean result =true;
 		r.setResult(orderservice.passengerGeton(orderid,
 				Double.parseDouble(lon), Double.parseDouble(lat), customid,
 				citycode));
