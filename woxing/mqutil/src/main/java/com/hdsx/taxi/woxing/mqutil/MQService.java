@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Singleton;
 import com.hdsx.taxi.woxing.mqutil.message.MQMessage;
+import com.hdsx.taxi.woxing.mqutil.msgpool.ReturnMsgUtil;
 
 @Singleton
 public class MQService {
@@ -68,7 +69,8 @@ public class MQService {
 
 		Properties p = new Properties();
 		p.load(MQService.class.getResourceAsStream("/mq.properties"));
-
+		ReturnMsgUtil.MAXCOUNT=Integer.parseInt(p.getProperty("MAXCOUNT"));
+		ReturnMsgUtil.SLEEP_PER_TIME=Integer.parseInt(p.getProperty("SLEEP_PER_TIME"));
 		String url = p.getProperty("mq.url");
 		String user = p.getProperty("mq.user");
 		String password = p.getProperty("mq.password");
@@ -98,6 +100,8 @@ public class MQService {
 	public void init(MessageListener listener) throws JMSException {
 
 		ResourceBundle rb = ResourceBundle.getBundle("mq");
+		ReturnMsgUtil.MAXCOUNT=Integer.parseInt(rb.getString("MAXCOUNT"));
+		ReturnMsgUtil.SLEEP_PER_TIME=Integer.parseInt(rb.getString("SLEEP_PER_TIME"));
 		String url = rb.getString("mq.url");
 		String user = rb.getString("mq.user");
 		String password = rb.getString("mq.password");
