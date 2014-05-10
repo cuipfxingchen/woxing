@@ -265,7 +265,7 @@ public class OrderRest {
 			@PathParam("customid") String customid) {
 		RestBean<Byte> r = new RestBean<>();
 		long orderid = Long.parseLong(orderId);
-		boolean result =false;
+		boolean result =true;
 		r.setResult(orderservice.passengerGeton(orderid,
 				Double.parseDouble(lon), Double.parseDouble(lat), customid,
 				citycode));
@@ -283,7 +283,7 @@ public class OrderRest {
 	@GET
 	@Produces("application/json;charset=UTF-8")
 	public RestBean upPassegerSite(@PathParam("orderId") String orderId,
-			@PathParam("type") String lon, @PathParam("desc") String lat,
+			@PathParam("lon") String lon, @PathParam("lat") String lat,
 			@PathParam("citycode") String citycode,
 			@PathParam("customid") String customid) {
 		RestBean r = new RestBean<>();
@@ -291,6 +291,23 @@ public class OrderRest {
 		boolean result = orderservice.upPassengerSite(orderid,
 				Double.parseDouble(lon), Double.parseDouble(lat), customid,
 				citycode);
+		if (result) {
+			r.setState(RestBean.SUCESSCODE);
+		} else {
+			r.setState(RestBean.FAILCODE);
+		}
+		return r;
+	}
+	@Path("/10/{orderId}/{type}/{desc}/{customid}/{citycode}")
+	@GET
+	@Produces("application/json;charset=UTF-8")
+	public RestBean payMoney(@PathParam("orderId") String orderId,
+			@PathParam("type") String type, @PathParam("desc") String desc,
+			@PathParam("citycode") String citycode,
+			@PathParam("customid") String customid) {
+		RestBean r = new RestBean<>();
+		long orderid = Long.parseLong(orderId);
+		boolean result = orderservice.payMoney(orderid, Byte.parseByte(type), desc, customid, citycode);
 		if (result) {
 			r.setState(RestBean.SUCESSCODE);
 		} else {

@@ -23,7 +23,7 @@ public class MQMsgPool {
 
 	private static final byte MAXCOUNT = (byte) 200; // 从缓存中取消息的最大次数
 
-	private static final byte SLEEP_PER_TIME = 50; // 每次取消息的间隔
+	private static final byte SLEEP_PER_TIME = 100; // 每次取消息的间隔
 	Ehcache cache;
 
 	@Inject
@@ -40,6 +40,14 @@ public class MQMsgPool {
 		Element e = new Element(toKey(msg), msg);
 		cache.put(e);
 		logger.debug("添加消息成功");
+	}
+	
+	public MQAbsMsg  get(String key)
+	{
+		Element e = this.cache.get(key);
+		if(e==null) return null;
+		
+		return (MQAbsMsg) e.getObjectValue();
 	}
 
 	/**
@@ -65,7 +73,7 @@ public class MQMsgPool {
 	 * @param msgid
 	 * @return
 	 */
-	String toKey(String customid, int msgid) {
+	public static String toKey(String customid, int msgid) {
 		return new String(customid + "," + msgid);
 	}
 
@@ -76,7 +84,7 @@ public class MQMsgPool {
 	 * @param msgid
 	 * @return
 	 */
-	public MQAbsMsg getMsg(String customid, int msgid) {
+	public MQAbsMsg getMsg_depa(String customid, int msgid) {
 
 		int count = 0;
 		while (count < MAXCOUNT) {
@@ -107,5 +115,7 @@ public class MQMsgPool {
 	public boolean Remove(String customid, int msgid) {
 		return cache.remove(toKey(customid, msgid));
 	}
+
+
 
 }

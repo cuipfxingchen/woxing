@@ -156,4 +156,16 @@ public interface IOrderService {
 	 */
 	boolean backPassegerEstimate(long orderId, byte type, String desc,
 			String customid, String citycode);
+	
+	
+	/**
+	 * 付款成功结果提交
+	 * @param orderId
+	 * @param type
+	 * @param desc
+	 * @param customid
+	 * @param citycode
+	 * @return
+	 */
+	boolean payMoney(long orderId,byte type,String desc,String customid,String citycode);
 }

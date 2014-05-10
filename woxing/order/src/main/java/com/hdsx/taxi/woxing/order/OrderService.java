@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.jms.JMSException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,10 +18,9 @@ import com.hdsx.taxi.woxing.dao.OrderMapper;
 import com.hdsx.taxi.woxing.mqutil.MQService;
 import com.hdsx.taxi.woxing.mqutil.message.MQAbsMsg;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg0001;
-import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg0002;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg0003;
+import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg0006;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg0007;
-import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1002;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1003;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1005;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1006;
@@ -27,6 +28,7 @@ import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1007;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1010;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1011;
 import com.hdsx.taxi.woxing.mqutil.msgpool.MQMsgPool;
+import com.hdsx.taxi.woxing.mqutil.msgpool.ReturnMsgUtil;
 import com.hdsx.taxi.woxing.xmpp.IXMPPService;
 import com.hdsx.taxi.woxing.xmpp.XMPPBean;
 
@@ -142,30 +144,39 @@ public class OrderService implements IOrderService {
 		} else {
 			o = orderMapper.getOrderById(orderid);
 		}
-		o.setState(Order.STATE_CANCEL_BY_DRIVE);
-		this.orderMapper.updateOrder(o);
+		if(o==null){
+			o.setState(Order.STATE_CANCEL_BY_DRIVE);
+			this.orderMapper.updateOrder(o);
 
-		XMPPBean<HashMap> bean = new XMPPBean<>();
-		bean.setMsgid(0x0003);
-		HashMap map = new HashMap<>();
-		map.put("orderid", orderid);
-		map.put("msg", reason);
-		bean.setResult(map);
-		xmppservice.sendMessage(o.getCustomid(), bean);
-
-		return true;
+			XMPPBean<HashMap> bean = new XMPPBean<>();
+			bean.setMsgid(0x0003);
+			HashMap map = new HashMap<>();
+			map.put("orderid", orderid);
+			map.put("msg", reason);
+			bean.setResult(map);
+			xmppservice.sendMessage(o.getCustomid(), bean);
+			return true;
+		}else{
+			return false;
+		}
 	}
 
 	/**
 	 * 通过订单查询车辆信息
+	 * 不用
 	 * 
 	 * @param orderid
 	 * @return
 	 */
 	@Override
 	public CarInfo queryCarInfoByOrder(long orderid) {
-		Order order = orderMapper.getOrderById(orderid);
-		// TODO.......通过订单查询关联车辆信息
+//		Order o = this.orderpool.getOrder(orderid);
+//		if (o != null) {
+//			this.orderpool.remove(o);
+//		} else {
+//			o = orderMapper.getOrderById(orderid);
+//		}
+//		// TODO.......通过订单查询关联车辆信息
 		return null;
 	}
 
@@ -276,8 +287,15 @@ public class OrderService implements IOrderService {
 		mqmsg.setCausecode(reason);
 		mqmsg.setPassengerName(order.getNickName());
 		mqmsg.setPassengerPhone(order.getUseriphone());
-		MQService.getInstance().sendMsg(order.getCitycode(), mqmsg);
-		MQAbsMsg returnmsg = msgpool.getMsg(order.getCustomid(), 0x1003);
+		try {
+			MQService.getInstance().sendMsg(order.getCitycode(), mqmsg);
+		} catch (JMSException e) {
+			e.printStackTrace();
+			return 1;
+		}
+		
+		ReturnMsgUtil getreturn=new ReturnMsgUtil();
+		MQAbsMsg returnmsg = getreturn.getMsg(order.getCustomid(), 0x1003);
 		if (returnmsg == null)
 			return 1;
 		if (!(returnmsg instanceof MQMsg1003))
@@ -321,16 +339,31 @@ public class OrderService implements IOrderService {
 
 	@Override
 	public byte getOrderState(long orderId, String customid, String citycode) {
-		MQMsg0002 mqmsg = new MQMsg0002(customid);
-		mqmsg.setOrderId(orderId);
-		MQService.getInstance().sendMsg(citycode, mqmsg);
-		MQAbsMsg returnmsg = msgpool.getMsg(customid, 0x1002);
-		if (returnmsg == null)
-			return 0;
-		if (!(returnmsg instanceof MQMsg1002))
-			return 0;
-		MQMsg1002 rm = (MQMsg1002) returnmsg;
-		return rm.getState();
+//		MQMsg0002 mqmsg = new MQMsg0002(customid);
+//		mqmsg.setOrderId(orderId);
+//		try {
+//			MQService.getInstance().sendMsg(citycode, mqmsg);
+//		} catch (JMSException e) {
+//			e.printStackTrace();
+//			//查询订单相关
+//		}
+//		MQAbsMsg returnmsg = msgpool.getMsg(customid, 0x1002);
+//		if (returnmsg == null)
+//			return 0;
+//		if (!(returnmsg instanceof MQMsg1002))
+//			return 0;
+//		MQMsg1002 rm = (MQMsg1002) returnmsg;
+//		return rm.getState();
+		Order order = orderpool.getOrder(orderId);
+		if (order == null) {
+			order = orderMapper.getOrderById(orderId);
+		}
+		if(order==null){
+			return -1;
+		}else{
+			return order.getState();
+		}
+		
 	}
 
 	@Override
@@ -394,11 +427,17 @@ public class OrderService implements IOrderService {
 		msg.setTime(df.format(new Date()));
 		msg.setLon(lon);
 		msg.setLat(lat);
-		MQService.getInstance().sendMsg(order.getCitycode(), msg);
-		MQAbsMsg returnmsg = msgpool.getMsg(order.getCustomid(), 0x0007);
+		try {
+			MQService.getInstance().sendMsg(order.getCitycode(), msg);
+		} catch (JMSException e) {
+			e.printStackTrace();
+			return 1;
+		}
+		ReturnMsgUtil getreturn=new ReturnMsgUtil();
+		MQAbsMsg returnmsg = getreturn.getMsg(order.getCustomid(), 0x0007);
 		if (returnmsg == null)
 			return 1;
-		if (!(returnmsg instanceof MQMsg1003))
+		if (!(returnmsg instanceof MQMsg0007))
 			return 1;
 		MQMsg0007 rm = (MQMsg0007) returnmsg;
 		if (rm.getCancle() == 0) {
@@ -417,7 +456,13 @@ public class OrderService implements IOrderService {
 		msg.setOrderid(orderId);
 		msg.setLon(lon);
 		msg.setLat(lat);
-		MQService.getInstance().sendMsg(citycode, msg);
+		try {
+			MQService.getInstance().sendMsg(citycode, msg);
+		} catch (JMSException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
 		return true;
 	}
 
@@ -429,8 +474,30 @@ public class OrderService implements IOrderService {
 		msg.setOrderid(orderId);
 		msg.setType(type);
 		msg.setDesc(desc);
-		MQService.getInstance().sendMsg(citycode, msg);
-		return false;
+		try {
+			MQService.getInstance().sendMsg(citycode, msg);
+		} catch (JMSException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public boolean payMoney(long orderId, byte type, String desc,
+			String customid, String citycode) {
+		MQMsg0006 msg = new MQMsg0006();
+		msg.getHead().setCustomId(customid);
+		msg.setOrderId(orderId);
+		msg.setCancle(type);
+		msg.setExplain(desc);
+		try {
+			MQService.getInstance().sendMsg(citycode, msg);
+		} catch (JMSException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
 	}
 
 }
