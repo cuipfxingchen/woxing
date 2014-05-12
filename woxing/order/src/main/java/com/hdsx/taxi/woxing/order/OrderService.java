@@ -78,11 +78,11 @@ public class OrderService implements IOrderService {
 			msg.setGetOffPlaceName(order.getGetOffPlaceName());
 			msg.setGetOffLat(order.getGetOffLat());
 			msg.setGetOffLon(order.getGetOffLon());
-			msg.setNotes(order.getNotes());
-			msg.setNickName(order.getNickName());
+			msg.setNotes(order.getNotes()==null?"":order.getNotes());
+			msg.setNickName(order.getNickName()==null?"":order.getNickName());
 			msg.setSex(order.getSex());
 			msg.setUserphone(order.getUseriphone());
-			msg.setFirstChoiceCompany(order.getFirstChoiceCompany());
+			msg.setFirstChoiceCompany(order.getFirstChoiceCompany()==null?"":order.getFirstChoiceCompany());
 			msg.setContractTaxi(order.getContractTaxi());
 			msg.setVipMark(order.getVipMark() + "");
 			orderpool.put(order);

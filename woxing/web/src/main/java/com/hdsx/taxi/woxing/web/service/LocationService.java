@@ -147,7 +147,7 @@ public class LocationService {
 		MQAbsMsg returnmsg = getreturn.getMsg(customid, 0x3004);
 		if (returnmsg == null)
 			return 0;
-		if (!returnmsg.getClass().isInstance(MQMsg3004.class))
+		if (!(returnmsg instanceof MQMsg3004))
 			return 0;
 		MQMsg3004 rmsg = (MQMsg3004)returnmsg;
 

@@ -19,7 +19,7 @@ import com.hdsx.taxi.woxing.bean.Estimate;
 public interface AddressMapper {
 	
 	/* 查询常用地址 */
-	@Select("SELECT * FROM db_address WHERE 1=1 AND citycode=#{citycode} AND customid=#{customid} ")
+	@Select("SELECT * FROM db_address WHERE 1=1 AND citycode=#{param1} AND customid=#{param2} ")
 	public List<Address> getAddressList(String citycode,String customid);
 
 	/* 新建常用地址 */
@@ -31,6 +31,6 @@ public interface AddressMapper {
 	public int updateAddress(Address address);
 
 	/* 删除常用地址*/
-	@Delete("DELETE FROM db_address WHERE id = #{id}")
+	@Delete("DELETE FROM db_address WHERE id = #{param1}")
 	public int deleteAddress(String id);
 }
