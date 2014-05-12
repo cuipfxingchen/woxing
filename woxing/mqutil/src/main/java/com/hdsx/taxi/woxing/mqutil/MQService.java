@@ -69,8 +69,8 @@ public class MQService {
 
 		Properties p = new Properties();
 		p.load(MQService.class.getResourceAsStream("/mq.properties"));
-		ReturnMsgUtil.MAXCOUNT=Integer.parseInt(p.getProperty("MAXCOUNT"));
-		ReturnMsgUtil.SLEEP_PER_TIME=Integer.parseInt(p.getProperty("SLEEP_PER_TIME"));
+//		ReturnMsgUtil.MAXCOUNT=Integer.parseInt(p.getProperty("MAXCOUNT"));
+//		ReturnMsgUtil.SLEEP_PER_TIME=Integer.parseInt(p.getProperty("SLEEP_PER_TIME"));
 		String url = p.getProperty("mq.url");
 		String user = p.getProperty("mq.user");
 		String password = p.getProperty("mq.password");
