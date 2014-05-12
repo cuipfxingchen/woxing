@@ -18,7 +18,13 @@ public class Order implements Serializable {
 	/**
 	 * 订单已发送
 	 */
-	public static byte STATE_SENDED = 0;
+	public static byte STATE_SENDED = -1;
+	/**
+	 * 更新完订单号订单开始
+	 */
+	public static byte STATE_START=0;
+	
+	
 	/**
 	 * 已经找到车
 	 */

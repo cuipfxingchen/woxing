@@ -102,6 +102,7 @@ public class OrderPool {
 			CutomOrderMapper mapper = new CutomOrderMapper();
 			mapper.setCustomid(order.getCustomid());
 			if (order.getReservation()==1) {
+				mapper.getReorderlist().remove(order.getOrderId());
 				mapper.getReorderlist().add(order.getOrderId());
 			} else {
 				mapper.setCurOrderid(order.getOrderId());
@@ -112,12 +113,18 @@ public class OrderPool {
 			CutomOrderMapper mapper = (CutomOrderMapper) customelement
 					.getObjectValue();
 			if (order.getReservation()==1) {
+				mapper.getReorderlist().remove(order.getOrderId());
 				mapper.getReorderlist().add(order.getOrderId());
 			} else {
 				mapper.setCurOrderid(order.getOrderId());
 			}
 		}
 		this.custompool.put(customelement);
+		this.pool.put(e);
+	}
+	
+	public void putPool (Order order) {
+		Element e = new Element(order.getOrderId(), order);
 		this.pool.put(e);
 	}
 

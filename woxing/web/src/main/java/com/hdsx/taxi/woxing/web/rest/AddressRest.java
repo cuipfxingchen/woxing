@@ -45,33 +45,26 @@ public class AddressRest {
 	@Produces("application/json;charset=UTF-8")
 	public RestBean addAddressRest(@Form Address address) {
 		RestBean restBean = new RestBean<>();
-		if(addressService.createAddress(address)){
-			restBean.setMsg("创建成功");
+		Address ad=addressService.getAddressOne(address.getCitycode(),address.getCustomid(), address.getOrder());
+		if(ad==null){
+			if(addressService.createAddress(address)){
+				restBean.setMsg("创建成功");
+			}else{
+				restBean.setState(201);
+				restBean.setMsg("创建失败");
+			}
 		}else{
-			restBean.setState(201);
-			restBean.setMsg("创建失败");
+			if(addressService.updateAddress(address)){
+				restBean.setMsg("更新成功");
+			}else{
+				restBean.setState(201);
+				restBean.setMsg("更新失败");
+			}
 		}
+		
 		return restBean;
 	}
 
-	/**
-	 * 更新常用地址
-	 * @param address
-	 * @return
-	 */
-	@POST
-	@Path("/2")
-	@Produces("application/json;charset=UTF-8")
-	public RestBean updateAddAddressRest(@Form Address address) {
-		RestBean restBean = new RestBean<>();
-		if(addressService.updateAddress(address)){
-			restBean.setMsg("更新成功");
-		}else{
-			restBean.setState(201);
-			restBean.setMsg("更新失败");
-		}
-		return restBean;
-	}
 
 	/**
 	 * 查询常用地址

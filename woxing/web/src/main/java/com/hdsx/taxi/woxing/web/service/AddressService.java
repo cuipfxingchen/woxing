@@ -31,6 +31,18 @@ public class AddressService {
 	}
 	
 	/**
+	 * 根据用户名和序号查找地址
+	 * @param citycode
+	 * @param customid
+	 * @param order
+	 * @return
+	 */
+	public Address getAddressOne(String citycode,String customid,int order){
+		return addressMapper.getAddressOne(citycode, customid, order);
+	}
+	
+	
+	/**
 	 * 更新常用地址
 	 * @param address
 	 * @return
