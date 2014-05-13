@@ -1,6 +1,7 @@
 package com.hdsx.taxi.woxing.web.service;
 
 import java.util.List;
+import java.util.UUID;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -23,6 +24,8 @@ public class AddressService {
 	 * @return
 	 */
 	public boolean createAddress(Address address){
+		String s = UUID.randomUUID().toString(); 
+		address.setId(s.substring(0,8)+s.substring(9,13)+s.substring(14,18)+s.substring(19,23)+s.substring(24));
 		if(addressMapper.createAddress(address)>0){
 			return true;
 		}else{
