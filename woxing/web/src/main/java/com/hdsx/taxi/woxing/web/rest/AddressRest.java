@@ -45,7 +45,7 @@ public class AddressRest {
 	@Produces("application/json;charset=UTF-8")
 	public RestBean addAddressRest(@Form Address address) {
 		RestBean restBean = new RestBean<>();
-		Address ad=addressService.getAddressOne(address.getCitycode(),address.getCustomid(), address.getOrder());
+		Address ad=addressService.getAddressOne(address.getCitycode(),address.getCustomid(), address.getSeqe());
 		if(ad==null){
 			if(addressService.createAddress(address)){
 				restBean.setMsg("创建成功");

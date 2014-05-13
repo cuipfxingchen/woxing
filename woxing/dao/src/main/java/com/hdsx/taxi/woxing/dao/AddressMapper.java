@@ -23,15 +23,15 @@ public interface AddressMapper {
 	public List<Address> getAddressList(String citycode,String customid);
 
 	/* 新建常用地址 */
-	@Insert("INSERT INTO db_address(id,title,address,customid,citycode,lon,lat,order) VALUES (#{id},#{title},#{address},#{customid},#{citycode},#{lon},#{lat},#{order})")
+	@Insert("INSERT INTO db_address(id,title,address,customid,citycode,lon,lat,seqe) VALUES (#{id},#{title},#{address},#{customid},#{citycode},#{lon},#{lat},#{seqe})")
 	public int createAddress(Address address);
 
 	/* 查询单个地址 */
-	@Select("SELECT * FROM db_address WHERE 1=1 AND citycode=#{param1} AND customid=#{param2} AND order=#{param3} ")
-	public Address getAddressOne(String citycode,String customid,int order);
+	@Select("SELECT * FROM db_address WHERE 1=1 AND citycode=#{param1} AND customid=#{param2} AND seqe=#{param3} ")
+	public Address getAddressOne(String citycode,String customid,int seqe);
 	
 	/*更新常用地址*/
-	@Update("UPDATE db_address SET title = #{title},address = #{address},customid =#{customid},citycode =#{citycode},lon = #{lon},lat =#{lat},order =#{order} WHERE id = #{id}")
+	@Update("UPDATE db_address SET title = #{title},address = #{address},customid =#{customid},citycode =#{citycode},lon = #{lon},lat =#{lat},seqe =#{seqe} WHERE id = #{id}")
 	public int updateAddress(Address address);
 
 	/* 删除常用地址*/
