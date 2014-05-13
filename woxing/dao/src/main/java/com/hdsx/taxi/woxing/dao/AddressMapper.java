@@ -27,7 +27,7 @@ public interface AddressMapper {
 	public int createAddress(Address address);
 
 	/* 查询单个地址 */
-	@Select("SELECT * FROM db_address WHERE 1=1 AND citycode=#{param1} AND customid=#{param2}, AND order=#{param3} ")
+	@Select("SELECT * FROM db_address WHERE 1=1 AND citycode=#{param1} AND customid=#{param2} AND order=#{param3} ")
 	public Address getAddressOne(String citycode,String customid,int order);
 	
 	/*更新常用地址*/
