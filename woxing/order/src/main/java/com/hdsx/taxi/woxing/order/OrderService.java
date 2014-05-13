@@ -70,7 +70,8 @@ public class OrderService implements IOrderService {
 			order.setOrderId(new Date().getTime());
 			MQMsg0001 msg = new MQMsg0001(order.getCustomid());
 			msg.setOrderId(order.getOrderId());
-			msg.setRevesation(order.getReservation() == 1 ? true : false);
+//			msg.setRevesation(order.getReservation() == 1 ? true : false);
+			msg.setTakeTaxiType(order.getReservation());
 			msg.setGetOnTime(order.getGetOnTime());
 			msg.setGetOnPlaceName(order.getGetOnPlaceName());
 			msg.setGetOnLat(order.getGetOnLat());
