@@ -54,6 +54,7 @@ public class AddressRest {
 				restBean.setMsg("创建失败");
 			}
 		}else{
+			address.setId(ad.getId());
 			if(addressService.updateAddress(address)){
 				restBean.setMsg("更新成功");
 			}else{
