@@ -14,7 +14,7 @@ public interface EstimateMapper {
 	public Estimate getEstimateById(long orderId);
 
 	/* 新建评论 */
-	@Insert("INSERT INTO db_estimate(orderId,customid,citycode,score,comment,estimateTime) VALUES (#{orderId},#{customid},#{score},#{comment},#{estimateTime})")
+	@Insert("INSERT INTO db_estimate(orderId,customid,citycode,score,comment,estimateTime) VALUES (#{orderId},#{customid},citycode=#{citycode},#{score},#{comment},#{estimateTime})")
 	public int createEstimate(Estimate estimate);
 
 	/* 修改评论 */
