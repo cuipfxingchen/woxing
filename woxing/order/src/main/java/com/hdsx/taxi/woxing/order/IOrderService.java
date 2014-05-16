@@ -10,6 +10,7 @@ import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1006;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1007;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1009;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1010;
+import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1012;
 
 
 /**
@@ -176,4 +177,10 @@ public interface IOrderService {
 	 * @return
 	 */
 	String getMqCustomid(long orderId);
+	
+	/**
+	 * 向乘客推送司机位置信息
+	 * @param msg
+	 */
+	void driverSitePush(MQMsg1012 msg);
 }

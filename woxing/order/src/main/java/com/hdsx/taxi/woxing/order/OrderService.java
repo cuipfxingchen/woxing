@@ -27,6 +27,7 @@ import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1006;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1007;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1010;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1011;
+import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1012;
 import com.hdsx.taxi.woxing.mqutil.msgpool.MQMsgPool;
 import com.hdsx.taxi.woxing.mqutil.msgpool.ReturnMsgUtil;
 import com.hdsx.taxi.woxing.xmpp.IXMPPService;
@@ -530,6 +531,23 @@ public class OrderService implements IOrderService {
 		}else{
 			return order.getCustomid();
 		}
+	}
+
+	@Override
+	public void driverSitePush(MQMsg1012 msg) {
+		
+		long orderId=msg.getOrderid();
+		XMPPBean<HashMap> bean = new XMPPBean<>();
+		bean.setMsgid(0x0007);
+		HashMap map = new HashMap<>();
+		map.put("orderid", orderId);
+		map.put("lon", msg.getLon());
+		map.put("lat", msg.getLat());
+		map.put("carNumber", msg.getCarNumber());
+		bean.setResult(map);
+		String customid=getMqCustomid(orderId);
+		xmppservice.sendMessage(customid, bean);
+		
 	}
 
 	
