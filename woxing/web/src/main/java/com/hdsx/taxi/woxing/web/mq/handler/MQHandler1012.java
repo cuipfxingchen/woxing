@@ -26,7 +26,7 @@ public class MQHandler1012 implements IMQMsgHanlder {
 
 		if(mqmsg instanceof MQMsg1012){
 			MQMsg1012 msg = (MQMsg1012) mqmsg;
-			GuiceFactory.getLocationService().driverSitePush(msg);
+			GuiceFactory.getInstance().driverSitePush(msg);
 		}
 		
 
