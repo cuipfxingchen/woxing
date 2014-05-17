@@ -233,6 +233,7 @@ public class OrderService implements IOrderService {
 			order.setState(Order.STATE_HASCAR);
 			order.getResult().setDriver_name(c.getDriverName());
 			order.getResult().setDriver_tel(c.getDriverphone());
+			order.getResult().setCarNum(c.getLisencenumber());
 			orderpool.put(order);
 			orderMapper.updateOrder(order);
 
@@ -392,6 +393,8 @@ public class OrderService implements IOrderService {
 		if (order == null) {
 			order = orderMapper.getOrderById(msg.getOrderid());
 		}
+		order.setFee(msg.getFee());
+		order.setFee2(msg.getFee2());
 		order.setState(Order.STATE_FUKUAN);
 		orderpool.putPool(order);
 		orderMapper.updateOrder(order);
@@ -506,6 +509,14 @@ public class OrderService implements IOrderService {
 	@Override
 	public boolean payMoney(long orderId, byte type, String desc,
 			String customid, String citycode) {
+		Order order = this.orderpool.getOrder(orderId);
+		if (order == null) {
+			order = orderMapper.getOrderById(orderId);
+		} else {
+			this.orderpool.remove(order);
+		}
+		order.setState(Order.STATE_OVER);
+		orderMapper.updateOrder(order);
 		MQMsg0006 msg = new MQMsg0006();
 		msg.getHead().setCustomId(customid);
 		msg.setOrderId(orderId);
