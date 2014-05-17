@@ -309,7 +309,7 @@ public class OrderService implements IOrderService {
 		mqmsg.setOrderId(order.getOrderId());
 		// mqmsg.setCancel("不爽");
 		mqmsg.setCausecode(reason);
-		mqmsg.setCarNum(order.getResult().getCarNum());
+		mqmsg.setCarNum(order.getResult().getCarNum()==null?"":order.getResult().getCarNum());
 		mqmsg.setPassengerName(order.getNickName());
 		mqmsg.setPassengerPhone(order.getUseriphone());
 		try {
