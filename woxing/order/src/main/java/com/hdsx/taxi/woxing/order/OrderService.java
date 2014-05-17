@@ -68,7 +68,6 @@ public class OrderService implements IOrderService {
 		}
 
 		try {
-			order.setOrderId(new Date().getTime());
 			MQMsg0001 msg = new MQMsg0001(order.getCustomid());
 			msg.setOrderId(order.getOrderId());
 //			msg.setRevesation(order.getReservation() == 1 ? true : false);
@@ -301,6 +300,7 @@ public class OrderService implements IOrderService {
 		mqmsg.setOrderId(order.getOrderId());
 		// mqmsg.setCancel("不爽");
 		mqmsg.setCausecode(reason);
+		mqmsg.setCarNum(order.getResult().getCarNum());
 		mqmsg.setPassengerName(order.getNickName());
 		mqmsg.setPassengerPhone(order.getUseriphone());
 		try {

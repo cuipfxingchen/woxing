@@ -3,6 +3,7 @@ package com.hdsx.taxi.woxing.web.rest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -44,7 +45,7 @@ public class OrderRest {
 	@POST
 	@Produces("application/json;charset=UTF-8")
 	public RestBean submit(@Form Order order) {
-		RestBean<Integer> r = new RestBean<>();
+		RestBean<Long> r = new RestBean<>();
 		String success = "成功";
 		String fail = "失败";
 		boolean operResult = false;
@@ -54,6 +55,9 @@ public class OrderRest {
 			logger.debug(
 					"submit(Order) - {}", "order ----->" + order.toString()); //$NON-NLS-1$ //$NON-NLS-2$
 		}
+		//产生订单Id
+		long orderId=new Date().getTime();
+		order.setOrderId(orderId);
 		int rtn = orderservice.submit(order);
 		if (1 == rtn)
 			operResult = true;
@@ -61,6 +65,7 @@ public class OrderRest {
 		// 业务逻辑结束
 		if (operResult) {
 			r.setState(RestBean.SUCESSCODE);
+			r.setResult(orderId);
 			r.setMsg(success);
 		} else {
 			r.setState(RestBean.FAILCODE);

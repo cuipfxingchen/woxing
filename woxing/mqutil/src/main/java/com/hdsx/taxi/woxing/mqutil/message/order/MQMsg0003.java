@@ -29,6 +29,7 @@ public class MQMsg0003 extends MQAbsMsg {
 	byte passengerSex;// 乘客性别 byte 1：男，2：女
 	String passengerPhone="";// 乘客电话 String
 	byte causecode; // 取消原因
+	String carNum="";
 
 	public MQMsg0003() {
 		super();
@@ -50,6 +51,14 @@ public class MQMsg0003 extends MQAbsMsg {
 		return cancel;
 	}
 
+	public String getCarNum() {
+		return carNum;
+	}
+
+	public void setCarNum(String carNum) {
+		this.carNum = carNum;
+	}
+
 	public void setCancel(String cancel) {
 		this.cancel = cancel;
 	}
@@ -67,6 +76,7 @@ public class MQMsg0003 extends MQAbsMsg {
 		this.passengerPhone = msg.readUTF();
 		this.passengerSex = msg.readByte();
 		this.causecode = msg.readByte();
+		this.carNum = msg.readUTF();
 	}
 
 	@Override
@@ -77,6 +87,7 @@ public class MQMsg0003 extends MQAbsMsg {
 		msg.writeUTF(this.passengerPhone);
 		msg.writeByte(passengerSex);
 		msg.writeByte(this.causecode);
+		msg.writeUTF(this.carNum);
 		return msg;
 	}
 
