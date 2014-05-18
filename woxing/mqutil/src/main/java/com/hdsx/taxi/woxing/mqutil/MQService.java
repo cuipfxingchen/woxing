@@ -59,6 +59,8 @@ public class MQService {
 	PooledConnection pooledconn;
 	private PooledConnectionFactory pooledConnectionFactory;
 
+	private String citycode;
+
 	// ActiveMQConnection conn;
 
 	/**
@@ -78,23 +80,24 @@ public class MQService {
 		String url = p.getProperty("mq.url");
 		String user = p.getProperty("mq.user");
 		String password = p.getProperty("mq.password");
-		String citycode = p.getProperty("mq.citycode");
+		citycode = p.getProperty("mq.citycode");
 		boolean useCompress = Boolean.parseBoolean(p
 				.getProperty("mq.usecompress"));
 		logger.info("开始连接ActiveMQ");
 		ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(
 				user, password, url);
 		pooledconn = (PooledConnection) connectionFactory.createConnection();
-		pooledconn.start();
+	
 		// connection=pooledconn.getConnection().
 		// connection.setUseCompression(useCompress);
 		session = pooledconn.createSession(false, Session.AUTO_ACKNOWLEDGE);
 		Queue inQueue = session.createQueue(citycode + ".tocity");// 接收队列
-		Queue outQueue = session.createQueue(citycode + ".fromcity");// 发送队列
+//		Queue outQueue = session.createQueue(citycode + ".fromcity");// 发送队列
 		this.consumer = session.createConsumer(inQueue);
 		this.consumer.setMessageListener(listener);
-		this.pro = session.createProducer(outQueue);
+//		this.pro = session.createProducer(outQueue);
 		// connection.start();
+		pooledconn.start();
 	}
 
 	/**
@@ -179,6 +182,33 @@ public class MQService {
 		t.start();
 	}
 
+	public void sendMsg(final MQMessage msg) {
+		Thread t = new Thread() {
+
+			@Override
+			public void run() {
+				try {
+					session = pooledconn.createSession(false,
+							Session.AUTO_ACKNOWLEDGE);
+					
+					Queue outQueue = session.createQueue(citycode + ".tocity");// 发送队列
+					MessageProducer p = session.createProducer(outQueue);
+					BytesMessage bmsg = session.createBytesMessage();
+					bmsg = msg.encode(bmsg);
+					p.send(bmsg);
+
+				} catch (JMSException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+
+		};
+
+		t.start();
+	}
+
 	@Deprecated
 	public void init(String user, String password, String url, String inqueue,
 			String outqueue, MessageListener listener) throws JMSException {
@@ -228,8 +258,9 @@ public class MQService {
 	 * 
 	 * @throws JMSException
 	 */
-	public void sendMsg(MQMessage msg) {
+	public void sendMsg2(MQMessage msg) {
 		try {
+
 			BytesMessage bmsg = session.createBytesMessage();
 			if (logger.isDebugEnabled()) {
 				logger.debug("sendMsg(MQMessage) - " + msg.toString()); //$NON-NLS-1$
