@@ -73,7 +73,7 @@ public class OrderService implements IOrderService {
 		try {
 			MQMsg0001 msg = new MQMsg0001(order.getCustomid());
 			msg.setOrderId(order.getOrderId());
-//			msg.setRevesation(order.getReservation() == 1 ? true : false);
+			// msg.setRevesation(order.getReservation() == 1 ? true : false);
 			msg.setTakeTaxiType(order.getReservation());
 			msg.setGetOnTime(order.getGetOnTime());
 			msg.setGetOnPlaceName(order.getGetOnPlaceName());
@@ -82,11 +82,13 @@ public class OrderService implements IOrderService {
 			msg.setGetOffPlaceName(order.getGetOffPlaceName());
 			msg.setGetOffLat(order.getGetOffLat());
 			msg.setGetOffLon(order.getGetOffLon());
-			msg.setNotes(order.getNotes()==null?"":order.getNotes());
-			msg.setNickName(order.getNickName()==null?"":order.getNickName());
+			msg.setNotes(order.getNotes() == null ? "" : order.getNotes());
+			msg.setNickName(order.getNickName() == null ? "" : order
+					.getNickName());
 			msg.setSex(order.getSex());
 			msg.setUserphone(order.getUseriphone());
-			msg.setFirstChoiceCompany(order.getFirstChoiceCompany()==null?"":order.getFirstChoiceCompany());
+			msg.setFirstChoiceCompany(order.getFirstChoiceCompany() == null ? ""
+					: order.getFirstChoiceCompany());
 			msg.setContractTaxi(order.getContractTaxi());
 			msg.setVipMark(order.getVipMark() + "");
 			order.setState(Order.STATE_SENDED);
@@ -149,7 +151,7 @@ public class OrderService implements IOrderService {
 		} else {
 			o = orderMapper.getOrderById(orderid);
 		}
-		if(o!=null){
+		if (o != null) {
 			o.setState(Order.STATE_CANCEL_BY_DRIVE);
 			this.orderMapper.updateOrder(o);
 
@@ -161,27 +163,26 @@ public class OrderService implements IOrderService {
 			bean.setResult(map);
 			xmppservice.sendMessage(o.getCustomid(), bean);
 			return true;
-		}else{
+		} else {
 			return false;
 		}
 	}
 
 	/**
-	 * 通过订单查询车辆信息
-	 * 不用
+	 * 通过订单查询车辆信息 不用
 	 * 
 	 * @param orderid
 	 * @return
 	 */
 	@Override
 	public CarInfo queryCarInfoByOrder(long orderid) {
-//		Order o = this.orderpool.getOrder(orderid);
-//		if (o != null) {
-//			this.orderpool.remove(o);
-//		} else {
-//			o = orderMapper.getOrderById(orderid);
-//		}
-//		// TODO.......通过订单查询关联车辆信息
+		// Order o = this.orderpool.getOrder(orderid);
+		// if (o != null) {
+		// this.orderpool.remove(o);
+		// } else {
+		// o = orderMapper.getOrderById(orderid);
+		// }
+		// // TODO.......通过订单查询关联车辆信息
 		return null;
 	}
 
@@ -234,8 +235,8 @@ public class OrderService implements IOrderService {
 	public void doSucess(long l, CarInfo c) {
 
 		Order order = this.orderpool.getOrder(l);
-		if(order==null){
-			order=orderMapper.getOrderById(l);
+		if (order == null) {
+			order = orderMapper.getOrderById(l);
 		}
 		if (order != null) {
 			order.setState(Order.STATE_HASCAR);
@@ -257,7 +258,7 @@ public class OrderService implements IOrderService {
 			bean.setMsgid(0x0001);
 			bean.setResult(result);
 			this.xmppservice.sendMessage(order.getCustomid(), bean);
-		}else{
+		} else {
 			logger.error("doSucess()订单池和数据库都没有订单【" + l + "】");
 		}
 
@@ -269,8 +270,8 @@ public class OrderService implements IOrderService {
 	@Override
 	public void doFail(long l, String describ, byte code) {
 		Order order = this.orderpool.getOrder(l);
-		if(order==null){
-			order=orderMapper.getOrderById(l);
+		if (order == null) {
+			order = orderMapper.getOrderById(l);
 		}
 		if (order != null) {
 			order.setState(code);
@@ -309,17 +310,14 @@ public class OrderService implements IOrderService {
 		mqmsg.setOrderId(order.getOrderId());
 		// mqmsg.setCancel("不爽");
 		mqmsg.setCausecode(reason);
-		mqmsg.setCarNum(order.getResult().getCarNum()==null?"":order.getResult().getCarNum());
+		mqmsg.setCarNum(order.getResult().getCarNum() == null ? "" : order
+				.getResult().getCarNum());
 		mqmsg.setPassengerName(order.getNickName());
 		mqmsg.setPassengerPhone(order.getUseriphone());
-		try {
-			MQService.getInstance().sendMsg(order.getCitycode(), mqmsg);
-		} catch (JMSException e) {
-			e.printStackTrace();
-			return 1;
-		}
-		
-		ReturnMsgUtil getreturn=new ReturnMsgUtil();
+
+		MQService.getInstance().sendMsg(order.getCitycode(), mqmsg);
+
+		ReturnMsgUtil getreturn = new ReturnMsgUtil();
 		MQAbsMsg returnmsg = getreturn.getMsg(order.getCustomid(), 0x1003);
 		if (returnmsg == null)
 			return 1;
@@ -345,7 +343,7 @@ public class OrderService implements IOrderService {
 		if (order == null) {
 			order = orderMapper.getOrderById(orderid);
 		}
-		if(order!=null){
+		if (order != null) {
 			order.getResult().setCarNum(msg.getCarLicensenumber());
 			order.setState(Order.STATE_OPERATING);// 预约订单开始执行状态
 			this.orderpool.onProduce(order);
@@ -360,7 +358,7 @@ public class OrderService implements IOrderService {
 			map.put("lon", msg.getLon());
 			bean.setResult(map);
 			xmppservice.sendMessage(order.getCustomid(), bean);
-		}else{
+		} else {
 			logger.error("startReversation()订单池和数据库都没有订单【" + orderid + "】");
 		}
 
@@ -368,31 +366,31 @@ public class OrderService implements IOrderService {
 
 	@Override
 	public byte getOrderState(long orderId, String customid, String citycode) {
-//		MQMsg0002 mqmsg = new MQMsg0002(customid);
-//		mqmsg.setOrderId(orderId);
-//		try {
-//			MQService.getInstance().sendMsg(citycode, mqmsg);
-//		} catch (JMSException e) {
-//			e.printStackTrace();
-//			//查询订单相关
-//		}
-//		MQAbsMsg returnmsg = msgpool.getMsg(customid, 0x1002);
-//		if (returnmsg == null)
-//			return 0;
-//		if (!(returnmsg instanceof MQMsg1002))
-//			return 0;
-//		MQMsg1002 rm = (MQMsg1002) returnmsg;
-//		return rm.getState();
+		// MQMsg0002 mqmsg = new MQMsg0002(customid);
+		// mqmsg.setOrderId(orderId);
+		// try {
+		// MQService.getInstance().sendMsg(citycode, mqmsg);
+		// } catch (JMSException e) {
+		// e.printStackTrace();
+		// //查询订单相关
+		// }
+		// MQAbsMsg returnmsg = msgpool.getMsg(customid, 0x1002);
+		// if (returnmsg == null)
+		// return 0;
+		// if (!(returnmsg instanceof MQMsg1002))
+		// return 0;
+		// MQMsg1002 rm = (MQMsg1002) returnmsg;
+		// return rm.getState();
 		Order order = orderpool.getOrder(orderId);
 		if (order == null) {
 			order = orderMapper.getOrderById(orderId);
 		}
-		if(order==null){
+		if (order == null) {
 			return -1;
-		}else{
+		} else {
 			return order.getState();
 		}
-		
+
 	}
 
 	@Override
@@ -458,13 +456,10 @@ public class OrderService implements IOrderService {
 		msg.setTime(df.format(new Date()));
 		msg.setLon(lon);
 		msg.setLat(lat);
-		try {
-			MQService.getInstance().sendMsg(order.getCitycode(), msg);
-		} catch (JMSException e) {
-			e.printStackTrace();
-			return 1;
-		}
-		ReturnMsgUtil getreturn=new ReturnMsgUtil();
+
+		MQService.getInstance().sendMsg(order.getCitycode(), msg);
+
+		ReturnMsgUtil getreturn = new ReturnMsgUtil();
 		MQAbsMsg returnmsg = getreturn.getMsg(order.getCustomid(), 0x0007);
 		if (returnmsg == null)
 			return 1;
@@ -487,13 +482,9 @@ public class OrderService implements IOrderService {
 		msg.setOrderid(orderId);
 		msg.setLon(lon);
 		msg.setLat(lat);
-		try {
-			MQService.getInstance().sendMsg(citycode, msg);
-		} catch (JMSException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return false;
-		}
+
+		MQService.getInstance().sendMsg(citycode, msg);
+
 		return true;
 	}
 
@@ -505,12 +496,9 @@ public class OrderService implements IOrderService {
 		msg.setOrderid(orderId);
 		msg.setType(type);
 		msg.setDesc(desc);
-		try {
-			MQService.getInstance().sendMsg(citycode, msg);
-		} catch (JMSException e) {
-			e.printStackTrace();
-			return false;
-		}
+
+		MQService.getInstance().sendMsg(citycode, msg);
+
 		return true;
 	}
 
@@ -530,12 +518,9 @@ public class OrderService implements IOrderService {
 		msg.setOrderId(orderId);
 		msg.setCancle(type);
 		msg.setExplain(desc);
-		try {
-			MQService.getInstance().sendMsg(citycode, msg);
-		} catch (JMSException e) {
-			e.printStackTrace();
-			return false;
-		}
+
+		MQService.getInstance().sendMsg(citycode, msg);
+
 		return true;
 	}
 
@@ -545,17 +530,17 @@ public class OrderService implements IOrderService {
 		if (order == null) {
 			order = orderMapper.getOrderById(orderId);
 		}
-		if(order==null){
+		if (order == null) {
 			return null;
-		}else{
+		} else {
 			return order.getCustomid();
 		}
 	}
 
 	@Override
 	public void driverSitePush(MQMsg1012 msg) {
-		
-		long orderId=msg.getOrderid();
+
+		long orderId = msg.getOrderid();
 		XMPPBean<HashMap> bean = new XMPPBean<>();
 		bean.setMsgid(0x0007);
 		HashMap map = new HashMap<>();
@@ -564,10 +549,9 @@ public class OrderService implements IOrderService {
 		map.put("lat", msg.getLat());
 		map.put("carNumber", msg.getCarNumber());
 		bean.setResult(map);
-		String customid=getMqCustomid(orderId);
+		String customid = getMqCustomid(orderId);
 		xmppservice.sendMessage(customid, bean);
-		
+
 	}
 
-	
 }

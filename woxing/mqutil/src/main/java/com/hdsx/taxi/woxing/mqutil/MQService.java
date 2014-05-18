@@ -20,6 +20,8 @@ import javax.jms.Session;
 
 import org.apache.activemq.ActiveMQConnection;
 import org.apache.activemq.ActiveMQConnectionFactory;
+import org.apache.activemq.pool.PooledConnection;
+import org.apache.activemq.pool.PooledConnectionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,6 +56,8 @@ public class MQService {
 	HashMap<String, MessageConsumer> consumerMap;
 	HashMap<String, MessageProducer> producerMap;;
 	ActiveMQConnection connection;
+	PooledConnection pooledconn;
+	private PooledConnectionFactory pooledConnectionFactory;
 
 	// ActiveMQConnection conn;
 
@@ -69,8 +73,8 @@ public class MQService {
 
 		Properties p = new Properties();
 		p.load(MQService.class.getResourceAsStream("/mq.properties"));
-//		ReturnMsgUtil.MAXCOUNT=Integer.parseInt(p.getProperty("MAXCOUNT"));
-//		ReturnMsgUtil.SLEEP_PER_TIME=Integer.parseInt(p.getProperty("SLEEP_PER_TIME"));
+		// ReturnMsgUtil.MAXCOUNT=Integer.parseInt(p.getProperty("MAXCOUNT"));
+		// ReturnMsgUtil.SLEEP_PER_TIME=Integer.parseInt(p.getProperty("SLEEP_PER_TIME"));
 		String url = p.getProperty("mq.url");
 		String user = p.getProperty("mq.user");
 		String password = p.getProperty("mq.password");
@@ -80,15 +84,17 @@ public class MQService {
 		logger.info("开始连接ActiveMQ");
 		ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(
 				user, password, url);
-		connection = (ActiveMQConnection) connectionFactory.createConnection();
-		connection.setUseCompression(useCompress);
-		session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+		pooledconn = (PooledConnection) connectionFactory.createConnection();
+		pooledconn.start();
+		// connection=pooledconn.getConnection().
+		// connection.setUseCompression(useCompress);
+		session = pooledconn.createSession(false, Session.AUTO_ACKNOWLEDGE);
 		Queue inQueue = session.createQueue(citycode + ".tocity");// 接收队列
 		Queue outQueue = session.createQueue(citycode + ".fromcity");// 发送队列
 		this.consumer = session.createConsumer(inQueue);
 		this.consumer.setMessageListener(listener);
 		this.pro = session.createProducer(outQueue);
-		connection.start();
+		// connection.start();
 	}
 
 	/**
@@ -100,8 +106,9 @@ public class MQService {
 	public void init(MessageListener listener) throws JMSException {
 
 		ResourceBundle rb = ResourceBundle.getBundle("mq");
-		ReturnMsgUtil.MAXCOUNT=Integer.parseInt(rb.getString("MAXCOUNT"));
-		ReturnMsgUtil.SLEEP_PER_TIME=Integer.parseInt(rb.getString("SLEEP_PER_TIME"));
+		ReturnMsgUtil.MAXCOUNT = Integer.parseInt(rb.getString("MAXCOUNT"));
+		ReturnMsgUtil.SLEEP_PER_TIME = Integer.parseInt(rb
+				.getString("SLEEP_PER_TIME"));
 		String url = rb.getString("mq.url");
 		String user = rb.getString("mq.user");
 		String password = rb.getString("mq.password");
@@ -121,9 +128,11 @@ public class MQService {
 		logger.info("开始连接ActiveMQ");
 		ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(
 				user, password, url);
-		connection = (ActiveMQConnection) connectionFactory.createConnection();
-		connection.setUseCompression(useCompress);
-		session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+		pooledConnectionFactory = new PooledConnectionFactory(connectionFactory);
+		pooledconn = (PooledConnection) pooledConnectionFactory
+				.createConnection();
+		// connection.setUseCompression(useCompress);
+		session = pooledconn.createSession(false, Session.AUTO_ACKNOWLEDGE);
 		consumerMap = new HashMap<>();
 		producerMap = new HashMap<>();
 		for (String code : list_citycode) {
@@ -134,8 +143,40 @@ public class MQService {
 			producerMap.put(code, session.createProducer(outQueue));
 			c.setMessageListener(listener);
 		}
-		connection.start();
+		pooledconn.start();
 		logger.info("连接ActiveMQ成功");
+	}
+
+	/**
+	 * 
+	 * @param citycode
+	 * @param msg
+	 */
+	public void sendMsg(final String citycode, final MQMessage msg) {
+
+		Thread t = new Thread() {
+
+			@Override
+			public void run() {
+				try {
+					session = pooledconn.createSession(false,
+							Session.AUTO_ACKNOWLEDGE);
+					Queue outQueue = session.createQueue(citycode + ".tocity");// 发送队列
+					MessageProducer p = session.createProducer(outQueue);
+					BytesMessage bmsg = session.createBytesMessage();
+					bmsg = msg.encode(bmsg);
+					p.send(bmsg);
+
+				} catch (JMSException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+
+		};
+
+		t.start();
 	}
 
 	@Deprecated
@@ -167,9 +208,9 @@ public class MQService {
 	 * @param citycode
 	 *            城市代码
 	 * @param msg
-	 * @throws JMSException 
+	 * @throws JMSException
 	 */
-	public void sendMsg(String citycode, MQMessage msg) throws JMSException {
+	public void sendMsg2(String citycode, MQMessage msg) throws JMSException {
 		try {
 			logger.debug("session：" + session);
 			BytesMessage bmsg = session.createBytesMessage();
@@ -184,9 +225,10 @@ public class MQService {
 
 	/**
 	 * 用于城市端往中心端发送消息
-	 * @throws JMSException 
+	 * 
+	 * @throws JMSException
 	 */
-	public void sendMsg(MQMessage msg){
+	public void sendMsg(MQMessage msg) {
 		try {
 			BytesMessage bmsg = session.createBytesMessage();
 			if (logger.isDebugEnabled()) {
