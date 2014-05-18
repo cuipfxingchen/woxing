@@ -4,3 +4,4 @@
 .project
 /target
 /.apt_generated
+/log
