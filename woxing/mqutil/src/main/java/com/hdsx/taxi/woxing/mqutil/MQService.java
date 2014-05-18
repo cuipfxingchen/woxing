@@ -86,7 +86,8 @@ public class MQService {
 		logger.info("开始连接ActiveMQ");
 		ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(
 				user, password, url);
-		pooledconn = (PooledConnection) connectionFactory.createConnection();
+		pooledConnectionFactory = new PooledConnectionFactory(connectionFactory);
+		pooledconn = (PooledConnection) pooledConnectionFactory.createConnection();
 	
 		// connection=pooledconn.getConnection().
 		// connection.setUseCompression(useCompress);
@@ -191,7 +192,7 @@ public class MQService {
 					session = pooledconn.createSession(false,
 							Session.AUTO_ACKNOWLEDGE);
 					
-					Queue outQueue = session.createQueue(citycode + ".tocity");// 发送队列
+					Queue outQueue = session.createQueue(citycode + ".fromcity");// 发送队列
 					MessageProducer p = session.createProducer(outQueue);
 					BytesMessage bmsg = session.createBytesMessage();
 					bmsg = msg.encode(bmsg);

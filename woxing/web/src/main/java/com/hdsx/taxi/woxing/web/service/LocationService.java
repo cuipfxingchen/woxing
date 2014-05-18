@@ -34,7 +34,6 @@ import com.hdsx.taxi.woxing.order.OrderPool;
  * @author Steven
  * 
  */
-@Singleton
 public class LocationService {
 
 	MQService ms;
@@ -64,11 +63,7 @@ public class LocationService {
 		msg.setLat(lat);
 		msg.setLon(lon);
 		msg.setRange(r);
-		try {
-			ms.sendMsg(citycode, msg);
-		} catch (JMSException e) {
-			e.printStackTrace();
-		}
+		ms.sendMsg(citycode, msg);
 		ReturnMsgUtil getreturn=new ReturnMsgUtil();
 		MQAbsMsg returnmsg = getreturn.getMsg(customid, 0x3001);
 		if (returnmsg == null)
@@ -100,12 +95,7 @@ public class LocationService {
 		
 		msg.setCarnum(order.getResult().getCarNum());
 		// 调用发送信息内
-		try {
-			ms.sendMsg(citycode, msg);
-		} catch (JMSException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		ms.sendMsg(citycode, msg);
 		ReturnMsgUtil getreturn=new ReturnMsgUtil();
 		MQAbsMsg returnmsg = getreturn.getMsg(customid, 0x3002);
 		if (returnmsg == null)
@@ -138,11 +128,7 @@ public class LocationService {
 		msg.setLon(x);
 
 		// 调用发送信息内
-		try {
-			ms.sendMsg(citycode, msg);
-		} catch (JMSException e) {
-			e.printStackTrace();
-		}
+		ms.sendMsg(citycode, msg);
 		ReturnMsgUtil getreturn=new ReturnMsgUtil();
 		MQAbsMsg returnmsg = getreturn.getMsg(customid, 0x3004);
 		if (returnmsg == null)
@@ -178,11 +164,7 @@ public class LocationService {
 		msg.setDlon(dx);
 
 		// 调用发送信息内
-		try {
-			ms.sendMsg(citycode, msg);
-		} catch (JMSException e) {
-			e.printStackTrace();
-		}
+		ms.sendMsg(citycode, msg);
 		ReturnMsgUtil getreturn=new ReturnMsgUtil();
 		MQAbsMsg returnmsg = getreturn.getMsg(customid, 0x3005);
 		if (returnmsg == null)
@@ -216,11 +198,7 @@ public class LocationService {
 		msg.setRange((short) distance);
 
 		// 调用发送信息内
-		try {
-			ms.sendMsg(citycode, msg);
-		} catch (JMSException e) {
-			e.printStackTrace();
-		}
+		ms.sendMsg(citycode, msg);
 		ReturnMsgUtil getreturn=new ReturnMsgUtil();
 		MQAbsMsg returnmsg = getreturn.getMsg(customid, 0x3006);
 		if (returnmsg == null)
@@ -256,11 +234,7 @@ public class LocationService {
 		msg.setXdlon(xdlon);
 		msg.setYdlat(ydlat);
 		// 调用发送信息内
-		try {
-			ms.sendMsg(citycode, msg);
-		} catch (JMSException e) {
-			e.printStackTrace();
-		}
+		ms.sendMsg(citycode, msg);
 		ReturnMsgUtil getreturn=new ReturnMsgUtil();
 		MQAbsMsg returnmsg = getreturn.getMsg(customid, 0x3006);
 		if (returnmsg == null)
