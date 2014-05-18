@@ -8,7 +8,26 @@
 		<param-name>resteasy.guice.modules</param-name>
 		<param-value>com.hdsx.taxi.woxing.web.module.RestEasyModule,com.hdsx.taxi.woxing.dao.module.DaoModule,com.hdsx.taxi.woxing.web.guice.GuiceModule,com.hdsx.taxi.woxing.mqutil.guice.MqGuiceModule</param-value>
 	</context-param>
+	<!-- // Specify where you expect OAuth access token (request header, body or query string) -->
+	<!-- 自己配置request中token的参数方式可选值：QUERY、HEADER、BODY -->
+	<context-param>
+		<param-name>oauth.rs.tokens</param-name>
+		<param-value>QUERY,BODY</param-value>
+	</context-param>
+	<context-param>
+		<param-name>oauth.rs.provider-class</param-name>
+		<param-value>com.hdsx.oauth2.RProvider</param-value>
+	</context-param>
 
+	<filter>
+		<filter-name>oauth2.0</filter-name>
+		<filter-class>com.hdsx.oauth2.OFilter</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>oauth2.0</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
 
 	<listener>
 		<listener-class>
@@ -30,30 +49,5 @@
 		<servlet-name>Rest</servlet-name>
 		<url-pattern>/rest/*</url-pattern>
 	</servlet-mapping>
-
-
-	
-	<!-- // Specify where you expect OAuth access token (request header, body or query string) -->
-	<!-- 自己配置request中token的参数方式可选值：QUERY、HEADER、BODY -->
-	<!-- 
-	<context-param>
-		<param-name>oauth.rs.tokens</param-name>
-		<param-value>QUERY,BODY</param-value>
-	</context-param>
-	<context-param>
-		<param-name>oauth.rs.provider-class</param-name>
-		<param-value>com.hdsx.oauth2.RProvider</param-value>
-	</context-param>
-
-	<filter>
-		<filter-name>oauth2.0</filter-name>
-		<filter-class>com.hdsx.oauth2.OFilter</filter-class>
-	</filter>
-
-	<filter-mapping>
-		<filter-name>oauth2.0</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
-	 -->
 
 </web-app>
