@@ -22,6 +22,8 @@ public class MQHandler1001 implements IMQMsgHanlder {
 		CarInfo c = new CarInfo();
 		c.setLisencenumber(msg.getNumber());
 		c.setDriverphone(msg.getPhone());
+		c.setLon(msg.getLon());
+		c.setLat(msg.getLat());
 		GuiceFactory.getInstance().doSucess(msg.getOrderId(), c);
 	}
 

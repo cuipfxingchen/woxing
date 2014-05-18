@@ -92,11 +92,17 @@ public class HanlderFactory {
 		case 0x1009:
 			hd=new MQHandler1009();
 			break;
+		case 0x1012:
+			hd=new MQHandler1012();
+			break;
 		case 0x3001:
 			hd=new MQHandler3001();
 			break;
 		case 0x3002:
 			hd=new MQHandler3002();
+			break;
+		case 0x3004:
+			hd=new MQHandler3004();
 			break;
 		case 0x5001:
 			hd=new MQHandler5001();

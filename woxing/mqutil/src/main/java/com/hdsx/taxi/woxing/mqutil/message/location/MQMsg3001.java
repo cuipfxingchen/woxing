@@ -62,7 +62,7 @@ public class MQMsg3001 extends MQAbsMsg {
 		if (this.count > 0) {
 			for (int i = 0; this.count > i; i++) {
 				CarInfo car = new CarInfo();
-				// car.setId(msg.readUTF());
+//				 car.setId(msg.readUTF());
 				car.setLisencenumber(msg.readUTF());
 				car.setDriverName(msg.readUTF());
 				car.setLon(msg.readInt() / 10E6d);
@@ -80,8 +80,8 @@ public class MQMsg3001 extends MQAbsMsg {
 
 		for (int i = 0; i < cars.size(); i++) {
 			CarInfo car = cars.get(i);
-
-			msg.writeUTF(car.getLisencenumber());
+//			msg.writeUTF(car.getId());
+			msg.writeUTF(car.getId());
 			msg.writeUTF(car.getDriverName());
 			msg.writeInt((int) (car.getLon() * 10E6));
 			msg.writeInt((int) (car.getLat() * 10E6));

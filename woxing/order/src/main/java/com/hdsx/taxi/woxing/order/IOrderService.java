@@ -4,11 +4,13 @@ import java.util.List;
 
 import com.hdsx.taxi.woxing.bean.CarInfo;
 import com.hdsx.taxi.woxing.bean.Order;
+import com.hdsx.taxi.woxing.mqutil.message.MQAbsMsg;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1005;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1006;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1007;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1009;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1010;
+import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1012;
 
 
 /**
@@ -168,4 +170,17 @@ public interface IOrderService {
 	 * @return
 	 */
 	boolean payMoney(long orderId,byte type,String desc,String customid,String citycode);
+	
+	/**
+	 * 根据订单id查询用户
+	 * @param orderId
+	 * @return
+	 */
+	String getMqCustomid(long orderId);
+	
+	/**
+	 * 向乘客推送司机位置信息
+	 * @param msg
+	 */
+	void driverSitePush(MQMsg1012 msg);
 }

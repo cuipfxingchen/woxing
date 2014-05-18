@@ -55,8 +55,8 @@ public class Address implements Serializable{
 	/**
 	 *  排序
 	 */
-	@FormParam("order")
-	private int order ;
+	@FormParam("seqe")
+	private int seqe ;
 	
 	public String getCitycode() {
 		return citycode;
@@ -64,11 +64,12 @@ public class Address implements Serializable{
 	public void setCitycode(String citycode) {
 		this.citycode = citycode;
 	}
-	public int getOrder() {
-		return order;
+	
+	public int getSeqe() {
+		return seqe;
 	}
-	public void setOrder(int order) {
-		this.order = order;
+	public void setSeqe(int seqe) {
+		this.seqe = seqe;
 	}
 	public String getId() {
 		return id;

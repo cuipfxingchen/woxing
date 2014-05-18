@@ -15,9 +15,9 @@ public class ReturnMsgUtil {
 	 */
 	private static final Logger logger = LoggerFactory.getLogger(ReturnMsgUtil.class);
 	
-	private static final int MAXCOUNT =  200; // 从缓存中取消息的最大次数
+	public static  int MAXCOUNT =  200; // 从缓存中取消息的最大次数
 
-	private static final int SLEEP_PER_TIME = 100; // 每次取消息的间隔
+	public static  int SLEEP_PER_TIME = 100; // 每次取消息的间隔
 	public MQAbsMsg getMsg(String customid, int msgid) {
 
 		int count = 0;
