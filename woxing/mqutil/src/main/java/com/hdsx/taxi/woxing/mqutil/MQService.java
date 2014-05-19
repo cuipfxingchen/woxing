@@ -9,6 +9,8 @@ import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.jms.BytesMessage;
 import javax.jms.JMSException;
@@ -60,6 +62,12 @@ public class MQService {
 	private PooledConnectionFactory pooledConnectionFactory;
 
 	private String citycode;
+	
+	//线程池数量  
+	private int threadPoolSize = DEFAULT_THREAD_POOL_SIZE;  
+	public static int DEFAULT_THREAD_POOL_SIZE=50;
+	private ExecutorService threadPool;
+
 
 	// ActiveMQConnection conn;
 
@@ -83,6 +91,9 @@ public class MQService {
 		citycode = p.getProperty("mq.citycode");
 		boolean useCompress = Boolean.parseBoolean(p
 				.getProperty("mq.usecompress"));
+		 //设置JAVA线程池  
+		this.threadPool = Executors.newFixedThreadPool(this.threadPoolSize);  
+
 		logger.info("开始连接ActiveMQ");
 		ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(
 				user, password, url);
@@ -129,7 +140,8 @@ public class MQService {
 				list_citycode.add(code);
 			}
 		}
-
+		//设置JAVA线程池  
+		this.threadPool = Executors.newFixedThreadPool(this.threadPoolSize);
 		logger.info("开始连接ActiveMQ");
 		ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(
 				user, password, url);
@@ -196,7 +208,7 @@ public class MQService {
 			}
 
 		};
-
+		
 		t.start();
 	}
 
