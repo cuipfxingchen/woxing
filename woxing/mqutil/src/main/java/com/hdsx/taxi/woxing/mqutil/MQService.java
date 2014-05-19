@@ -87,16 +87,17 @@ public class MQService {
 		ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(
 				user, password, url);
 		pooledConnectionFactory = new PooledConnectionFactory(connectionFactory);
-		pooledconn = (PooledConnection) pooledConnectionFactory.createConnection();
-	
+		pooledconn = (PooledConnection) pooledConnectionFactory
+				.createConnection();
+
 		// connection=pooledconn.getConnection().
 		// connection.setUseCompression(useCompress);
 		session = pooledconn.createSession(false, Session.AUTO_ACKNOWLEDGE);
 		Queue inQueue = session.createQueue(citycode + ".tocity");// 接收队列
-//		Queue outQueue = session.createQueue(citycode + ".fromcity");// 发送队列
+		// Queue outQueue = session.createQueue(citycode + ".fromcity");// 发送队列
 		this.consumer = session.createConsumer(inQueue);
 		this.consumer.setMessageListener(listener);
-//		this.pro = session.createProducer(outQueue);
+		// this.pro = session.createProducer(outQueue);
 		// connection.start();
 		pooledconn.start();
 	}
@@ -133,6 +134,9 @@ public class MQService {
 		ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(
 				user, password, url);
 		pooledConnectionFactory = new PooledConnectionFactory(connectionFactory);
+		pooledConnectionFactory.setIdleTimeout(0);
+		pooledConnectionFactory.setMaxConnections(10);
+
 		pooledconn = (PooledConnection) pooledConnectionFactory
 				.createConnection();
 		// connection.setUseCompression(useCompress);
@@ -149,6 +153,11 @@ public class MQService {
 		}
 		pooledconn.start();
 		logger.info("连接ActiveMQ成功");
+
+		logger.info("Active ActiveSessions:"
+				+ pooledconn.getNumActiveSessions());
+		logger.info("Active Sessions" + pooledconn.getNumSessions());
+		logger.info("Active  Idle Sessions" + pooledconn.getNumtIdleSessions());
 	}
 
 	/**
@@ -170,6 +179,13 @@ public class MQService {
 					BytesMessage bmsg = session.createBytesMessage();
 					bmsg = msg.encode(bmsg);
 					p.send(bmsg);
+					session.close();
+					// pooledconn.close();
+					logger.info("Active ActiveSessions:"
+							+ pooledconn.getNumActiveSessions());
+					logger.info("Active Sessions" + pooledconn.getNumSessions());
+					logger.info("Active  Idle Sessions"
+							+ pooledconn.getNumtIdleSessions());
 
 				} catch (JMSException e) {
 					// TODO Auto-generated catch block
@@ -191,12 +207,15 @@ public class MQService {
 				try {
 					session = pooledconn.createSession(false,
 							Session.AUTO_ACKNOWLEDGE);
-					
-					Queue outQueue = session.createQueue(citycode + ".fromcity");// 发送队列
+
+					Queue outQueue = session
+							.createQueue(citycode + ".fromcity");// 发送队列
 					MessageProducer p = session.createProducer(outQueue);
 					BytesMessage bmsg = session.createBytesMessage();
 					bmsg = msg.encode(bmsg);
 					p.send(bmsg);
+
+					session.close();
 
 				} catch (JMSException e) {
 					// TODO Auto-generated catch block
