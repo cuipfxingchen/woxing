@@ -172,14 +172,15 @@ public class MQService {
 			@Override
 			public void run() {
 				try {
-					session = pooledconn.createSession(false,
+					
+					Session sess = pooledconn.createSession(false,
 							Session.AUTO_ACKNOWLEDGE);
-					Queue outQueue = session.createQueue(citycode + ".tocity");// 发送队列
-					MessageProducer p = session.createProducer(outQueue);
-					BytesMessage bmsg = session.createBytesMessage();
+					Queue outQueue = sess.createQueue(citycode + ".tocity");// 发送队列
+					MessageProducer p = sess.createProducer(outQueue);
+					BytesMessage bmsg = sess.createBytesMessage();
 					bmsg = msg.encode(bmsg);
 					p.send(bmsg);
-					session.close();
+					sess.close();
 					// pooledconn.close();
 					logger.info("Active ActiveSessions:"
 							+ pooledconn.getNumActiveSessions());
@@ -205,17 +206,17 @@ public class MQService {
 			@Override
 			public void run() {
 				try {
-					session = pooledconn.createSession(false,
+					Session sess = pooledconn.createSession(false,
 							Session.AUTO_ACKNOWLEDGE);
 
-					Queue outQueue = session
+					Queue outQueue = sess
 							.createQueue(citycode + ".fromcity");// 发送队列
-					MessageProducer p = session.createProducer(outQueue);
-					BytesMessage bmsg = session.createBytesMessage();
+					MessageProducer p = sess.createProducer(outQueue);
+					BytesMessage bmsg = sess.createBytesMessage();
 					bmsg = msg.encode(bmsg);
 					p.send(bmsg);
 
-					session.close();
+					sess.close();
 
 				} catch (JMSException e) {
 					// TODO Auto-generated catch block
