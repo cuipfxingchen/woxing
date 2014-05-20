@@ -213,12 +213,14 @@ public class OrderService implements IOrderService {
 			order1.setState(Order.STATE_START);
 			this.orderpool.put(order1);
 			orderMapper.updateOrderId(oldOrderId, newOrderId);
-			XMPPBean<HashMap> bean = new XMPPBean<>();
-			bean.setMsgid(0x0008);
-			HashMap map = new HashMap<>();
-			map.put("orderid", newOrderId);
-			bean.setResult(map);
-			xmppservice.sendMessage(order1.getCustomid(), bean);
+			if(order1.getReservation()==0){
+				XMPPBean<HashMap> bean = new XMPPBean<>();
+				bean.setMsgid(0x0008);
+				HashMap map = new HashMap<>();
+				map.put("orderid", newOrderId);
+				bean.setResult(map);
+				xmppservice.sendMessage(order1.getCustomid(), bean);
+			}
 		} else {
 			logger.error("更新订单号错误【旧" + oldOrderId + "】+【新+" + newOrderId
 					+ "】：订单池里面没有旧订单");
@@ -255,7 +257,11 @@ public class OrderService implements IOrderService {
 			result.put("lat", c.getLat());
 
 			XMPPBean<HashMap> bean = new XMPPBean<>();
-			bean.setMsgid(0x0001);
+			if(order.getReservation()==0){
+				bean.setMsgid(0x0001);
+			}else{
+				bean.setMsgid(0x0009);
+			}
 			bean.setResult(result);
 			this.xmppservice.sendMessage(order.getCustomid(), bean);
 		} else {
