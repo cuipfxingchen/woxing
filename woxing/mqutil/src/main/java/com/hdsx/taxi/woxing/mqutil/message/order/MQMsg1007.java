@@ -17,11 +17,23 @@ public class MQMsg1007 extends MQAbsMsg {
 	long orderid;
 	double lat, lon;
 	String time;
+	String carNum="";
 
 	@Override
 	protected short getMessageId() {
 		return 0x1007;
 	}
+
+	
+	public String getCarNum() {
+		return carNum;
+	}
+
+
+	public void setCarNum(String carNum) {
+		this.carNum = carNum;
+	}
+
 
 	public long getOrderid() {
 		return orderid;
@@ -62,6 +74,7 @@ public class MQMsg1007 extends MQAbsMsg {
 		this.lat = msg.readDouble();
 		this.lon = msg.readDouble();
 		this.time = msg.readUTF();
+		this.carNum=msg.readUTF();
 	}
 
 	@Override
@@ -70,6 +83,7 @@ public class MQMsg1007 extends MQAbsMsg {
 		msg.writeDouble(lat);
 		msg.writeDouble(lon);
 		msg.writeUTF(time);
+		msg.writeUTF(carNum);
 		return msg;
 	}
 

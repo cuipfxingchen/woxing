@@ -92,6 +92,7 @@ public class OrderService implements IOrderService {
 			msg.setContractTaxi(order.getContractTaxi());
 			msg.setVipMark(order.getVipMark() + "");
 			order.setState(Order.STATE_SENDED);
+			order.setOrderCreateTime(new Date());
 			orderpool.put(order);
 			orderMapper.insert(order);
 			MQService.getInstance().sendMsg(order.getCitycode(), msg);
@@ -458,6 +459,8 @@ public class OrderService implements IOrderService {
 		MQMsg1007 msg = new MQMsg1007();
 		msg.getHead().setCustomId(order.getCustomid());
 		msg.setOrderid(orderId);
+		msg.setCarNum(order.getResult().getCarNum() == null ? "" : order
+				.getResult().getCarNum());
 		SimpleDateFormat df = new SimpleDateFormat("yyyyMMddhhmmss");
 		msg.setTime(df.format(new Date()));
 		msg.setLon(lon);

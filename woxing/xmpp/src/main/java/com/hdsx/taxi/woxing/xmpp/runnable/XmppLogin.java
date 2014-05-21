@@ -59,7 +59,6 @@ public class XmppLogin implements Runnable {
 
 		public void connectionClosedOnError(Exception arg0) {
 			logger.info("connectionClosedOnError");
-			XmppManager.getXmppManager().connected();
 		}
 
 		public void reconnectingIn(int arg0) {
@@ -69,11 +68,11 @@ public class XmppLogin implements Runnable {
 
 		public void reconnectionFailed(Exception arg0) {
 			logger.info("reconnectionFailed");
-			XmppManager.getXmppManager().connected();
 			
 		}
 
 		public void reconnectionSuccessful() {
+			XmppManager.getXmppManager().connected();
 			logger.info("reconnectionSuccessful");
 			
 		}

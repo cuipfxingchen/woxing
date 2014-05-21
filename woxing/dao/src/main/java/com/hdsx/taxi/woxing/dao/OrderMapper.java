@@ -18,11 +18,11 @@ public interface OrderMapper {
 	public Order getOrderById(long orderId);
 	
 	/* 查询历史订单  WHERE 1=1 AND customid=#{customid}*/							
-	@Select("SELECT * FROM db_order WHERE 1=1 and customid=#{customid}")
+	@Select("SELECT * FROM db_order WHERE 1=1 and customid=#{customid} order by getOnTime desc,orderCreateTime desc")
 	public List<Order> getHistoryOrderByCustomId(String customid);
 
 	/* 查询预约单*/
-	@Select("SELECT * FROM db_order WHERE 1=1 AND customid=#{customid} and reservation=1 and state!=100")
+	@Select("SELECT * FROM db_order WHERE 1=1 AND customid=#{customid} and reservation=1 and state!=100  order by getOnTime desc,orderCreateTime desc")
 	public List<Order> getReservationOrder(String customid);
 
 	/* 新建订单 */
