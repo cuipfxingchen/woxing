@@ -20,7 +20,7 @@ public class MQMsg1010 extends MQAbsMsg {
 
 	@Override
 	protected short getMessageId() {
-		return 0x1007;
+		return 0x1010;
 	}
 
 	public long getOrderid() {

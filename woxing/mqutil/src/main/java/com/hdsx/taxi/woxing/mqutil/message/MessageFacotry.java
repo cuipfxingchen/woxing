@@ -31,6 +31,7 @@ import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1006;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1007;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1008;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1009;
+import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1010;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1012;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg4001;
 
@@ -68,6 +69,8 @@ public class MessageFacotry {
 			return new MQMsg1008();
 		else if (id == 0x1009)
 			return new MQMsg1009();
+		else if (id == 0x1010)
+			return new MQMsg1010();
 		else if (id == 0x1012)
 			return new MQMsg1012();
 

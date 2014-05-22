@@ -16,7 +16,7 @@ import com.hdsx.taxi.woxing.mqutil.message.MQAbsMsg;
 public class MQMsg1007 extends MQAbsMsg {
 	long orderid;
 	double lat, lon;
-	String time;
+	String time="";
 	String carNum="";
 
 	@Override
