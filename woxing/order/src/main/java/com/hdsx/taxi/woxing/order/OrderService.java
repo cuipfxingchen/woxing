@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.hdsx.gis.coortransfor.EvilTransform;
 import com.hdsx.taxi.woxing.bean.CarInfo;
 import com.hdsx.taxi.woxing.bean.Order;
 import com.hdsx.taxi.woxing.dao.OrderMapper;
@@ -250,12 +251,12 @@ public class OrderService implements IOrderService {
 			orderMapper.updateOrder(order);
 
 			HashMap<String, Object> result = new HashMap<>();
-
+			double[] gd=EvilTransform.WGS84ToGCJ02(c.getLon(), c.getLat());
 			result.put("orderid", order.getOrderId());
 			result.put("carnum", c.getLisencenumber());
 			result.put("driver_tel", c.getDriverphone());
-			result.put("lon", c.getLon());
-			result.put("lat", c.getLat());
+			result.put("lon", gd[0]);
+			result.put("lat", gd[1]);
 
 			XMPPBean<HashMap> bean = new XMPPBean<>();
 			if(order.getReservation()==0){
@@ -358,11 +359,12 @@ public class OrderService implements IOrderService {
 
 			XMPPBean<HashMap> bean = new XMPPBean<>();
 			bean.setMsgid(0x0006);
+			double[] gd=EvilTransform.WGS84ToGCJ02(msg.getLon(),msg.getLat());
 			HashMap map = new HashMap<>();
 			map.put("orderid", msg.getOrderid());
 			map.put("carnum", msg.getCarLicensenumber());
-			map.put("lat", msg.getLat());
-			map.put("lon", msg.getLon());
+			map.put("lat", gd[1]);
+			map.put("lon", gd[0]);
 			bean.setResult(map);
 			xmppservice.sendMessage(order.getCustomid(), bean);
 		} else {
@@ -432,10 +434,11 @@ public class OrderService implements IOrderService {
 		orderMapper.updateOrder(order);
 		XMPPBean<HashMap> bean = new XMPPBean<>();
 		bean.setMsgid(0x0005);
+		double[] gd=EvilTransform.WGS84ToGCJ02(msg.getLon(),msg.getLat());
 		HashMap map = new HashMap<>();
 		map.put("orderid", msg.getOrderid());
-		map.put("lon", msg.getLon());
-		map.put("lat", msg.getLat());
+		map.put("lat", gd[1]);
+		map.put("lon", gd[0]);
 		bean.setResult(map);
 		xmppservice.sendMessage(order.getCustomid(), bean);
 
@@ -491,7 +494,8 @@ public class OrderService implements IOrderService {
 		msg.setOrderid(orderId);
 		msg.setLon(lon);
 		msg.setLat(lat);
-
+		SimpleDateFormat df=new SimpleDateFormat("yyyyMMddhhmmss");
+		msg.setTime(df.format(new Date()));
 		MQService.getInstance().sendMsg(citycode, msg);
 
 		return true;
@@ -552,10 +556,11 @@ public class OrderService implements IOrderService {
 		long orderId = msg.getOrderid();
 		XMPPBean<HashMap> bean = new XMPPBean<>();
 		bean.setMsgid(0x0007);
+		double[] gd=EvilTransform.WGS84ToGCJ02(msg.getLon(),msg.getLat());
 		HashMap map = new HashMap<>();
 		map.put("orderid", orderId);
-		map.put("lon", msg.getLon());
-		map.put("lat", msg.getLat());
+		map.put("lat", gd[1]);
+		map.put("lon", gd[0]);
 		map.put("carNumber", msg.getCarNumber());
 		bean.setResult(map);
 		String customid = getMqCustomid(orderId);

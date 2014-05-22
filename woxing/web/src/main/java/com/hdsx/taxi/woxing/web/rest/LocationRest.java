@@ -15,6 +15,7 @@ import com.google.inject.Inject;
 import com.hdsx.taxi.woxing.bean.CarInfo;
 import com.hdsx.taxi.woxing.bean.Index;
 import com.hdsx.taxi.woxing.bean.Station;
+import com.hdsx.taxi.woxing.bean.util.coor.EvilTransform;
 import com.hdsx.taxi.woxing.mqutil.message.location.MQMsg2001;
 import com.hdsx.taxi.woxing.mqutil.msgpool.MQMsgPool;
 import com.hdsx.taxi.woxing.web.rest.bean.RestBean;
@@ -69,15 +70,20 @@ public class LocationRest {
 		// re.setResult(l);
 		// }
 		// return re;
-
+		double[] wg84=EvilTransform.GCJ02ToWGS84(x, y);
 		RestBean<List> rb = new RestBean<>();
 		String success = "成功";
 		String fail = "没有找到车辆";
 		boolean operResult = false;
 		// 业务逻辑开始
 		logger.debug("Customid=:" + customid);
-		List<CarInfo> l = ls.findCars(x, y, r, citycode, customid);
+		List<CarInfo> l = ls.findCars(wg84[0],wg84[1], r, citycode, customid);
 		if (l.size() > 0) {
+			for (CarInfo carInfo : l) {
+				double[] gd=EvilTransform.WGS84ToGCJ02(carInfo.getLon(), carInfo.getLat());
+				carInfo.setLon(gd[0]);
+				carInfo.setLat(gd[1]);
+			}
 			rb.setResult(l);
 			operResult = true;
 		}
@@ -116,6 +122,9 @@ public class LocationRest {
 		// 业务逻辑开始
 		CarInfo c = ls.getCarInfoByCarNum(citycode, customid,
 				Long.parseLong(orderId));
+		double[] gd=EvilTransform.WGS84ToGCJ02(c.getLon(), c.getLat());
+		c.setLon(gd[0]);
+		c.setLat(gd[1]);
 		r.setResult(c);
 
 		operResult = true;
@@ -208,8 +217,8 @@ public class LocationRest {
 			bean.setState(RestBean.FAILCODE);
 			bean.setMsg("纬度解析错误");
 		}
-
-		int rd = ls.getCurLocationIndex(lon, lat, citycode, customid);
+		double[] wg84=EvilTransform.GCJ02ToWGS84(lon, lat);
+		int rd = ls.getCurLocationIndex(wg84[0], wg84[1], citycode, customid);
 		bean.setResult(rd);
 		return bean;
 	}
@@ -231,7 +240,9 @@ public class LocationRest {
 			@PathParam("y") double y, @PathParam("dx") double dx,
 			@PathParam("dy") double dy, @PathParam("citycode") String citycode,
 			@PathParam("customid") String customid) {
-		List<Index> list = ls.getTaxiIndex(x, y, dx, dy, citycode, customid);
+		double[] wg84=EvilTransform.GCJ02ToWGS84(x, y);
+		double[] dwg84=EvilTransform.GCJ02ToWGS84(dx, dy);
+		List<Index> list = ls.getTaxiIndex(wg84[0], wg84[1], dwg84[0], dwg84[1], citycode, customid);
 		RestBean<List<Index>> bean = new RestBean<>();
 		if (list != null && list.size() > 0) {
 			bean.setMsg("查询成功");

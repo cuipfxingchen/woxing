@@ -13,11 +13,13 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
+import org.apache.ibatis.scripting.xmltags.ForEachSqlNode;
 import org.jboss.resteasy.annotations.Form;
 
 import com.google.inject.Inject;
 import com.hdsx.taxi.woxing.bean.CarInfo;
 import com.hdsx.taxi.woxing.bean.Order;
+import com.hdsx.taxi.woxing.bean.util.coor.EvilTransform;
 import com.hdsx.taxi.woxing.dao.OrderMapper;
 import com.hdsx.taxi.woxing.order.IOrderService;
 import com.hdsx.taxi.woxing.web.rest.bean.RestBean;
@@ -58,6 +60,12 @@ public class OrderRest {
 		//产生订单Id
 		long orderId=new Date().getTime();
 		order.setOrderId(orderId);
+		double[] wg84_on=EvilTransform.GCJ02ToWGS84(order.getGetOnLon(), order.getGetOnLat());
+		double[] wg84_off=EvilTransform.GCJ02ToWGS84(order.getGetOffLon(), order.getGetOffLat());
+		order.setGetOnLon(wg84_on[0]);
+		order.setGetOnLat(wg84_on[1]);
+		order.setGetOffLon(wg84_off[0]);
+		order.setGetOffLat(wg84_off[1]);
 		int rtn = orderservice.submit(order);
 		if (1 == rtn)
 			operResult = true;
@@ -94,6 +102,14 @@ public class OrderRest {
 		// 业务逻辑开始
 		List<Order> rtn = orderservice.getHistoryOrder(customid);
 		if (rtn != null) {
+			for (Order order : rtn) {
+				double[] gd_on=EvilTransform.WGS84ToGCJ02(order.getGetOnLon(), order.getGetOnLat());
+				double[] gd_off=EvilTransform.WGS84ToGCJ02(order.getGetOffLon(), order.getGetOffLat());
+				order.setGetOnLon(gd_on[0]);
+				order.setGetOnLat(gd_on[1]);
+				order.setGetOffLon(gd_off[0]);
+				order.setGetOffLat(gd_off[1]);
+			}
 			r.setResult(rtn);
 			operResult = true;
 		}
@@ -129,7 +145,16 @@ public class OrderRest {
 		boolean operResult = false;
 		// 业务逻辑开始
 		// r.setResult();
-		r.setResult(orderservice.getReservationOrder(customid));
+		List<Order> list=orderservice.getReservationOrder(customid);
+		for (Order order : list) {
+			double[] gd_on=EvilTransform.WGS84ToGCJ02(order.getGetOnLon(), order.getGetOnLat());
+			double[] gd_off=EvilTransform.WGS84ToGCJ02(order.getGetOffLon(), order.getGetOffLat());
+			order.setGetOnLon(gd_on[0]);
+			order.setGetOnLat(gd_on[1]);
+			order.setGetOffLon(gd_off[0]);
+			order.setGetOffLat(gd_off[1]);
+		}
+		r.setResult(list);
 
 		operResult = true;
 
@@ -197,7 +222,11 @@ public class OrderRest {
 		String fail = "失败";
 		boolean operResult = false;
 		// 业务逻辑开始
-		r.setResult(orderservice.queryCarInfoByOrder(orderid));
+		CarInfo carInfo =orderservice.queryCarInfoByOrder(orderid);
+		double[] gd=EvilTransform.WGS84ToGCJ02(carInfo.getLon(), carInfo.getLat());
+		carInfo.setLon(gd[0]);
+		carInfo.setLat(gd[1]);
+		r.setResult(carInfo);
 		operResult = true;
 
 		// 业务逻辑结束
@@ -209,36 +238,6 @@ public class OrderRest {
 			r.setMsg(fail);
 		}
 		return r;
-	}
-
-	/**
-	 * 更新订单，包括状态
-	 * 
-	 * @param order
-	 * @return
-	 */
-	@Path("/6")
-	@GET
-	@Produces("application/json;charset=UTF-8")
-	public RestBean update(@Form Order order) {
-		RestBean<Boolean> r = new RestBean<>();
-		String success = "成功";
-		String fail = "失败";
-		boolean operResult = false;
-		// 业务逻辑开始
-		r.setResult(new Boolean(orderservice.update(order)));
-		operResult = true;
-
-		// 业务逻辑结束
-		if (operResult) {
-			r.setState(RestBean.SUCESSCODE);
-			r.setMsg(success);
-		} else {
-			r.setState(RestBean.FAILCODE);
-			r.setMsg(fail);
-		}
-		return r;
-
 	}
 
 	/**
@@ -261,6 +260,15 @@ public class OrderRest {
 		return r;
 	}
 
+	/**
+	 * 乘客上车
+	 * @param orderId
+	 * @param lon
+	 * @param lat
+	 * @param citycode
+	 * @param customid
+	 * @return
+	 */
 	@Path("/8/{orderId}/{lon}/{lat}/{customid}/{citycode}")
 	@GET
 	@Produces("application/json;charset=UTF-8")
@@ -270,9 +278,10 @@ public class OrderRest {
 			@PathParam("customid") String customid) {
 		RestBean<Byte> r = new RestBean<>();
 		long orderid = Long.parseLong(orderId);
+		double[] wg84=EvilTransform.GCJ02ToWGS84(Double.parseDouble(lon), Double.parseDouble(lat));
 		boolean result =true;
 		r.setResult(orderservice.passengerGeton(orderid,
-				Double.parseDouble(lon), Double.parseDouble(lat), customid,
+				wg84[0], wg84[1], customid,
 				citycode));
 		if (result) {
 			r.setState(RestBean.SUCESSCODE);
@@ -284,6 +293,15 @@ public class OrderRest {
 		return r;
 	}
 
+	/**
+	 * 乘客位置上传
+	 * @param orderId
+	 * @param lon
+	 * @param lat
+	 * @param citycode
+	 * @param customid
+	 * @return
+	 */
 	@Path("/9/{orderId}/{lon}/{lat}/{customid}/{citycode}")
 	@GET
 	@Produces("application/json;charset=UTF-8")
@@ -293,8 +311,9 @@ public class OrderRest {
 			@PathParam("customid") String customid) {
 		RestBean r = new RestBean<>();
 		long orderid = Long.parseLong(orderId);
+		double[] wg84=EvilTransform.GCJ02ToWGS84(Double.parseDouble(lon), Double.parseDouble(lat));
 		boolean result = orderservice.upPassengerSite(orderid,
-				Double.parseDouble(lon), Double.parseDouble(lat), customid,
+				wg84[0], wg84[1], customid,
 				citycode);
 		if (result) {
 			r.setState(RestBean.SUCESSCODE);
@@ -303,6 +322,16 @@ public class OrderRest {
 		}
 		return r;
 	}
+	
+	/**
+	 * 付款成功
+	 * @param orderId
+	 * @param type
+	 * @param desc
+	 * @param citycode
+	 * @param customid
+	 * @return
+	 */
 	@Path("/10/{orderId}/{type}/{desc}/{customid}/{citycode}")
 	@GET
 	@Produces("application/json;charset=UTF-8")

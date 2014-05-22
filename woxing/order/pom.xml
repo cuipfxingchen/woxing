@@ -41,5 +41,10 @@
 			<artifactId>mqutil</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.hdsx.gis</groupId>
+			<artifactId>coortransfor</artifactId>
+			<version>0.0.1</version>
+	</dependency>
 	</dependencies>
 </project>
