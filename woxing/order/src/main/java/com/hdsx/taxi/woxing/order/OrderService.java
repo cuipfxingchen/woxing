@@ -356,7 +356,7 @@ public class OrderService implements IOrderService {
 			order.setState(Order.STATE_OPERATING);// 预约订单开始执行状态
 			this.orderpool.onProduce(order);
 			orderMapper.updateOrder(order);
-
+			this.orderpool.putPool(order);
 			XMPPBean<HashMap> bean = new XMPPBean<>();
 			bean.setMsgid(0x0006);
 			double[] gd=EvilTransform.WGS84ToGCJ02(msg.getLon(),msg.getLat());
