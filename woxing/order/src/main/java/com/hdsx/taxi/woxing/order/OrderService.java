@@ -292,7 +292,7 @@ public class OrderService implements IOrderService {
 			if(order.getReservation()==0){
 				bean.setMsgid(0x0002);//即时没成功的
 			}else{
-				bean.setMsgid(0x0010);//预约没成功的通知
+				bean.setMsgid(0x000A);//预约没成功的通知
 			}
 			bean.setResult(map);
 			this.xmppservice.sendMessage(order.getCustomid(), bean);
