@@ -289,7 +289,11 @@ public class OrderService implements IOrderService {
 			map.put("orderid", l);
 			map.put("msg", describ);
 			XMPPBean<HashMap> bean = new XMPPBean<>();
-			bean.setMsgid(0x0002);
+			if(order.getReservation()==0){
+				bean.setMsgid(0x0002);//即时没成功的
+			}else{
+				bean.setMsgid(0x0010);//预约没成功的通知
+			}
 			bean.setResult(map);
 			this.xmppservice.sendMessage(order.getCustomid(), bean);
 		} else {
