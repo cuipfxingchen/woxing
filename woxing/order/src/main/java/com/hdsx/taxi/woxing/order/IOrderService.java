@@ -11,6 +11,7 @@ import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1007;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1009;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1010;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1012;
+import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1013;
 
 
 /**
@@ -29,6 +30,12 @@ public interface IOrderService {
 	 */
 	public int submit(Order order);
 
+	/**
+	 * 告诉乘客订单通知到司机的数量
+	 * @param msg
+	 */
+	public void noticeDriverCount(MQMsg1013 msg);
+	
 	/**
 	 * 查询历史订单
 	 * 

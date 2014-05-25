@@ -104,8 +104,8 @@ public class HanlderFactory {
 		case 0x3004:
 			hd=new MQHandler3004();
 			break;
-		case 0x5001:
-			hd=new MQHandler5001();
+		case 0x1013:
+			hd=new MQHandler1013();
 			break;
 		default:
 			break;

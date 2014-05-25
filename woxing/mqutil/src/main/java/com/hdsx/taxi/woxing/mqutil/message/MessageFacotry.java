@@ -34,6 +34,7 @@ import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1008;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1009;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1010;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1012;
+import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1013;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg4001;
 
 public class MessageFacotry {
@@ -76,7 +77,8 @@ public class MessageFacotry {
 			return new MQMsg1010();
 		else if (id == 0x1012)
 			return new MQMsg1012();
-
+		else if (id == 0x1013)
+			return new MQMsg1013();
 		/**
 		 * 发送 位置内容
 		 */

@@ -32,6 +32,7 @@ import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1007;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1010;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1011;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1012;
+import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg1013;
 import com.hdsx.taxi.woxing.mqutil.msgpool.MQMsgPool;
 import com.hdsx.taxi.woxing.mqutil.msgpool.ReturnMsgUtil;
 import com.hdsx.taxi.woxing.xmpp.IXMPPService;
@@ -39,6 +40,18 @@ import com.hdsx.taxi.woxing.xmpp.XMPPBean;
 
 /**
  * 订单服务实现类
+ * 
+ * xmpp:1、即时订单抢单成功
+ * 		2、即时没成功
+ * 		3、驾驶员取消订单
+ * 		4、付款通知
+ * 		5、乘客上车
+ * 		6、开始执行预约订单
+ * 		7、司机位置推送
+ * 		8、更新订单号
+ * 		9、预约订单抢单成功
+ * 		10、预约没成功
+ * 		11、通知乘客收到订单的司机数量
  * 
  * @author Steven
  * 
@@ -570,6 +583,19 @@ public class OrderService implements IOrderService {
 		String customid = getMqCustomid(orderId);
 		xmppservice.sendMessage(customid, bean);
 
+	}
+
+	@Override
+	public void noticeDriverCount(MQMsg1013 msg) {
+		long orderId = msg.getOrderId();
+		XMPPBean<HashMap> bean = new XMPPBean<>();
+		bean.setMsgid(0x000B);
+		HashMap map = new HashMap<>();
+		map.put("orderid", orderId);
+		map.put("count", msg.getCount());
+		bean.setResult(map);
+		String customid = getMqCustomid(orderId);
+		xmppservice.sendMessage(customid, bean);
 	}
 
 }
