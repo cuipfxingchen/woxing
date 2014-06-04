@@ -555,6 +555,13 @@ public class Order implements Serializable {
 	@FormParam("taxiResponse2CityTime")
 	private String taxiResponse2CityTime;
 
+	/* id的用户对订单的评分(对出租车司机的评分) */
+	@FormParam("score")
+	private int score;
+	/* 对订单的评论 */
+	@FormParam("comment")
+	private String comment;
+	
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
@@ -587,6 +594,22 @@ public class Order implements Serializable {
 
 	public void setFee2(short fee2) {
 		this.fee2 = fee2;
+	}
+
+	public int getScore() {
+		return score;
+	}
+
+	public void setScore(int score) {
+		this.score = score;
+	}
+
+	public String getComment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
 	}
 	
 	

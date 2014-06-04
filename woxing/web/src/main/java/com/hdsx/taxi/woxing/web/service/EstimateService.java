@@ -12,8 +12,10 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.hdsx.taxi.woxing.bean.Complaint;
 import com.hdsx.taxi.woxing.bean.Estimate;
+import com.hdsx.taxi.woxing.bean.Order;
 import com.hdsx.taxi.woxing.dao.ComplaintMapper;
 import com.hdsx.taxi.woxing.dao.EstimateMapper;
+import com.hdsx.taxi.woxing.dao.OrderMapper;
 import com.hdsx.taxi.woxing.mqutil.MQService;
 import com.hdsx.taxi.woxing.mqutil.message.order.MQMsg4001;
 import com.hdsx.taxi.woxing.mqutil.msgpool.MQMsgPool;
@@ -30,7 +32,8 @@ public class EstimateService {
 	 */
 	private static final Logger logger = LoggerFactory.getLogger(EstimateService.class);
 
-	
+	@Inject
+	OrderMapper ordermapper;
 	
 	@Inject
 	EstimateMapper estimateMapper;
@@ -63,6 +66,8 @@ public class EstimateService {
 		String estimateTime = format1.format(currentTime);
 		est.setEstimateTime(estimateTime);
 		if(estimateMapper.createEstimate(est)>0){
+			Order order =ordermapper.getOrderById(est.getOrderId());
+			order.setState(Order.STATE_OVER);
 			return true;
 		}else{
 			return false;

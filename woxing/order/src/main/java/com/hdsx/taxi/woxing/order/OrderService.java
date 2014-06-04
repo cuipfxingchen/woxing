@@ -541,7 +541,7 @@ public class OrderService implements IOrderService {
 		} else {
 			this.orderpool.remove(order);
 		}
-		order.setState(Order.STATE_OVER);
+		order.setState(Order.STATE_PAYED);
 		orderMapper.updateOrder(order);
 		MQMsg0006 msg = new MQMsg0006();
 		msg.getHead().setCustomId(customid);

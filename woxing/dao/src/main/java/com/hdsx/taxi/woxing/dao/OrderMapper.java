@@ -18,7 +18,8 @@ public interface OrderMapper {
 	public Order getOrderById(long orderId);
 	
 	/* 查询历史订单  WHERE 1=1 AND customid=#{customid}*/							
-	@Select("SELECT * FROM db_order WHERE 1=1 and customid=#{customid} order by getOnTime desc,orderCreateTime desc")
+//	@Select("SELECT * FROM db_order WHERE 1=1 and customid=#{customid} order by getOnTime desc,orderCreateTime desc")
+	@Select("SELECT * FROM db_order t1 left join db_estimate t2 on t1.orderId=t2.orderId WHERE 1=1 and t1.customid=#{customid} and t1.state not in ('20','21') order by t1.getOnTime desc,t1.orderCreateTime desc")
 	public List<Order> getHistoryOrderByCustomId(String customid);
 
 	/* 查询预约单*/
