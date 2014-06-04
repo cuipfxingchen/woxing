@@ -21,8 +21,8 @@ public interface ComplaintMapper {
 	public Complaint getComplaintById(long orderId);
 
 	/* 新建投诉 */
-	@Insert("insert into db_complaint(id,orderId,type,content,state,passengerMobile,passengerName,complaint_creat_time,"
-			+ "citcode,customid) values(#{id},#{orderId},#{type},#{content},#{state},#{passengerMobile},#{passengerName},#{complainDate},#{citycode},#{customid})")
+	@Insert("insert into db_complaint(id,orderId,type,content,state,passengerMobile,passengerName,complainDate,"
+			+ "citycode,customid) values(#{id},#{orderId},#{type},#{content},#{state},#{passengerMobile},#{passengerName},#{complainDate},#{citycode},#{customid})")
 	public int createComplaint(Complaint complaint);
 
 	/* 修改投诉 */

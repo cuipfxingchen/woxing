@@ -380,6 +380,7 @@ public class OrderService implements IOrderService {
 			HashMap map = new HashMap<>();
 			map.put("orderid", msg.getOrderid());
 			map.put("carnum", msg.getCarLicensenumber());
+			map.put("driver_tel",order.getResult().getDriver_tel());
 			map.put("lat", gd[1]);
 			map.put("lon", gd[0]);
 			bean.setResult(map);
