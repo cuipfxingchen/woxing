@@ -4,8 +4,11 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Result;
+import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.type.JdbcType;
 
 import com.hdsx.taxi.woxing.bean.Estimate;
 import com.hdsx.taxi.woxing.bean.Order;
@@ -14,15 +17,32 @@ public interface OrderMapper {
 
 	
 	/* 查询订单 */
+	@Results(value = {
+			@Result( property = "result.carNum", column = "carNum", javaType = String.class, jdbcType = JdbcType.VARCHAR),
+			@Result( property = "result.driver_name", column = "driver_name", javaType = String.class, jdbcType = JdbcType.VARCHAR),
+			@Result( property = "result.driver_tel", column = "driver_tel", javaType = String.class, jdbcType = JdbcType.VARCHAR)
+			
+	}) 
 	@Select("SELECT * FROM db_order WHERE 1=1 AND orderId=#{orderId}")
 	public Order getOrderById(long orderId);
 	
-	/* 查询历史订单  WHERE 1=1 AND customid=#{customid}*/							
-//	@Select("SELECT * FROM db_order WHERE 1=1 and customid=#{customid} order by getOnTime desc,orderCreateTime desc")
+	/* 查询历史订单  WHERE 1=1 AND customid=#{customid}*/
+	@Results(value = {
+			@Result( property = "result.carNum", column = "carNum", javaType = String.class, jdbcType = JdbcType.VARCHAR),
+			@Result( property = "result.driver_name", column = "driver_name", javaType = String.class, jdbcType = JdbcType.VARCHAR),
+			@Result( property = "result.driver_tel", column = "driver_tel", javaType = String.class, jdbcType = JdbcType.VARCHAR)
+			
+	}) 
 	@Select("SELECT * FROM db_order t1 left join db_estimate t2 on t1.orderId=t2.orderId WHERE 1=1 and t1.customid=#{customid} and t1.state not in ('20','21') order by t1.getOnTime desc,t1.orderCreateTime desc")
 	public List<Order> getHistoryOrderByCustomId(String customid);
 
 	/* 查询预约单*/
+	@Results(value = {
+			@Result( property = "result.carNum", column = "carNum", javaType = String.class, jdbcType = JdbcType.VARCHAR),
+			@Result( property = "result.driver_name", column = "driver_name", javaType = String.class, jdbcType = JdbcType.VARCHAR),
+			@Result( property = "result.driver_tel", column = "driver_tel", javaType = String.class, jdbcType = JdbcType.VARCHAR)
+			
+	}) 
 	@Select("SELECT * FROM db_order WHERE 1=1 AND customid=#{customid} and reservation=1 and state!=100  order by getOnTime desc,orderCreateTime desc")
 	public List<Order> getReservationOrder(String customid);
 

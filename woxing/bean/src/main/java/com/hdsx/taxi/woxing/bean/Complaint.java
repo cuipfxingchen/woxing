@@ -18,7 +18,7 @@ public class Complaint implements Serializable{
 	@FormParam("id")
 	String id; // id
 	@FormParam("orderId")
-	String orderId; // 订单号
+	private long orderId; // 订单号
 	@FormParam("type")
 	String type; // 投诉类型
 	@FormParam("content")
@@ -60,11 +60,13 @@ public class Complaint implements Serializable{
 		this.id = id;
 	}
 
-	public String getOrderId() {
+
+
+	public long getOrderId() {
 		return orderId;
 	}
 
-	public void setOrderId(String orderId) {
+	public void setOrderId(long orderId) {
 		this.orderId = orderId;
 	}
 

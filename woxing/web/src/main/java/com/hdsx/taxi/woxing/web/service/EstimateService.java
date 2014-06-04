@@ -39,12 +39,13 @@ public class EstimateService {
 	EstimateMapper estimateMapper;
 	
 	
-	public String getEstimateById(long orderId) {
+	public Estimate getEstimateById(long orderId) {
 		Estimate estimate = estimateMapper.getEstimateById(orderId);
 		if (estimate != null) {
-			Gson gson = new Gson();
-			String json = gson.toJson(estimate);
-			return json;
+//			Gson gson = new Gson();
+//			String json = gson.toJson(estimate);
+//			return json;
+			return estimate;
 		} else {
 			if (logger.isInfoEnabled()) {
 				logger.info("getEstimateById(long) - Estimate estimate={}", "评价查询异常"); //$NON-NLS-1$
@@ -68,6 +69,7 @@ public class EstimateService {
 		if(estimateMapper.createEstimate(est)>0){
 			Order order =ordermapper.getOrderById(est.getOrderId());
 			order.setState(Order.STATE_OVER);
+			ordermapper.updateOrder(order);
 			return true;
 		}else{
 			return false;

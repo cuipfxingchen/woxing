@@ -26,9 +26,9 @@ public interface ComplaintMapper {
 	public int createComplaint(Complaint complaint);
 
 	/* 修改投诉 */
-	@Update ("UPDATE db_complaint SET orderId=#{orderId},type=#{type},content=#{content},state=#{state},"
-			+ "passengerMobile=#{passengerMobile},passengerName=#{passengerName},complainDate=#{complainDate},customid=#{customid},citycode=#{citycode}")
-	public int insert(Complaint complaint);
+	@Update ("UPDATE db_complaint SET type=#{type},content=#{content},state=#{state},"
+			+ "passengerMobile=#{passengerMobile},passengerName=#{passengerName},complainDate=#{complainDate},customid=#{customid},citycode=#{citycode} WHERE orderId = #{orderId}")
+	public int updateComplaint(Complaint complaint);
 
 	/* 删除投诉 */
 	@Delete("DELETE FROM db_complaint WHERE orderId = #{orderId}")

@@ -38,8 +38,8 @@ public class EstimateRest {
 	@Path("/1/{estimateId}")
 	@Produces("application/json;charset=UTF-8")
 	public RestBean getEstimateById(@PathParam("estimateId") long estimateId) {
-		RestBean<String> re = new RestBean<>();
-		String result=estimateService.getEstimateById(estimateId);
+		RestBean<Estimate> re = new RestBean<>();
+		Estimate result=estimateService.getEstimateById(estimateId);
 		if(result==null){
 			re.setState(201);
 			re.setMsg("没有找到评论");
@@ -57,13 +57,23 @@ public class EstimateRest {
 	@Produces("application/json;charset=UTF-8")
 	public RestBean createEstimate(@Form Estimate est) {
 		RestBean<String> re = new RestBean<>();
-		
-		if(estimateService.createEstimate(est)){
-			re.setMsg("创建评论成功");
+		Estimate est1=estimateService.getEstimateById(est.getOrderId());
+		if(est1==null){
+			if(estimateService.createEstimate(est)){
+				re.setMsg("创建评论成功");
+			}else{
+				re.setState(201);
+				re.setMsg("创建评论失败");
+			}
 		}else{
-			re.setState(201);
-			re.setMsg("创建评论失败");
+			if(estimateService.updateEstimate(est)){
+				re.setMsg("修改评论成功");
+			}else{
+				re.setState(201);
+				re.setMsg("修改评论失败");
+			}
 		}
+		
 		return re;
 
 	}

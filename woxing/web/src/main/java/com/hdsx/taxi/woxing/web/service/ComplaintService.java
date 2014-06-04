@@ -28,10 +28,20 @@ public class ComplaintService {
 	 * @return
 	 */
 	public boolean saveComplain(Complaint complaint) {
-		if(complaintMapper.insert(complaint)>0){
-			return true;
+		Complaint complaint1=complaintMapper.getComplaintById(complaint.getOrderId());
+		if(complaint1==null){
+			if(complaintMapper.createComplaint(complaint)>0){
+				return true;
+			}else{
+				return false;
+			}
 		}else{
-			return false;
+			if(complaintMapper.updateComplaint(complaint)>0){
+				return true;
+			}else{
+				return false;
+			}
 		}
+		
 	}
 }
