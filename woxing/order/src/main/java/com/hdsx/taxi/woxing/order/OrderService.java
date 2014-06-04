@@ -578,7 +578,7 @@ public class OrderService implements IOrderService {
 		map.put("orderid", orderId);
 		map.put("lat", gd[1]);
 		map.put("lon", gd[0]);
-		map.put("carNumber", msg.getCarNumber());
+		map.put("carnum", msg.getCarNumber());
 		bean.setResult(map);
 		String customid = getMqCustomid(orderId);
 		xmppservice.sendMessage(customid, bean);
