@@ -48,7 +48,7 @@ public class EstimateService {
 			return estimate;
 		} else {
 			if (logger.isInfoEnabled()) {
-				logger.info("getEstimateById(long) - Estimate estimate={}", "评价查询异常"); //$NON-NLS-1$
+				logger.info("getEstimateById(long) - Estimate estimate={}", "评价查询为空"); //$NON-NLS-1$
 			}
 			return null;
 		}

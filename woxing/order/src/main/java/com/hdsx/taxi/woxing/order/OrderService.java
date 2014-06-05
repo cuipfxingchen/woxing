@@ -221,13 +221,18 @@ public class OrderService implements IOrderService {
 	@Override
 	public void update(long newOrderId, long oldOrderId) {
 		Order order1 = this.orderpool.getOrder(oldOrderId);
+		if (order1 == null) {
+			order1 = orderMapper.getOrderById(oldOrderId);
+		}
 		logger.debug("oldorder:" + (order1 == null));
 		if (order1 != null) {
 			this.orderpool.remove(order1);
 			order1.setOrderId(newOrderId);
 			order1.setState(Order.STATE_START);
 			this.orderpool.put(order1);
-			orderMapper.updateOrderId(oldOrderId, newOrderId);
+			if(orderMapper.updateOrderId(oldOrderId, newOrderId)>0){
+				orderMapper.updateOrder(order1);
+			}
 			if(order1.getReservation()==0){
 				XMPPBean<HashMap> bean = new XMPPBean<>();
 				bean.setMsgid(0x0008);
