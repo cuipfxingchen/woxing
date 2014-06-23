@@ -547,6 +547,7 @@ public class OrderService implements IOrderService {
 		} else {
 			this.orderpool.remove(order);
 		}
+		order.setPaytype(type);
 		order.setState(Order.STATE_PAYED);
 		orderMapper.updateOrder(order);
 		MQMsg0006 msg = new MQMsg0006();
