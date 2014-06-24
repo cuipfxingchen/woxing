@@ -60,12 +60,15 @@ public class OrderRest {
 		//产生订单Id
 		long orderId=new Date().getTime();
 		order.setOrderId(orderId);
+		double[] wg84_create=EvilTransform.GCJ02ToWGS84(order.getCreateLon(), order.getCreateLat());
 		double[] wg84_on=EvilTransform.GCJ02ToWGS84(order.getGetOnLon(), order.getGetOnLat());
 		double[] wg84_off=EvilTransform.GCJ02ToWGS84(order.getGetOffLon(), order.getGetOffLat());
 		order.setGetOnLon(wg84_on[0]);
 		order.setGetOnLat(wg84_on[1]);
 		order.setGetOffLon(wg84_off[0]);
 		order.setGetOffLat(wg84_off[1]);
+		order.setCreateLon(wg84_create[0]);
+		order.setCreateLat(wg84_create[1]);
 		int rtn = orderservice.submit(order);
 		if (1 == rtn)
 			operResult = true;

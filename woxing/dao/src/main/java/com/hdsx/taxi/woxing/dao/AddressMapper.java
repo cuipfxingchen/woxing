@@ -19,7 +19,7 @@ import com.hdsx.taxi.woxing.bean.Estimate;
 public interface AddressMapper {
 	
 	/* 查询常用地址 */
-	@Select("SELECT * FROM db_address WHERE 1=1 AND citycode=#{param1} AND customid=#{param2} ")
+	@Select("SELECT * FROM db_address WHERE citycode=#{param1} AND customid=#{param2} ")
 	public List<Address> getAddressList(String citycode,String customid);
 
 	/* 新建常用地址 */
@@ -27,7 +27,7 @@ public interface AddressMapper {
 	public int createAddress(Address address);
 
 	/* 查询单个地址 */
-	@Select("SELECT * FROM db_address WHERE 1=1 AND citycode=#{param1} AND customid=#{param2} AND seqe=#{param3} ")
+	@Select("SELECT * FROM db_address WHERE citycode=#{param1} AND customid=#{param2} AND seqe=#{param3} ")
 	public Address getAddressOne(String citycode,String customid,int seqe);
 	
 	/*更新常用地址*/

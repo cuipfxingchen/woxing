@@ -10,7 +10,7 @@ import com.hdsx.taxi.woxing.bean.Estimate;
 public interface EstimateMapper {
 	
 	/* 查询评论 */
-	@Select("SELECT * FROM db_estimate WHERE 1=1 AND orderId=#{orderId}")
+	@Select("SELECT * FROM db_estimate WHERE orderId=#{orderId}")
 	public Estimate getEstimateById(long orderId);
 
 	/* 新建评论 */

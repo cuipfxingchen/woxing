@@ -1,5 +1,6 @@
 package com.hdsx.taxi.woxing.order;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -453,6 +454,15 @@ public class OrderService implements IOrderService {
 			order = orderMapper.getOrderById(msg.getOrderid());
 		}
 		order.setState(Order.STATE_PASSAGER_ON);
+		SimpleDateFormat df = new SimpleDateFormat("yyyyMMddhhmmss");
+		order.setFinalOnLon(msg.getLon());
+		order.setFinalOnLat(msg.getLat());
+		try {
+			order.setFinalOnTime(df.parse(msg.getTime()));
+		} catch (ParseException e) {
+			logger.error("上车时间格式转换异常");
+			e.printStackTrace();
+		}
 		orderpool.putPool(order);
 		orderMapper.updateOrder(order);
 		XMPPBean<HashMap> bean = new XMPPBean<>();
@@ -479,7 +489,11 @@ public class OrderService implements IOrderService {
 		if (order == null) {
 			return 2;
 		}
+		Date finalOnTime=new Date();
 		order.setState(Order.STATE_PASSAGER_ON);
+		order.setFinalOnLon(lon);
+		order.setFinalOnLat(lat);
+		order.setFinalOnTime(finalOnTime);
 		orderpool.putPool(order);
 		orderMapper.updateOrder(order);
 		MQMsg1007 msg = new MQMsg1007();
@@ -488,7 +502,7 @@ public class OrderService implements IOrderService {
 		msg.setCarNum(order.getResult().getCarNum() == null ? "" : order
 				.getResult().getCarNum());
 		SimpleDateFormat df = new SimpleDateFormat("yyyyMMddhhmmss");
-		msg.setTime(df.format(new Date()));
+		msg.setTime(df.format(finalOnTime));
 		msg.setLon(lon);
 		msg.setLat(lat);
 

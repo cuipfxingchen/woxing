@@ -23,7 +23,7 @@ public interface OrderMapper {
 			@Result( property = "result.driver_tel", column = "driver_tel", javaType = String.class, jdbcType = JdbcType.VARCHAR)
 			
 	}) 
-	@Select("SELECT * FROM db_order WHERE 1=1 AND orderId=#{orderId}")
+	@Select("SELECT * FROM db_order WHERE orderId=#{orderId}")
 	public Order getOrderById(long orderId);
 	
 	/* 查询历史订单  WHERE 1=1 AND customid=#{customid}*/
@@ -33,7 +33,7 @@ public interface OrderMapper {
 			@Result( property = "result.driver_tel", column = "driver_tel", javaType = String.class, jdbcType = JdbcType.VARCHAR)
 			
 	}) 
-	@Select("SELECT * FROM db_order t1 left join db_estimate t2 on t1.orderId=t2.orderId WHERE 1=1 and t1.customid=#{customid} and t1.state not in ('20','21') order by t1.getOnTime desc,t1.orderCreateTime desc")
+	@Select("SELECT * FROM db_order t1 left join db_estimate t2 on t1.orderId=t2.orderId WHERE t1.customid=#{customid} and t1.state not in ('20','21') order by t1.getOnTime desc,t1.orderCreateTime desc")
 	public List<Order> getHistoryOrderByCustomId(String customid);
 
 	/* 查询预约单*/
@@ -43,7 +43,7 @@ public interface OrderMapper {
 			@Result( property = "result.driver_tel", column = "driver_tel", javaType = String.class, jdbcType = JdbcType.VARCHAR)
 			
 	}) 
-	@Select("SELECT * FROM db_order WHERE 1=1 AND customid=#{customid} and reservation=1 and state!=100  order by getOnTime desc,orderCreateTime desc")
+	@Select("SELECT * FROM db_order WHERE customid=#{customid} and reservation=1 and state!=100  order by getOnTime desc,orderCreateTime desc")
 	public List<Order> getReservationOrder(String customid);
 
 	/* 新建订单 */
@@ -52,13 +52,13 @@ public interface OrderMapper {
 			+ "vipMark,reservation,takeTaxiType,serverLevel,firstChoiceCompany,"
 			+ "personCount,getOnLon,getOnLat,getOffLon,getOffLat,getOnPlaceName,"
 			+ "getOffPlaceName,notes,motorcycleType,anotherCellPhoneNo,specialRequirements,"
-			+ "orderCreateTime,cityResponse2CenterTime,taxiResponse2CityTime)"
+			+ "orderCreateTime,cityResponse2CenterTime,taxiResponse2CityTime,createLon,createLat)"
 			+ " VALUES (#{citycode}, #{useriphone}, #{paytype}, #{fee}, #{state},"
 			+ " #{orderId}, #{customid}, #{nickName}, #{sex}, #{getOnTime}, #{lastReplTime},"
 			+ " #{contractTaxi}, #{vipMark}, #{reservation}, #{takeTaxiType}, #{serverLevel},"
 			+ " #{firstChoiceCompany}, #{personCount}, #{getOnLon}, #{getOnLat}, #{getOffLon},"
 			+ " #{getOffLat}, #{getOnPlaceName}, #{getOffPlaceName}, #{notes}, #{motorcycleType}, #{anotherCellPhoneNo},"
-			+ " #{specialRequirements}, #{orderCreateTime}, #{cityResponse2CenterTime}, #{taxiResponse2CityTime})")
+			+ " #{specialRequirements}, #{orderCreateTime}, #{cityResponse2CenterTime}, #{taxiResponse2CityTime}, #{createLon}, #{createLat})")
 	public int insert(Order order);
 
 	/* 修改订单 */
@@ -70,7 +70,7 @@ public interface OrderMapper {
 			+ "getOnPlaceName=#{getOnPlaceName},getOffPlaceName=#{getOffPlaceName},notes=#{notes},motorcycleType=#{motorcycleType},"
 			+ "anotherCellPhoneNo=#{anotherCellPhoneNo},specialRequirements=#{specialRequirements},orderCreateTime=#{orderCreateTime},"
 			+ "cityResponse2CenterTime=#{cityResponse2CenterTime},taxiResponse2CityTime=#{taxiResponse2CityTime},carNum=#{result.carNum},"
-			+ "driver_name=#{result.driver_name},driver_tel=#{result.driver_tel}"
+			+ "driver_name=#{result.driver_name},driver_tel=#{result.driver_tel},finalOnLon=#{finalOnLon},finalOnLat=#{finalOnLat},finalOnTime=#{finalOnTime} "
 			+ " where orderId=#{orderId}"
 			)
 	public int updateOrder(Order order);

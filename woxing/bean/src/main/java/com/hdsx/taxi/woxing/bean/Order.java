@@ -540,6 +540,36 @@ public class Order implements Serializable {
 	private Date orderCreateTime;
 
 	/**
+	 * 下单地点经度
+	 */
+	@FormParam("createLon")
+	private double createLon;
+	
+	/**
+	 * 下单地点纬度
+	 */
+	@FormParam("createLat")
+	private double createLat;
+	
+	/**
+	 * 实际上车地点经度
+	 */
+	@FormParam("finalOnLon")
+	private double finalOnLon;
+	
+	/**
+	 * 实际上车地点纬度
+	 */
+	@FormParam("finalOnLat")
+	private double finalOnLat;
+	
+	/**
+	 * 上车时间
+	 */
+	@FormParam("finalOnTime")
+	private Date finalOnTime;
+	
+	/**
 	 * [城市级响应到中心时间]
 	 * 
 	 * String类型时间格式的字符串yyyy-MM-dd HH:mm:ss
@@ -610,6 +640,46 @@ public class Order implements Serializable {
 
 	public void setComment(String comment) {
 		this.comment = comment;
+	}
+
+	public double getCreateLon() {
+		return createLon;
+	}
+
+	public void setCreateLon(double createLon) {
+		this.createLon = createLon;
+	}
+
+	public double getCreateLat() {
+		return createLat;
+	}
+
+	public void setCreateLat(double createLat) {
+		this.createLat = createLat;
+	}
+
+	public double getFinalOnLon() {
+		return finalOnLon;
+	}
+
+	public void setFinalOnLon(double finalOnLon) {
+		this.finalOnLon = finalOnLon;
+	}
+
+	public double getFinalOnLat() {
+		return finalOnLat;
+	}
+
+	public void setFinalOnLat(double finalOnLat) {
+		this.finalOnLat = finalOnLat;
+	}
+
+	public Date getFinalOnTime() {
+		return finalOnTime;
+	}
+
+	public void setFinalOnTime(Date finalOnTime) {
+		this.finalOnTime = finalOnTime;
 	}
 	
 	

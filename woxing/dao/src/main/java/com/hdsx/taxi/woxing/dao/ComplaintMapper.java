@@ -17,7 +17,7 @@ public interface ComplaintMapper {
 	
 
 	/* 查询投诉 */
-	@Select("SELECT * FROM db_complaint WHERE 1=1 AND orderId=#{orderId}")
+	@Select("SELECT * FROM db_complaint WHERE orderId=#{orderId}")
 	public Complaint getComplaintById(long orderId);
 
 	/* 新建投诉 */
