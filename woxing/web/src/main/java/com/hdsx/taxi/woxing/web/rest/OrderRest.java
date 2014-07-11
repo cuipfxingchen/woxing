@@ -1,20 +1,17 @@
 package com.hdsx.taxi.woxing.web.rest;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.Date;
 import java.util.List;
 
-import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
-import org.apache.ibatis.scripting.xmltags.ForEachSqlNode;
 import org.jboss.resteasy.annotations.Form;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 import com.hdsx.taxi.woxing.bean.CarInfo;
