@@ -45,6 +45,30 @@ public class DaoModule extends MyBatisModule {
 		myBatisProperties.setProperty("JDBC.Sch", rb.getString("JDBC.Sch"));
 		myBatisProperties.setProperty("bonecp.lazyInit",
 				rb.getString("bonecp.lazyInit"));
+		myBatisProperties.setProperty("bonecp.partitionCount",
+				rb.getString("bonecp.partitionCount"));
+		myBatisProperties.setProperty("bonecp.minConnectionsPerPartition",
+				rb.getString("bonecp.minConnectionsPerPartition"));
+		myBatisProperties.setProperty("bonecp.maxConnectionsPerPartition",
+				rb.getString("bonecp.maxConnectionsPerPartition"));
+		myBatisProperties.setProperty("bonecp.acquireIncrement",
+				rb.getString("bonecp.acquireIncrement"));
+		myBatisProperties.setProperty("bonecp.poolAvailabilityThreshold",
+				rb.getString("bonecp.poolAvailabilityThreshold"));
+		myBatisProperties.setProperty("bonecp.connectionTimeout",
+				rb.getString("bonecp.connectionTimeout"));
+		myBatisProperties.setProperty("bonecp.releaseHelperThreads",
+				rb.getString("bonecp.releaseHelperThreads"));
+		myBatisProperties.setProperty("bonecp.statementReleaseHelperThreads",
+				rb.getString("bonecp.statementReleaseHelperThreads"));
+		myBatisProperties.setProperty("bonecp.idleConnectionTestPeriod",
+				rb.getString("bonecp.idleConnectionTestPeriod"));
+		myBatisProperties.setProperty("bonecp.idleMaxAge",
+				rb.getString("bonecp.idleMaxAge"));
+		myBatisProperties.setProperty("bonecp.statementsCacheSize",
+				rb.getString("bonecp.statementsCacheSize"));
+		
+		
 		myBatisProperties.setProperty("ldap.url", rb.getString("ldap.url"));
 		myBatisProperties.setProperty("ldap.username",
 				rb.getString("ldap.username"));
