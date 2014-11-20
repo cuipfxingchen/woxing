@@ -1,20 +1,20 @@
 package com.hdsx.taxi.woxing.dao;
 
-
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 import com.hdsx.taxi.woxing.bean.Complaint;
-import com.hdsx.taxi.woxing.bean.Estimate;
+import com.hdsx.taxi.woxing.bean.FeedBack;
+
 /**
- * 投诉dao
+ * 投诉dao及意见反馈
+ * 
  * @author cuipengfei
- *
+ * 
  */
 public interface ComplaintMapper {
-	
 
 	/* 查询投诉 */
 	@Select("SELECT * FROM db_complaint WHERE orderId=#{orderId}")
@@ -26,11 +26,14 @@ public interface ComplaintMapper {
 	public int createComplaint(Complaint complaint);
 
 	/* 修改投诉 */
-	@Update ("UPDATE db_complaint SET type=#{type},content=#{content},state=#{state},"
+	@Update("UPDATE db_complaint SET type=#{type},content=#{content},state=#{state},"
 			+ "passengerMobile=#{passengerMobile},passengerName=#{passengerName},complainDate=#{complainDate},customid=#{customid},citycode=#{citycode} WHERE orderId = #{orderId}")
 	public int updateComplaint(Complaint complaint);
 
 	/* 删除投诉 */
 	@Delete("DELETE FROM db_complaint WHERE orderId = #{orderId}")
 	public int deleteEstimate(long complaintId);
+
+	@Insert("insert into db_feedback(id,customid,citycode,content) values(#{id},#{customid},#{citycode},#{content})")
+	int addFeedBack(FeedBack feedBack);
 }

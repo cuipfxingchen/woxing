@@ -1,11 +1,10 @@
 package com.hdsx.taxi.woxing.web.rest;
 
 import java.util.Date;
+import java.util.UUID;
 
-import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
 import org.jboss.resteasy.annotations.Form;
@@ -14,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 import com.hdsx.taxi.woxing.bean.Complaint;
+import com.hdsx.taxi.woxing.bean.FeedBack;
 import com.hdsx.taxi.woxing.mqutil.util.DateFormatUtil;
 import com.hdsx.taxi.woxing.web.rest.bean.RestBean;
 import com.hdsx.taxi.woxing.web.service.ComplaintService;
@@ -36,10 +36,9 @@ public class ComplaintRest {
 	@Inject
 	ComplaintService complaintService;
 
-	
-	
 	/**
 	 * 保存投诉信息
+	 * 
 	 * @param orderId
 	 * @param type
 	 * @param content
@@ -60,6 +59,27 @@ public class ComplaintRest {
 		RestBean bean = new RestBean<>();
 		// 业务处理
 		if (complaintService.saveComplain(cp)) {
+			bean.setMsg("提交成功");
+		} else {
+			bean.setState(200);
+			bean.setMsg("提交失败");
+		}
+		return bean;
+
+	}
+
+	@POST
+	@Path("/2")
+	@Produces("application/json;charset=UTF-8")
+	public RestBean saveFeedBack(@Form FeedBack feedBack) {
+
+		RestBean bean = new RestBean<>();
+		String s = UUID.randomUUID().toString();
+		feedBack.setId(s.substring(0, 8) + s.substring(9, 13)
+				+ s.substring(14, 18) + s.substring(19, 23) + s.substring(24));
+		feedBack.setTime(new Date());
+		// 业务处理
+		if (complaintService.saveFeedBack(feedBack)) {
 			bean.setMsg("提交成功");
 		} else {
 			bean.setState(200);
