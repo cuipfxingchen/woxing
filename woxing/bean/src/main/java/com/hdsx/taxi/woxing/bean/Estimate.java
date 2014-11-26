@@ -100,5 +100,11 @@ public class Estimate implements Serializable{
 	/* 评价生成时间 */
 	@FormParam("estimateTime")
 	private String estimateTime;
+	@Override
+	public String toString() {
+		return "Estimate [orderId=" + orderId + ", customid=" + customid
+				+ ", citycode=" + citycode + ", score=" + score + ", comment="
+				+ comment + ", estimateTime=" + estimateTime + "]";
+	}
 
 }

@@ -61,16 +61,20 @@ public class EstimateRest {
 		if(est1==null){
 			if(estimateService.createEstimate(est)){
 				re.setMsg("创建评论成功");
+				logger.info("新建评价成功："+est.toString());
 			}else{
 				re.setState(201);
 				re.setMsg("创建评论失败");
+				logger.info("新建评价失败："+est.toString());
 			}
 		}else{
 			if(estimateService.updateEstimate(est)){
 				re.setMsg("修改评论成功");
+				logger.info("修改评价成功："+est.toString());
 			}else{
 				re.setState(201);
 				re.setMsg("修改评论失败");
+				logger.info("修改评价失败："+est.toString());
 			}
 		}
 		

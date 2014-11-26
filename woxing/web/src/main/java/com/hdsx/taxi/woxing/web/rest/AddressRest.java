@@ -49,20 +49,23 @@ public class AddressRest {
 		if(ad==null){
 			if(addressService.createAddress(address)){
 				restBean.setMsg("创建成功");
+				logger.info("创建常用地址成功："+address.toString());
 			}else{
 				restBean.setState(201);
 				restBean.setMsg("创建失败");
+				logger.info("创建常用地址失败："+address.toString());
 			}
 		}else{
 			address.setId(ad.getId());
 			if(addressService.updateAddress(address)){
 				restBean.setMsg("更新成功");
+				logger.info("更新常用地址："+address.toString());
 			}else{
 				restBean.setState(201);
 				restBean.setMsg("更新失败");
+				logger.info("更新常用地址失败："+address.toString());
 			}
 		}
-		
 		return restBean;
 	}
 
@@ -85,9 +88,11 @@ public class AddressRest {
 		if(list!=null){
 			restBean.setResult(list);
 			restBean.setMsg("查询成功");
+
 		}else{
 			restBean.setState(201);
 			restBean.setMsg("查询失败");
+
 		}
 		return restBean;
 	}

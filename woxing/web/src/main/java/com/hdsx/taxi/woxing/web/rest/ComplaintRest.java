@@ -60,9 +60,11 @@ public class ComplaintRest {
 		// 业务处理
 		if (complaintService.saveComplain(cp)) {
 			bean.setMsg("提交成功");
+			logger.info("投诉成功："+cp.toString());
 		} else {
 			bean.setState(200);
 			bean.setMsg("提交失败");
+			logger.info("投诉失败："+cp.toString());
 		}
 		return bean;
 
@@ -81,9 +83,11 @@ public class ComplaintRest {
 		// 业务处理
 		if (complaintService.saveFeedBack(feedBack)) {
 			bean.setMsg("提交成功");
+			logger.info("意见反馈成功："+feedBack.toString());
 		} else {
 			bean.setState(200);
 			bean.setMsg("提交失败");
+			logger.info("意见反馈失败："+feedBack.toString());
 		}
 		return bean;
 

@@ -99,4 +99,13 @@ public class OrderResult {
 		this.id = id;
 	}
 
+	@Override
+	public String toString() {
+		return "OrderResult [id=" + id + ", taxiid=" + taxiid + ", carNum="
+				+ carNum + ", driver_id=" + driver_id + ", driver_tel="
+				+ driver_tel + ", driver_name=" + driver_name + ", car_color="
+				+ car_color + ", car_type=" + car_type + ", car_company="
+				+ car_company + ", state=" + state + "]";
+	}
+
 }

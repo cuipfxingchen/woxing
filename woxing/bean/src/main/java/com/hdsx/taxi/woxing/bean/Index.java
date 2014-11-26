@@ -38,4 +38,10 @@ public class Index {
 		this.zones = zones;
 	}
 
+	@Override
+	public String toString() {
+		return "Index [index=" + index + ", waittime=" + waittime + ", zones="
+				+ zones + "]";
+	}
+
 }

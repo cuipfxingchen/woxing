@@ -165,5 +165,16 @@ public class HistoryOrderResult {
 	private long orderId;
 	// 成功/失败标记
 	private String succeedMark;
+	@Override
+	public String toString() {
+		return "HistoryOrderResult [currentTime=" + currentTime
+				+ ", getOnPlaceName=" + getOnPlaceName + ", getOffPlaceName="
+				+ getOffPlaceName + ", getOnLon=" + getOnLon + ", getOnLat="
+				+ getOnLat + ", getOffLon=" + getOffLon + ", getOffLat="
+				+ getOffLat + ", getOnTime=" + getOnTime + ", taxiCompany="
+				+ taxiCompany + ", taxiDriverName=" + taxiDriverName
+				+ ", taxiPlateNumber=" + taxiPlateNumber + ", taxiId=" + taxiId
+				+ ", orderId=" + orderId + ", succeedMark=" + succeedMark + "]";
+	}
 
 }

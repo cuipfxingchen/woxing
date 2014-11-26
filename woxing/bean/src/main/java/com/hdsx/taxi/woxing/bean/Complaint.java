@@ -118,4 +118,13 @@ public class Complaint implements Serializable{
 		this.complainDate = complainDate;
 	}
 
+	@Override
+	public String toString() {
+		return "Complaint [id=" + id + ", orderId=" + orderId + ", type="
+				+ type + ", content=" + content + ", state=" + state
+				+ ", passengerMobile=" + passengerMobile + ", passengerName="
+				+ passengerName + ", complainDate=" + complainDate
+				+ ", customid=" + customid + ", citycode=" + citycode + "]";
+	}
+
 }

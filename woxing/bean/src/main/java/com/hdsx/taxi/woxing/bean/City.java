@@ -57,4 +57,10 @@ public class City {
 		this.datetime = datetime;
 	}
 
+	@Override
+	public String toString() {
+		return "City [id=" + id + ", name=" + name + ", code=" + code
+				+ ", tip=" + tip + ", datetime=" + datetime + "]";
+	}
+
 }

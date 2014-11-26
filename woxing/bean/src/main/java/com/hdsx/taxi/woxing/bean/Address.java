@@ -108,6 +108,12 @@ public class Address implements Serializable{
 	public void setLon(String lon) {
 		this.lon = lon;
 	}
+	@Override
+	public String toString() {
+		return "Address [id=" + id + ", title=" + title + ", address="
+				+ address + ", customid=" + customid + ", citycode=" + citycode
+				+ ", lat=" + lat + ", lon=" + lon + ", seqe=" + seqe + "]";
+	}
 
 
 }

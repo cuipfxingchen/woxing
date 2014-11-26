@@ -50,10 +50,7 @@ public class OrderRest {
 		boolean operResult = false;
 		// *业务逻辑开始
 		// ordermapper.insert(order);
-		if (logger.isDebugEnabled()) {
-			logger.debug(
-					"submit(Order) - {}", "order ----->" + order.toString()); //$NON-NLS-1$ //$NON-NLS-2$
-		}
+		
 		//产生订单Id
 		long orderId=new Date().getTime();
 		order.setOrderId(orderId);
@@ -75,9 +72,11 @@ public class OrderRest {
 			r.setState(RestBean.SUCESSCODE);
 			r.setResult(orderId);
 			r.setMsg(success);
+			logger.info("下单"+success+":"+order.toString());
 		} else {
 			r.setState(RestBean.FAILCODE);
 			r.setMsg(fail);
+			logger.info("下单"+fail+":"+order.toString());
 		}
 
 		return r;
@@ -93,8 +92,6 @@ public class OrderRest {
 	@GET
 	@Produces("application/json;charset=UTF-8")
 	public RestBean getHistoryOrder(@PathParam("customid") String customid) {
-		logger.info("getHistoryOrder(String) - start"); //$NON-NLS-1$
-
 		RestBean<List<Order>> r = new RestBean<>();
 		String success = "成功";
 		String fail = "没有订单";
@@ -117,14 +114,13 @@ public class OrderRest {
 		if (operResult) {
 			r.setState(RestBean.SUCESSCODE);
 			r.setMsg(success);
+			logger.info("查询"+customid+"历史订单："+rtn.toString());
 		} else {
 			r.setState(RestBean.FAILCODE);
 			r.setMsg(fail);
+			logger.info("查询"+customid+"历史订单："+fail);
 		}
 
-		if (logger.isDebugEnabled()) {
-			logger.debug("getHistoryOrder(String) - end"); //$NON-NLS-1$
-		}
 		return r;
 	}
 
@@ -138,7 +134,7 @@ public class OrderRest {
 	@GET
 	@Produces("application/json;charset=UTF-8")
 	public RestBean getReservationOrder(@PathParam("customid") String customid) {
-		logger.debug("getReservationOrder(String) - start"); //$NON-NLS-1$
+		
 		RestBean<List<Order>> r = new RestBean<>();
 		String success = "成功";
 		String fail = "失败";
@@ -162,13 +158,11 @@ public class OrderRest {
 		if (operResult) {
 			r.setState(RestBean.SUCESSCODE);
 			r.setMsg(success);
+			logger.info("查询"+customid+"预约订单："+list.toString());
 		} else {
 			r.setState(RestBean.FAILCODE);
 			r.setMsg(fail);
-		}
-
-		if (logger.isDebugEnabled()) {
-			logger.debug("getReservationOrder(String) - end"); //$NON-NLS-1$
+			logger.info("查询"+customid+"预约订单："+fail);
 		}
 		return r;
 	}
@@ -200,9 +194,11 @@ public class OrderRest {
 		if (operResult) {
 			r.setState(RestBean.SUCESSCODE);
 			r.setMsg(success);
+			logger.info("取消"+customid+"订单："+success);
 		} else {
 			r.setState(RestBean.FAILCODE);
 			r.setMsg(fail);
+			logger.info("取消"+customid+"订单："+fail);
 		}
 		return r;
 	}
@@ -233,9 +229,11 @@ public class OrderRest {
 		if (operResult) {
 			r.setState(RestBean.SUCESSCODE);
 			r.setMsg(success);
+			logger.info("查询"+orderid+"订单号对应的车辆："+carInfo.toString());
 		} else {
 			r.setState(RestBean.FAILCODE);
 			r.setMsg(fail);
+			logger.info("查询"+orderid+"订单号对应的车辆："+fail);
 		}
 		return r;
 	}
@@ -257,6 +255,7 @@ public class OrderRest {
 		RestBean r = new RestBean<>();
 		long orderid = Long.parseLong(orderId);
 		r.setState(orderservice.getOrderState(orderid, customid, citycode));
+		logger.info("根据订单号"+orderid+"查询订单状态："+r.getState());
 		return r;
 	}
 
@@ -286,9 +285,11 @@ public class OrderRest {
 		if (result) {
 			r.setState(RestBean.SUCESSCODE);
 			r.setMsg("成功");
+			logger.info("乘客："+customid+"主动上车成功状态："+r.getState());
 		} else {
 			r.setState(RestBean.FAILCODE);
 			r.setMsg("失败");
+			logger.info("乘客："+customid+"主动上车失败状态："+r.getState());
 		}
 		return r;
 	}
@@ -344,8 +345,10 @@ public class OrderRest {
 		boolean result = orderservice.payMoney(orderid, Byte.parseByte(type), desc, customid, citycode);
 		if (result) {
 			r.setState(RestBean.SUCESSCODE);
+			logger.info("乘客："+customid+"付款成功");
 		} else {
 			r.setState(RestBean.FAILCODE);
+			logger.info("乘客："+customid+"付款失败");
 		}
 		return r;
 	}

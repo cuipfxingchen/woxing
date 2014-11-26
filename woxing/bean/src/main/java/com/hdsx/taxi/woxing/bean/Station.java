@@ -81,5 +81,13 @@ public class Station {
 	public void setY(double y) {
 		this.y = y;
 	}
+	@Override
+	public String toString() {
+		return "Station [id=" + id + ", number=" + number + ", district="
+				+ district + ", roadname=" + roadname + ", position="
+				+ position + ", stopnum=" + stopnum + ", stoptype=" + stoptype
+				+ ", servicetype=" + servicetype + ", x=" + x + ", y=" + y
+				+ "]";
+	}
 	
 }

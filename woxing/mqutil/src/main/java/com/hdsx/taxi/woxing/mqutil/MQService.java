@@ -194,11 +194,11 @@ public class MQService {
 					p.send(bmsg);
 					sess.close();
 					// pooledconn.close();
-					logger.info("Active ActiveSessions:"
-							+ pooledconn.getNumActiveSessions());
-					logger.info("Active Sessions" + pooledconn.getNumSessions());
-					logger.info("Active  Idle Sessions"
-							+ pooledconn.getNumtIdleSessions());
+//					logger.info("Active ActiveSessions:"
+//							+ pooledconn.getNumActiveSessions());
+//					logger.info("Active Sessions" + pooledconn.getNumSessions());
+//					logger.info("Active  Idle Sessions"
+//							+ pooledconn.getNumtIdleSessions());
 
 				} catch (JMSException e) {
 					// TODO Auto-generated catch block
