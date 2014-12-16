@@ -166,7 +166,7 @@ public class EvilTransform {
 	 * @return
 	 */
 	public static double[] WGS84ToBD09(double wgs_lat, double wgs_lon) {
-		double[] gcj = WGS84ToGCJ02(wgs_lat, wgs_lon);
+		double[] gcj = WGS84ToGCJ02( wgs_lon,wgs_lat);
 		return GCJ02ToBD09(gcj[1], gcj[0]);
 	}
 }
